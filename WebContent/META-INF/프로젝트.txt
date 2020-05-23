@@ -1,0 +1,31 @@
+CanbanBoard - 혜린
+FreeBoard - 진원
+MyBoard - 소영
+NoticeBoard - 세종
+Sign - 동률
+
+명명규칙
+-모든 java파일의 첫글자는 대문자로 시작
+-그 외의 단어들은 소문자로 시작하며 명사+명사의 형태의 경우 결합문자의 첫글자는 대문자로 한다 ex) boardList
+-네이밍 시 의미있는 이름으로 짓기(모의 프로젝트 파일명들 참고) 
+  ex) 사원번호로 사원찾기 > selectEmpByEmpNo, 사원리스트 > selectEmpList, 사원 삭제 > deleteEmp
+
+깃허브 사용 시 충돌 방지를 위해 각자의 컨트롤러, dao를 따로 만들었으며 
+기능에 따른 service(action)파일은 필요한 만큼 만들어서 사용하시면 됩니다.
+Ajax기능 사용시에는 각자의 Controller(*.do 등)를 타게 만들지 말고, ajax기능에 맞는 네이밍을 하여 
+kr.or.bit.ajax폴더에 컨트롤러를 만들어서 사용하시면 됩니다. (이해안되면 물어보러 오세용!~)
+
+혼동되지 않도록 각자 컨트롤러(servlet)마다 연결되는 주소를 다르게 주었습니다.
+*.kanban - 혜린
+*.free - 진원
+*.my - 소영
+*.notice - 세종
+*.do - 동률
+컨트롤러의 어노테이션 @WebServlet 부분 지금 맵핑되는 것이 없어 에러가 나서 주석처리 해놓았으니 코드 구현시 주석 제거하고 해주세요.
+
+jsp파일의 디자인틀은 template.jsp로 만들어 놓았으니 필요한 내용을 채워주시면 됩니다.
+필요한 input태그, button 등의 elements들은 elements.html에서 찾아서 골라서 갖다 쓰세욥^^
+
+WebContent 바로 밑에는 index.jsp만 둘 것이고, 현재 views폴더는 추후 WEB-INF밑으로 옮길 예정입니다.
+WEB-INF밑에 있는 파일들은 Controller를 타지 않고서는 실행이 불가하기 때문에 일단 디자인이 완료되고 컨트롤러랑 연결이 다 되면
+WEB-INF밑으로 옮기겠습니다. (나중에 경로 바꿀 때 짜증내지 않기ㅠ)
