@@ -32,7 +32,7 @@
 <script type="text/javascript">
 	console.log(window.location.pathname);
 	let url = window.location.pathname;
-	if(url == "/2nd_team3_project/index.jsp" || url == "/2nd_team3_project/logout.do" || url == "/2nd_team3_project/loginOk.do") {
+	if(url == "/2nd_bitbox/index.jsp" || url == "/2nd_bitbox/logout.do" || url == "/2nd_bitbox/loginOk.do") {
 		$('header').attr('class', 'alt');
 	}
 </script>
