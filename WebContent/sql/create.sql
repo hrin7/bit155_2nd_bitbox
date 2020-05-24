@@ -6,7 +6,8 @@ CREATE TABLE board (
 	title VARCHAR2(100) NOT NULL, /* 글제목 */
 	content VARCHAR2(2000) NOT NULL, /* 글내용 */
 	views NUMBER default 0, /* 조회수 */
-	write_date DATE NOT NULL /* 작성일 */
+	write_date DATE NOT NULL, /* 작성일 */
+    comment_count number
 );
 
 ALTER TABLE board
@@ -138,7 +139,8 @@ CREATE TABLE diary (
 	diary_refer NUMBER default 0, /* 그룹번호 */
 	diary_depth NUMBER default 0, /* 들여쓰기 */
 	diary_step NUMBER default 0, /* 답변정렬 */
-	diary_file_name VARCHAR2(110) /* 파일이름 */
+	diary_file_name VARCHAR2(110), /* 파일이름 */
+    diary_comment_count number
 );
 
 ALTER TABLE diary
@@ -172,7 +174,9 @@ CREATE TABLE kanban (
 	kanban_title VARCHAR2(100) NOT NULL, /* 글제목 */
 	kanban_content VARCHAR2(2000) NOT NULL, /* 글내용 */
 	kanban_date DATE NOT NULL, /* 작성일 */
-	kanban_file_name VARCHAR2(110) /* 파일이름 */
+	kanban_file_name VARCHAR2(110), /* 파일이름 */
+    kanban_comment_count number,
+    kanban_file_count number
 );
 
 ALTER TABLE kanban
