@@ -31,6 +31,8 @@ insert into kanban(id, kanban_code, kanban_no, kanban_title, kanban_content, kan
 values ('hyerin', 1, KANBAN_NO_SEQ.nextval, 'JavaScript', '자바스크립트 문제입니다. 풀어보세요', sysdate);
 insert into kanban(id, kanban_code, kanban_no, kanban_title, kanban_content, kanban_date) 
 values ('hyerin', 1, KANBAN_NO_SEQ.nextval, 'Java', '자바 문제입니다. 풀어보세요', sysdate);
+insert into kanban(id, kanban_code, kanban_no, kanban_title, kanban_content, kanban_date) 
+values ('hyerin', 1, KANBAN_NO_SEQ.nextval, '문제문제', '자바 문제입니다. 풀어보세요', sysdate);
 
 insert into kanban_group(kanban_code, list_name) 
 values (KANBAN_CODE_SEQ.nextval, '코드공유');

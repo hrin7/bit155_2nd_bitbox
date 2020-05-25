@@ -2,6 +2,7 @@ package kr.or.boram.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,7 +44,17 @@ public class KanbanBoardController extends HttpServlet {
 //    		String viewPage = "/login.jsp";
 //    		RequestDispatcher dis = request.getRequestDispatcher(viewPage);
 //			dis.forward(request, response);  
-    	} 
+    	}
+    	
+    	//뷰 지정하기
+    	if(forward != null) {
+    		if(forward.isRedirect()) { //true면 redirect 하겠다.
+    			response.sendRedirect(forward.getPath());
+    		} else { //false(모든 자원) 사용
+    			RequestDispatcher dis = request.getRequestDispatcher(forward.getPath());
+    			dis.forward(request, response);
+    		}
+    	}
     	
 	}
     

@@ -74,3 +74,11 @@ $('#outer').on('click', '.addCardBtn', function() {
 	$(this).remove();
 	createMemoContentBtn.show();
 });
+
+$('.memoContent').draggable();
+
+
+
+
+
+
