@@ -2,15 +2,18 @@ package kr.or.boram.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
+import kr.or.boram.service.SelectMyBoardListAction;
 
-//@WebServlet("*.my")
+@WebServlet("*.my")
 public class MyBoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     public MyBoardController() {
@@ -43,7 +46,7 @@ public class MyBoardController extends HttpServlet {
 //    	}
     	
     	//마이보드리스트 가져오기
-    	if(url_Command.equals("myBoardList.my")) {
+    	if(url_Command.equals("/myBoardList.my")) {
     		action = new SelectMyBoardListAction();
     		forward = action.execute(request, response);
     	}
@@ -52,20 +55,18 @@ public class MyBoardController extends HttpServlet {
     	else if(url_Command.equals("/myBoardInsertForm.my")) {
     		forward = new ActionForward();
             forward.setRedirect(false);
-            forward.setPath("/views/myBoard/myBoardInsert.jsp");
+            forward.setPath("/views/myBoard/myBoardList.jsp");
     	}
     	
-    	//글 작성하기
-    	else if(url_Command.equals("/insertBoard.board")) {
-    		action = new InsertBoardAction();
-    		forward = action.execute(request, response);
-    	}
-    	
-    	//작성된 글 보기(상세보기)
-    	else if(url_Command.equals("/selectBoard.board")) {
-    		action = new SelectBoardByNoAction();
-    		forward = action.execute(request, response);
-    	}
+    	//뷰 지정하기
+    	if(forward != null) {
+    		if(forward.isRedirect()) { //true면 redirect 하겠다.
+    			response.sendRedirect(forward.getPath());
+    		} else { //false(모든 자원) 사용
+    			RequestDispatcher dis = request.getRequestDispatcher(forward.getPath());
+    			dis.forward(request, response);
+    		}
+    	}    
     	
 	}
     
