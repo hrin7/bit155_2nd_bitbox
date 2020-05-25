@@ -3,24 +3,26 @@ package kr.or.boram.controller;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
+import kr.or.boram.service.SelectFreeBoardListAction;
 
-//@WebServlet("*.free")
+@WebServlet("*.free")
 public class FreeBoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
     public FreeBoardController() {
         super();
     }
 	
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	request.setCharacterEncoding("utf-8");
-	
+    	
     	String requestURI = request.getRequestURI();
     	String contextPath = request.getContextPath();
     	String url_Command = requestURI.substring(contextPath.length());
@@ -34,7 +36,7 @@ public class FreeBoardController extends HttpServlet {
     	
     	//게시판 목록보기
     	if(url_Command.equals("/selectBoardList.free")) {
-    		//action = new SelectBoardListAction();
+    		action = new SelectFreeBoardListAction();
     		forward = action.execute(request, response);
     	} 
     	
