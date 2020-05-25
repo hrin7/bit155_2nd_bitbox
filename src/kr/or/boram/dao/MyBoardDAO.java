@@ -30,7 +30,7 @@ public class MyBoardDAO {
 	}
 	
 	//글 목록 가져오기
-	public List<MyBoard> selectBoardList() {
+	public List<MyBoard> selectMyBoardList() {
 		List<MyBoard> list = null;
 		
 		try {
@@ -68,8 +68,6 @@ public class MyBoardDAO {
 		}
 		System.out.println(list); //list가 잘 넘어오는지 확인하기
 		return list;
-	}
+	}	
 	
-	
-
 }

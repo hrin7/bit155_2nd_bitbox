@@ -72,7 +72,6 @@ public class MyBoard {
 	public void setDiaryCommentCount(int diaryCommentCount) {
 		this.diaryCommentCount = diaryCommentCount;
 	}
-	
 	@Override
 	public String toString() {
 		return "MyBoard [id=" + id + ", diaryNo=" + diaryNo + ", diaryTitle=" + diaryTitle + ", diaryContent="
@@ -84,6 +83,6 @@ public class MyBoard {
 				+ getDiaryStep() + ", getDiaryFileName()=" + getDiaryFileName() + ", getDiaryCommentCount()="
 				+ getDiaryCommentCount() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
 				+ super.toString() + "]";
-	}	
-	
+	}
+		
 }

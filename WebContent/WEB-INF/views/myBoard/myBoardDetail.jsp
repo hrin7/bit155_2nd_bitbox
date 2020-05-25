@@ -30,25 +30,22 @@
 	<div id="page-wrapper">
 	
 		<!-- Header -->
-		<jsp:include page="/common/header.jsp"></jsp:include>
+		<jsp:include page="../../header.jsp"></jsp:include>
 		
 		<section id="main" class="container">
 			<header>
-				<h2>DIARY</h2>
-				<p>keeping a daily journal can change your life</p>
+				<h2>Free Board</h2>
+				<p>게시글 상세보기</p>
 			</header>
 			
 			<div class="row">
 				<div class="col-12">
 					<!-- Form -->
 					<section class="box">
-					
-						${requestScope.myBoard}
-						${requestScope.Result}
 						
-						<c:set var="board" value="${requestScope.myBoard}"/>						
+						<c:set var="board" value="${requestScope.board}"/>
+						<h3>${board.boardSubject}</h3>
 						<blockquote>
-							${board.boardSubject}
 							${board.boardName}<br>
 							${board.boardDate}  조회수 ${board.boardReadcount}<br>
 							<c:if test="${!empty board.boardFile}">
@@ -71,7 +68,7 @@
 						<button class="button special small" id="commWrite">등록</button>
 						<br><br>
 						<a href="boardList.board" id="goList">목록으로</a>
-												
+						
 					</section>
 				</div>
 			</div>
@@ -79,7 +76,7 @@
 		</section>
 		
 		<!-- Footer -->
-		<jsp:include page="/common/footer.jsp"></jsp:include>
+		<jsp:include page="../../footer.jsp"></jsp:include>
 		
 	</div>
 	<!-- Scripts -->
