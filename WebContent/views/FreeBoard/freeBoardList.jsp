@@ -8,7 +8,7 @@
 		<title>Diary</title>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-			<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
+			<link rel="stylesheet" href="../../assets/css/main.css" />
 			<link href="https://cdn.jsdelivr.net/npm/remixicon@2.4.0/fonts/remixicon.css" rel="stylesheet"> <!-- 아이콘 -->
 			<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -31,8 +31,8 @@
 			<!-- Main -->
 			<article id="main">
 				<header>
-					<h2>DIARY</h2>
-					<p>keeping a daily journal can change your life</p>
+					<h2>FreeBoard</h2>
+					<p>This is Free Board List</p>
 				</header>
 				
 				<section class="wrapper style5">
@@ -43,10 +43,11 @@
                         	<table>
                         		<thead>
 									<tr>
-										<th width="15%">글번호</th>
-										<th width="55%">제목</th>
-										<th width="15%">작성일</th>
-										<th width="15%">조회</th>
+										<th width="10%">글번호</th>
+			                            <th width="50%">제목</th>
+			                            <th width="15%">작성자</th>
+			                            <th width="15%">작성일</th>
+			                            <th width="10%">조회</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -118,13 +119,13 @@
 		</div>
 		
 		<!-- Scripts -->
-		<script src="<%=request.getContextPath()%>/assets/js/jquery.min.js"></script>
-		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrollex.min.js"></script>
-		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrolly.min.js"></script>
-		<script src="<%=request.getContextPath()%>/assets/js/browser.min.js"></script>
-		<script src="<%=request.getContextPath()%>/assets/js/breakpoints.min.js"></script>
-		<script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
-		<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/jquery.scrollex.min.js"></script>
+		<script src="../assets/js/jquery.scrolly.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
 		
 		<script type="text/javascript">		
 		//개인 계정으로만 접근 가능
