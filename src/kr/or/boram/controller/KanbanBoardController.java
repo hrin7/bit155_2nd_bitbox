@@ -3,14 +3,16 @@ package kr.or.boram.controller;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
+import kr.or.boram.service.SelectKanbanListAction;
 
-//@WebServlet("*.kanban")
+@WebServlet("*.kanban")
 public class KanbanBoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -32,10 +34,10 @@ public class KanbanBoardController extends HttpServlet {
     	ActionForward forward = null;
     	Action action = null;
     	
-    	if(url_Command.equals("")) {
+    	if(url_Command.equals("/selectList.kanban")) {
     		//UI + 로직
-//    		action = new InsertEmpAction();
-//    		forward = action.execute(request, response);
+    		action = new SelectKanbanListAction();
+    		forward = action.execute(request, response);
     		
     		//UI만 제공 시
 //    		String viewPage = "/login.jsp";
