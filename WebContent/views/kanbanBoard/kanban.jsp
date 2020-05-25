@@ -26,10 +26,6 @@
 
 				<!-- Main -->
 					<article id="main">
-						<header>
-							<h2>Generic Page</h2>
-							<p>Aliquam ut ex ut interdum donec amet imperdiet eleifend</p>
-						</header>
 						<section class="wrapper style5">
 							<div class="inner">
 								
