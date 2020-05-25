@@ -3,6 +3,7 @@ package kr.or.boram.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +50,11 @@ public class FreeBoardDAO {
 				board.setTitle(rs.getString("title"));
 				board.setContent(rs.getString("content"));
 				board.setViews(rs.getInt("views"));
-				board.setWriteDate(rs.getString("writeDate"));
-				board.setCommentCount(rs.getInt("commentCount"));
+				board.setWriteDate(rs.getString("write_date"));
+				board.setCommentCount(rs.getInt("comment_Count"));
 				
 				boardList.add(board);
-				System.out.println(boardList);
+				
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -67,6 +68,104 @@ public class FreeBoardDAO {
 			}
 		}
 		return boardList;
+	}
+	
+	//게시글 상세보기
+	public Board selectBoardByNo(int no) {
+		Board board = null;
 		
+		try {
+			conn = ds.getConnection();
+			String sql = "select no, id, title, content, write_date, views from board where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				board = new Board();
+				board.setNo(rs.getInt("no"));
+				board.setId(rs.getString("id"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setWriteDate(rs.getString("write_date"));
+				board.setViews(rs.getInt("views"));
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e2) {
+				System.out.println(e2.getMessage());
+			}
+		}
+		System.out.println(board);
+		return board;
+	}
+	
+	//게시글 작성
+	public int insertBoard(Board board) {
+		int row = 0;
+		
+		try {
+			conn = ds.getConnection();
+			String selectsql = "select no form board";
+			pstmt = conn.prepareStatement(selectsql);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				if(board.getNo() == rs.getInt("no")) {
+					return -1;
+				}
+			}
+			
+			String sql = "insert into board(no , id , title , content , write_date)"
+					+ "values(no_seq.nextval,?,?,?,sysdate)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, board.getId());
+			pstmt.setString(2, board.getTitle());
+			pstmt.setString(3, board.getContent());
+			
+			row = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.out.println("insert오류:" + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		System.out.println(row);
+		return row;
+	}
+	
+	//조회수 증가 함수
+	public int updateViews(int no) {
+		int row = 0;
+		
+		try {
+			conn = ds.getConnection();
+			String sql = "update board set views = views+1 where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			row = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (Exception e2) {
+				e2.getStackTrace();
+			}
+		}
+		return row;
 	}
 }

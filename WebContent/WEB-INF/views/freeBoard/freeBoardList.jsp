@@ -8,9 +8,9 @@
 		<title>Diary</title>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-			<link rel="stylesheet" href="../../assets/css/main.css" />
+			<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
 			<link href="https://cdn.jsdelivr.net/npm/remixicon@2.4.0/fonts/remixicon.css" rel="stylesheet"> <!-- 아이콘 -->
-			<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+			<noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/noscript.css" /></noscript>
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 	<script type="text/javascript">
@@ -51,29 +51,13 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="board" items="${requestScope.boardList}">
+									<c:forEach var="boardList" items="${requestScope.boardList}">
 										<tr>
-											<td>${board.boardNum}</td>
-											<td>
-												<c:forEach var="i" begin="1" end="${board.boardReLev}">
-												&nbsp;&nbsp;&nbsp;
-												</c:forEach>
-												<!-- depth가 0보다 큰것은 답글. 답글인 경우에는 이미지를 붙여준다 -->
-												<c:if test="${board.boardReLev > 0}">
-													<i class="ri-arrow-right-s-line"></i>
-												</c:if>
-                                    			<a href="selectBoard.board?boardNum=${board.boardNum}">${board.boardSubject}</a>
-												<!-- boardFile이 존재하는 경우에는 이미지를 붙여준다 -->
-                                    			<c:if test="${!empty board.boardFile}">
-                                    				<i class="ri-image-line"></i>
-                                    			</c:if>
-												<!-- comment cnt가 존재하는 경우 -->
-                                    			<c:if test="${board.commentCnt > 0}">
-													[${board.commentCnt}]
-												</c:if>
-											</td>
-											<td>${board.boardDate}</td>
-											<td>${board.boardReadcount}</td>
+											<td>${boardList.no}</td>
+											<td><a href="selectBoard.free?no=${boardList.no}">${boardList.title}</a></td>
+											<td>${boardList.id}</td>
+											<td>${boardList.writeDate}</td>
+											<td>${boardList.views}</td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -110,7 +94,7 @@
                         	</c:choose>
                      	</div>
 						<br>
-						<a href="../myBoardInsertForm.my" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
+						<a href="insertForm.free" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
 					</div>
 				</section>	
 			</article>
@@ -119,13 +103,13 @@
 		</div>
 		
 		<!-- Scripts -->
-		<script src="../assets/js/jquery.min.js"></script>
-		<script src="../assets/js/jquery.scrollex.min.js"></script>
-		<script src="../assets/js/jquery.scrolly.min.js"></script>
-		<script src="../assets/js/browser.min.js"></script>
-		<script src="../assets/js/breakpoints.min.js"></script>
-		<script src="../assets/js/util.js"></script>
-		<script src="../assets/js/main.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrollex.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrolly.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/browser.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/breakpoints.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 		
 		<script type="text/javascript">		
 		//개인 계정으로만 접근 가능
