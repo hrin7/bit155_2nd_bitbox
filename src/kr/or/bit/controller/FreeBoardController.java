@@ -33,15 +33,10 @@ public class FreeBoardController extends HttpServlet {
     	ActionForward forward = null;
     	Action action = null;
     	
-    	if(url_Command.equals("")) {
-    		//UI + 로직
-//    		action = new InsertEmpAction();
-//    		forward = action.execute(request, response);
-    		
-    		//UI만 제공 시
-//    		String viewPage = "/login.jsp";
-//    		RequestDispatcher dis = request.getRequestDispatcher(viewPage);
-//			dis.forward(request, response);  
+    	//게시판 목록보기
+    	if(url_Command.equals("/selectBoardList.free")) {
+    		//action = new SelectBoardListAction();
+    		forward = action.execute(request, response);
     	} 
     	
 	}

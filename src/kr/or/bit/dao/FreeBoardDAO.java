@@ -3,6 +3,7 @@ package kr.or.bit.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -24,5 +25,10 @@ public class FreeBoardDAO {
 			System.out.println("look up Fail : " + e.getMessage());
 		}
 	}
-
+	
+	//게시판 목록보기
+//	public List<Board> boardList(){
+//		List<Board> boardList = null;
+//		return null;
+//	}
 }
