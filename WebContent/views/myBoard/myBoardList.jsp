@@ -8,7 +8,7 @@
 		<title>Diary</title>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-			<link rel="stylesheet" href="../../assets/css/main.css" />
+			<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
 			<link href="https://cdn.jsdelivr.net/npm/remixicon@2.4.0/fonts/remixicon.css" rel="stylesheet"> <!-- 아이콘 -->
 			<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -118,13 +118,13 @@
 		</div>
 		
 		<!-- Scripts -->
-		<script src="../assets/js/jquery.min.js"></script>
-		<script src="../assets/js/jquery.scrollex.min.js"></script>
-		<script src="../assets/js/jquery.scrolly.min.js"></script>
-		<script src="../assets/js/browser.min.js"></script>
-		<script src="../assets/js/breakpoints.min.js"></script>
-		<script src="../assets/js/util.js"></script>
-		<script src="../assets/js/main.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrollex.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrolly.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/browser.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/breakpoints.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 		
 		<script type="text/javascript">		
 		//개인 계정으로만 접근 가능
