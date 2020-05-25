@@ -33,7 +33,7 @@
 					<section class="box">
 					
 						<h3>Free Board</h3>
-						<form method="post" action="<%=request.getContextPath()%>/insertBoard.board" enctype="multipart/form-data">
+						<form method="post" action="<%=request.getContextPath()%>/myBoardInsert.my" enctype="multipart/form-data">
 							<div class="row gtr-uniform gtr-50">
 								<div class="col-6 col-12-mobilep">
 									<input type="text" name="title" id="title" placeholder="Title" />
@@ -52,7 +52,7 @@
 								</div>
 							</div>
 						</form>
-						<a href="<%=request.getContextPath()%>/boardList.board" id="goList">목록가기</a>
+						<a href="<%=request.getContextPath()%>/myBoardList.my" id="">LIST</a>
 						<hr />
 						
 					</section>

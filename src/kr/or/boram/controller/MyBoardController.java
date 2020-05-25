@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.or.bit.service.InsertBoardAction;
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.service.SelectMyBoardListAction;
@@ -55,7 +56,13 @@ public class MyBoardController extends HttpServlet {
     	else if(url_Command.equals("/myBoardInsertForm.my")) {
     		forward = new ActionForward();
             forward.setRedirect(false);
-            forward.setPath("/views/myBoard/myBoardList.jsp");
+            forward.setPath("/views/myBoard/myBoardInsert.jsp");
+    	}
+    	
+    	//글 작성하기
+    	else if(url_Command.equals("/myBoardInsert.my")) {
+    		action = new InsertBoardAction();
+    		forward = action.execute(request, response);
     	}
     	
     	//뷰 지정하기

@@ -19,7 +19,7 @@
 	<div id="page-wrapper">
 	
 		<!-- Header -->
-		<jsp:include page="<%=request.getContextPath()%>/common/header.jsp"></jsp:include>
+		<jsp:include page="/common/header.jsp"></jsp:include>
 		
 		<section id="main" class="container">
 			<header>
@@ -52,7 +52,7 @@
 								</div>
 							</div>
 						</form>
-						<a href="<%=request.getContextPath()%>/boardList.board" id="goList">목록가기</a>
+						<a href="<%=request.getContextPath()%>/myBoardList.my" id="goList">LIST</a>
 						<hr />
 						
 					</section>
@@ -62,7 +62,7 @@
 		</section>
 		
 		<!-- Footer -->
-		<jsp:include page="<%=request.getContextPath()%>/common/footer.jsp"></jsp:include>
+		<jsp:include page="/common/footer.jsp"></jsp:include>
 		
 	</div>
 	<!-- Scripts -->

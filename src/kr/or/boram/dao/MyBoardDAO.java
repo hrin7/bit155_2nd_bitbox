@@ -68,6 +68,9 @@ public class MyBoardDAO {
 		}
 		System.out.println(list); //list가 잘 넘어오는지 확인하기
 		return list;
-	}	
+	}
+	
+	//
+	
 	
 }

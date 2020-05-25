@@ -109,7 +109,7 @@
                         	</c:choose>
                      	</div>
 						<br>
-						<a href="../myBoardInsertForm.my" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
+						<a href="<%=request.getContextPath()%>/myBoardInsertForm.my" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
 					</div>
 				</section>	
 			</article>
