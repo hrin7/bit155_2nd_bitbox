@@ -1,15 +1,14 @@
-package kr.or.bit.controller;
+package kr.or.boram.controller;
 
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.bit.action.Action;
-import kr.or.bit.action.ActionForward;
+import kr.or.boram.action.Action;
+import kr.or.boram.action.ActionForward;
 
 //@WebServlet("*.kanban")
 public class KanbanBoardController extends HttpServlet {

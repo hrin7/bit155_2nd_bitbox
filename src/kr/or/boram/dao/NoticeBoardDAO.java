@@ -1,4 +1,4 @@
-package kr.or.bit.dao;
+package kr.or.boram.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

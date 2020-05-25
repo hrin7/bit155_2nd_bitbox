@@ -1,4 +1,4 @@
-package kr.or.bit.action;
+package kr.or.boram.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

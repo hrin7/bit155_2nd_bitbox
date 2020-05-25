@@ -1,4 +1,4 @@
-package kr.or.bit.dao;
+package kr.or.boram.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import kr.or.bit.dto.MyBoard;
+import kr.or.boram.dto.MyBoard;
 
 public class MyBoardDAO {
 	static DataSource ds;

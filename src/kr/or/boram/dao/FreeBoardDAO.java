@@ -1,9 +1,8 @@
-package kr.or.bit.dao;
+package kr.or.boram.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;

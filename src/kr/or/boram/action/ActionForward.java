@@ -1,4 +1,4 @@
-package kr.or.bit.action;
+package kr.or.boram.action;
 
 public class ActionForward {
 	private boolean isRedirect = false; //true면 redirect(O) false면 redirect(X)

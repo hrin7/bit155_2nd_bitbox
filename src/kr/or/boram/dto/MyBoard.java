@@ -1,4 +1,4 @@
-package kr.or.bit.dto;
+package kr.or.boram.dto;
 
 public class MyBoard {
 	private String id;
