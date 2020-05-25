@@ -10,7 +10,7 @@
 					<ul>
 						<!-- 로그인 시 보이는 메뉴 -->
 						<li>
-							<img src="<%=request.getContextPath()%>/images/user.png" width="150px;" height="150px;">
+							<img src="../images/user.png" width="150px;" height="150px;">
 							<a href="#">누구누구님</a>
 						</li>
 						<li><br><a href="template.jsp">My Board</a></li>
