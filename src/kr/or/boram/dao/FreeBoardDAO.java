@@ -37,9 +37,10 @@ public class FreeBoardDAO {
 			conn = ds.getConnection();
 			String sql = "select board_code, no, id, title, content, views, write_date, comment_count from board order by no desc";
 			pstmt = conn.prepareStatement(sql);
-			
 			rs = pstmt.executeQuery();
+			
 			boardList = new ArrayList<Board>();
+			
 			while(rs.next()) {
 				Board board = new Board();
 				board.setBoardCode(rs.getInt("board_code"));
@@ -52,6 +53,7 @@ public class FreeBoardDAO {
 				board.setCommentCount(rs.getInt("commentCount"));
 				
 				boardList.add(board);
+				System.out.println(boardList);
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -65,5 +67,6 @@ public class FreeBoardDAO {
 			}
 		}
 		return boardList;
+		
 	}
 }

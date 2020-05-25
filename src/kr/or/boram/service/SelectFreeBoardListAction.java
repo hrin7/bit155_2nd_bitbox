@@ -24,6 +24,7 @@ public class SelectFreeBoardListAction implements Action {
 		forward.setRedirect(false);
 		forward.setPath("WEB-INF/views/FreeBoard/freeBoardList.jsp");
 		return forward;
+		
 	}
 
 }
