@@ -14,7 +14,7 @@
 							<a href="#">누구누구님</a>
 						</li>
 						<li><br><a href="template.jsp">My Board</a></li>
-						<li><a href="template.jsp">CanBan</a></li>
+						<li><a href="selectList.kanban">KanBan</a></li>
 						<li><a href="template.jsp">Scheduler</a></li>
 						<li><a href="template.jsp">To-do-List</a></li>
 						
