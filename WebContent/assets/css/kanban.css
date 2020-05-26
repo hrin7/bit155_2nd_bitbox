@@ -1,0 +1,73 @@
+@charset "UTF-8";
+
+#createListBtnBefore {
+	display:inline-block;
+	vertical-align: top;
+}
+#createListBtn {
+	width: 300px;
+	height: 50px;
+	padding: 10px;
+	background-color: lightgray;
+	border-radius: 5px;
+	cursor:pointer;
+	margin: 10px;
+}
+#createListBtn:hover {
+	background-color: silver;
+}
+.memoSectionDiv {
+	margin: 10px;
+	display:inline-block;
+	vertical-align: top;
+	width: 300px;
+	padding: 5px;
+	background-color: #f6f8fc;
+	border-radius: 5px;
+	color: #707090;
+	align-content: center;
+}
+.memoTopHr {
+	width: 290px;
+	height: 5px;
+	background-color: #c781ff;
+	border-radius: 5px;
+}
+.memoTitle {
+	width: 270px;
+	margin: 5px 10px;
+	padding: 5px;
+}
+.createMemoContentBtn {
+	width: 270px;
+	margin: 10px;
+	padding: 5px;
+	border-radius: 5px;
+	cursor:pointer;
+	font-size: 15px;
+}
+.memoContent {
+	width: 270px;
+	margin: 10px;
+	padding: 0px 5px;
+	background-color: white;
+	border-radius: 5px;
+	cursor:pointer;
+}
+.createMemoContentBtn:hover, .memoContent:hover {
+	background-color: lightgray;
+}
+.shadow {
+	box-shadow: 0px 0px 5px lightgray;
+}
+
+.modal {
+	top: 50px;
+}
+.modal-dialog { 
+	background-color: #f6f8fc;
+	border-radius: 5px;
+}
+.font-design, .modal, .modal-title {
+	color: #707090 !important; 
+}

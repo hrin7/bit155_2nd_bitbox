@@ -10,17 +10,17 @@
 					<ul>
 						<!-- 로그인 시 보이는 메뉴 -->
 						<li>
-							<img src="<%=request.getContextPath()%>/images/user.png" width="150px;" height="150px;">
+							<img src="../images/user.png" width="150px;" height="150px;">
 							<a href="#">누구누구님</a>
 						</li>
-						<li><br><a href="template.jsp">My Board</a></li>
-						<li><a href="template.jsp">CanBan</a></li>
+						<li><br><a href="myBoardList.my">My Board</a></li>
+						<li><a href="selectList.kanban">KanBan</a></li>
 						<li><a href="template.jsp">Scheduler</a></li>
 						<li><a href="template.jsp">To-do-List</a></li>
 						
 						<!-- 로그인 안해도 보이는 메뉴 -->
 						<li><br><a href="template.jsp">Notice</a></li>
-						<li><a href="elements.html">Free Board</a></li>
+						<li><a href="selectBoardList.free">Free Board</a></li>
 					</ul>
 				</div>
 			</li>
