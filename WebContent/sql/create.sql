@@ -171,10 +171,9 @@ CREATE TABLE kanban (
 	id VARCHAR2(50) NOT NULL, /* 회원아이디 */
 	kanban_no NUMBER NOT NULL, /* 글번호 */
 	kanban_title VARCHAR2(100) NOT NULL, /* 글제목 */
-	kanban_content VARCHAR2(2000) NOT NULL, /* 글내용 */
-	kanban_date DATE NOT NULL, /* 작성일 */
+	kanban_content VARCHAR2(2000), /* 글내용 */
+	kanban_date DATE, /* 작성일 */
 	kanban_file_name VARCHAR2(110), /* 파일이름 */
-	kanban_file_size NUMBER, /* 파일크기 */
 	kanban_file_count NUMBER default 0, /* 파일개수 */
 	kanban_comment_count NUMBER default 0, /* 댓글개수 */
 	kanban_code NUMBER NOT NULL /* 칸반리스트 코드 */
