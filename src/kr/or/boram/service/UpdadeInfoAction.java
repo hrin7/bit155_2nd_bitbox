@@ -18,13 +18,12 @@ public class UpdadeInfoAction implements Action {
 		String boardCode = request.getParameter("boardCode");
 		
 		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
-		
+		System.out.println(no);
+		System.out.println(boardCode);
 		Board board = freeBoardDao.selectBoardByNo(Integer.parseInt(no));
 		
 		request.setAttribute("board", board);
-		List<Object> boardAndBoardName = freeBoardDao.selectBoardByNo(Integer.parseInt(no), Integer.parseInt(boardCode));
-		
-		request.setAttribute("boardAndBoardName", boardAndBoardName);
+
 		
 		ActionForward forward = new ActionForward();
 		forward.setPath("/WEB-INF/views/freeBoard/updateForm.jsp");

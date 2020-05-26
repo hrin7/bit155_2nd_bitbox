@@ -24,7 +24,7 @@
                   <header>
                      <h2>Free Board Detail</h2>
                      <p>This is Free Board Detail</p>
-                     ${requestScope.boardAndBoardName[0]}
+                     
                   </header>
                   <section class="wrapper style5">
                      <div class="inner">
@@ -32,12 +32,12 @@
                         <h2>${board.title}</h2>
                         <blockquote>
                            <br>
-                           ${board.writeDate}  조회수 : ${board.views}<br>
+                           ${board.writeDate}  조회수 : ${board.views} 카테고리 : ${requestScope.boardAndBoardName[0]}<br>
                            
                         </blockquote> 
                         <pre><code>${board.content}</code></pre>
                         
-                        <a href="boardInfo.free?no=${board.no}" class="button small">Edit</a>
+                        <a href="boardInfo.free?no=${board.no}&boardCode=${board.boardCode}" class="button small">Edit</a>
                         <a href="deleteBoard.free?no=${board.no}" class="button small">Delete</a>
                         <a href="#" class="button small">Reply</a>
                         <hr>
