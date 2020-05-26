@@ -23,6 +23,7 @@ public class UpdadeInfoAction implements Action {
 		Board board = freeBoardDao.selectBoardByNo(Integer.parseInt(no));
 		
 		request.setAttribute("board", board);
+
 		
 		ActionForward forward = new ActionForward();
 		forward.setPath("/WEB-INF/views/freeBoard/updateForm.jsp");
