@@ -2,15 +2,18 @@ package kr.or.boram.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
+import kr.or.boram.service.LoginService;
 
-//@WebServlet("*.user")
+@WebServlet("*.user")
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +35,13 @@ public class UserController extends HttpServlet {
     	ActionForward forward = null;
     	Action action = null;
     	
-    	if(url_Command.equals("")) {
+    	if(url_Command.equals("/login.user")) {
+    		
+    		action = new LoginService();
+    		forward = action.execute(request, response);
+    		
+    		RequestDispatcher dis = request.getRequestDispatcher(forward.getPath());
+			dis.forward(request, response);
     		//UI + 로직
 //    		action = new InsertEmpAction();
 //    		forward = action.execute(request, response);

@@ -16,9 +16,9 @@ public class UpdadeInfoAction implements Action {
 		
 		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
 		
-		Board board = freeBoardDao.selectBoardByNo(Integer.parseInt(no));
+		//Board board = freeBoardDao.selectBoardByNo(Integer.parseInt(no));
 		
-		request.setAttribute("board", board);
+		//request.setAttribute("board", board);
 		
 		ActionForward forward = new ActionForward();
 		forward.setPath("/WEB-INF/views/freeBoard/updateForm.jsp");
