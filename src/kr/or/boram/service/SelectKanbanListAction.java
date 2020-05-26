@@ -9,6 +9,7 @@ import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.KanbanBoardDAO;
 import kr.or.boram.dto.KanbanBoard;
+import kr.or.boram.dto.KanbanGroup;
 
 public class SelectKanbanListAction implements Action {
 
@@ -16,9 +17,13 @@ public class SelectKanbanListAction implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		KanbanBoardDAO dao = new KanbanBoardDAO();
 		
+		//칸반 그룹 가져오기(code, listName)
+		List<KanbanGroup> kanbanGroupList = dao.selectKanbanCode();
+		request.setAttribute("kanbanGroupList", kanbanGroupList);
+		
 		//보드리스트 가져오기
-		List<KanbanBoard> list = dao.selectList();
-		request.setAttribute("list", list);
+		List<List<KanbanBoard>> allList = dao.selectList();
+		request.setAttribute("allList", allList);
 		
 		ActionForward forward = new ActionForward();
 		forward.setRedirect(false);
