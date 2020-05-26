@@ -43,11 +43,12 @@
                         	<table>
                         		<thead>
 									<tr>
-										<th width="15%">글번호</th>
-										<th width="55%">제목</th>
-										<th width="15%">작성일</th>
-										<th width="15%">조회</th>
-									</tr>
+									<th width="10%">글번호</th>
+									<th width="50%">제목</th>
+									<th width="15%">작성자</th>
+									<th width="15%">작성일</th>
+									<th width="10%">조회</th>
+								</tr>
 								</thead>
 								<tbody>
 									<c:forEach var="board" items="${requestScope.boardList}">
@@ -114,7 +115,7 @@
 				</section>	
 			</article>
         	<!-- Footer -->
-			<jsp:include page="../footer.jsp"></jsp:include>
+			<jsp:include page="common/footer.jsp"></jsp:include>
 		</div>
 		
 		<!-- Scripts -->

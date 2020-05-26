@@ -2,6 +2,7 @@ package kr.or.bit.controller;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import kr.or.bit.action.Action;
 import kr.or.bit.action.ActionForward;
 
-//@WebServlet("*.notice")
+@WebServlet("*.notice")
 public class NoticeBoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,15 +34,15 @@ public class NoticeBoardController extends HttpServlet {
     	ActionForward forward = null;
     	Action action = null;
     	
-    	if(url_Command.equals("")) {
-    		//UI + 로직
-//    		action = new InsertEmpAction();
-//    		forward = action.execute(request, response);
+    	if(url_Command.equals("/NoticeBoardController.notice")) {
     		
-    		//UI만 제공 시
-//    		String viewPage = "/login.jsp";
-//    		RequestDispatcher dis = request.getRequestDispatcher(viewPage);
-//			dis.forward(request, response);  
+    		action = new InsertEmpAction();
+    		forward = action.execute(request, response);
+    		
+    		
+  		String viewPage = "/create.jsp";
+   		RequestDispatcher dis = request.getRequestDispatcher(viewPage);
+		dis.forward(request, response);  
     	} 
     	
 	}
