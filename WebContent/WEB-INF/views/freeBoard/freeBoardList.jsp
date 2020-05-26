@@ -5,7 +5,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Diary</title>
+		<title>BITBOX - 게시판 목록</title>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 			<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
@@ -44,17 +44,17 @@
                         		<thead>
 									<tr>
 										<th width="10%">글번호</th>
-			                            <th width="50%">제목</th>
+			                            <th width="45%">제목</th>
 			                            <th width="15%">작성자</th>
-			                            <th width="15%">작성일</th>
-			                            <th width="10%">조회</th>
+			                            <th width="22%">작성일</th>
+			                            <th width="8%">조회</th>
 									</tr>
 								</thead>
 								<tbody>
 									<c:forEach var="boardList" items="${requestScope.boardList}">
 										<tr>
 											<td>${boardList.no}</td>
-											<td><a href="selectBoard.free?no=${boardList.no}">${boardList.title}</a></td>
+											<td><a href="selectBoard.free?no=${boardList.no}&boardCode=${boardList.boardCode}">${boardList.title}</a></td>
 											<td>${boardList.id}</td>
 											<td>${boardList.writeDate}</td>
 											<td>${boardList.views}</td>

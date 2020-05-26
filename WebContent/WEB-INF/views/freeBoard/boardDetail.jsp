@@ -18,16 +18,17 @@
 
          <!-- Header -->
          <jsp:include page="/common/header.jsp"></jsp:include>
-
+			
             <!-- Main -->
                <article id="main">
                   <header>
                      <h2>Free Board Detail</h2>
                      <p>This is Free Board Detail</p>
+                     ${requestScope.boardAndBoardName[0]}
                   </header>
                   <section class="wrapper style5">
                      <div class="inner">
-                        <c:set var="board" value="${requestScope.board}"/>
+                        <c:set var="board" value="${requestScope.boardAndBoardName[1]}"/>
                         <h2>${board.title}</h2>
                         <blockquote>
                            <br>
@@ -36,8 +37,8 @@
                         </blockquote> 
                         <pre><code>${board.content}</code></pre>
                         
-                        <a href="#" class="button small">Edit</a>
-                        <a href="#" class="button small">Delete</a>
+                        <a href="boardInfo.free?no=${board.no}" class="button small">Edit</a>
+                        <a href="deleteBoard.free?no=${board.no}" class="button small">Delete</a>
                         <a href="#" class="button small">Reply</a>
                         <hr>
                         
@@ -55,7 +56,7 @@
                         <br>
                         <button class="button primary small" id="commWrite">Write</button>
                         <br><br>
-                        <a href="#" id="goList">목록으로</a>
+                        <a href="<%=request.getContextPath()%>/selectBoardList.free" id="goList">목록으로</a>
 
                      </div>
                   </section>
@@ -74,6 +75,5 @@
       <script src="<%=request.getContextPath()%>/assets/js/breakpoints.min.js"></script>
       <script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
       <script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
-
    </body>
 </html>

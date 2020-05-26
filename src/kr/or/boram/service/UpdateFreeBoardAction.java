@@ -14,29 +14,28 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.FreeBoardDAO;
 import kr.or.boram.dto.Board;
 
-public class InsertFreeBoardAction implements Action {
+public class UpdateFreeBoardAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		String boardCode = "";
-		String id = "";
+		String no = "";
 		String title = "";
 		String content = "";
 		String fileName = "";
 		String oriFileName = "";
 		
 		String uploadpath = request.getSession().getServletContext().getRealPath("upload");
-		System.out.println(uploadpath);
-		int size = 1024 * 1024 * 10; //업로드 파일에 대한 기본 정보(10mb)
+		int size = 1024 * 1024 * 10;
 		
 		MultipartRequest multi;
 		try {
 			multi = new MultipartRequest(
 					request,
 					uploadpath,
-					size, //10mb
+					size,
 					"UTF-8",
-					new DefaultFileRenamePolicy() //파일중복은 자동으로 이름 변경
+					new DefaultFileRenamePolicy()
 			);
 			Enumeration filenames = multi.getFileNames();
 			
@@ -44,10 +43,11 @@ public class InsertFreeBoardAction implements Action {
 			fileName = multi.getFilesystemName(file);
 			oriFileName = multi.getOriginalFileName(file);
 			
-			id = multi.getParameter("id");
+			boardCode = multi.getParameter("searchCode");
+			no = multi.getParameter("no");
 			title = multi.getParameter("title");
 			content = multi.getParameter("content");
-			boardCode = multi.getParameter("searchCode");
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -55,24 +55,24 @@ public class InsertFreeBoardAction implements Action {
 		HttpSession session = request.getSession();
 		
 		Board board = new Board();
+		board.setNo(Integer.parseInt(no));
 		board.setTitle(title);
 		board.setContent(content);
 		board.setBoardCode(Integer.parseInt(boardCode));
-		//board.setId((String)session.getAttribute("id"));
 		
 		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
-		int result = freeBoardDao.insertBoard(board);
-		
+		int result = freeBoardDao.updateBoard(board);
 		String msg = "";
 		if(result > 0) {
-			msg = "게시글이 등록되었습니다.";
+			msg = "수정되었습니다.";
 		} else {
-			msg = "게시글 등록실패";
+			msg = "수정실패";
 		}
 		
-		ActionForward forward = new ActionForward();
 		request.setAttribute("msg", msg);
-		forward.setPath("selectBoardList.free");
+		ActionForward forward = new ActionForward();
+		forward.setRedirect(false);
+		forward.setPath("selectBoard.free?no=" + no);
 		
 		return forward;
 	}

@@ -11,9 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
+import kr.or.boram.service.DeleteFreeBoardAction;
 import kr.or.boram.service.InsertFreeBoardAction;
 import kr.or.boram.service.SelectFreeBoardByNoAction;
 import kr.or.boram.service.SelectFreeBoardListAction;
+import kr.or.boram.service.UpdadeInfoAction;
+import kr.or.boram.service.UpdateFreeBoardAction;
 
 @WebServlet("*.free")
 public class FreeBoardController extends HttpServlet {
@@ -56,6 +59,21 @@ public class FreeBoardController extends HttpServlet {
         //게시판 글쓰기 로직    
     	} else if(url_Command.equals("/insertBoard.free")) {
     		action = new InsertFreeBoardAction();
+    		forward = action.execute(request, response);
+    		
+    	//게시판 삭제
+    	} else if(url_Command.equals("/deleteBoard.free")) {
+    		action = new DeleteFreeBoardAction();
+    		forward = action.execute(request, response);
+
+    	//게시글 수정	
+    	} else if(url_Command.equals("/updateBoard.free")) {
+    		action = new UpdateFreeBoardAction();
+    		forward = action.execute(request, response);
+    	
+		//게시글 정보
+    	} else if(url_Command.equals("/boardInfo.free")) {
+    		action = new UpdadeInfoAction();
     		forward = action.execute(request, response);
     	}
     	
