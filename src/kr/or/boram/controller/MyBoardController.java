@@ -11,7 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
+import kr.or.boram.service.DeleteMyBoardAction;
+import kr.or.boram.service.InsertMyBoardAction;
+import kr.or.boram.service.ReInsertMyBoardAction;
+import kr.or.boram.service.SelectMyBoardByNoAction;
 import kr.or.boram.service.SelectMyBoardListAction;
+import kr.or.boram.service.UpdateMyBoardAction;
+import kr.or.boram.service.UpdateMyBoardInfoAction;
 
 @WebServlet("*.my")
 public class MyBoardController extends HttpServlet {
@@ -55,8 +61,53 @@ public class MyBoardController extends HttpServlet {
     	else if(url_Command.equals("/myBoardInsertForm.my")) {
     		forward = new ActionForward();
             forward.setRedirect(false);
-            forward.setPath("/views/myBoard/myBoardList.jsp");
+            forward.setPath("WEB-INF/views/myBoard/myBoardInsert.jsp");
     	}
+    	
+    	//글 작성하기
+    	else if(url_Command.equals("/myBoardInsert.my")) {
+    		action = new InsertMyBoardAction();
+    		forward = action.execute(request, response);
+    	}
+    	
+    	//작성된 글 보기(상세보기)
+    	else if(url_Command.equals("/myBoardSelect.my")) {
+    		action = new SelectMyBoardByNoAction();
+    		forward = action.execute(request, response);
+    	}
+    	
+    	//수정 버튼 누르면 원글 정보 넘겨주기
+    	else if(url_Command.equals("/myBoardUpdateInfo.my")) {
+    		action = new UpdateMyBoardInfoAction();
+    		forward = action.execute(request, response);
+    	}
+    	
+    	//수정하기
+    	else if(url_Command.equals("/myBoardUpdate.my")) {
+    		action = new UpdateMyBoardAction();
+    		forward = action.execute(request, response);
+    	}
+    	
+    	//삭제하기
+    	else if(url_Command.equals("/myBoardDelete.my")) {
+    		action = new DeleteMyBoardAction();
+    		forward = action.execute(request, response);
+    	}
+    	
+    	//답글 작성하는 폼으로 보내기
+		else if(url_Command.equals("/myBoardReInsertForm.my")) {		
+		String diaryNo = request.getParameter("diaryNo");
+		request.setAttribute("diaryNo", diaryNo);
+		forward = new ActionForward();
+		forward.setRedirect(false);
+		forward.setPath("WEB-INF/views/myBoard/myBoardReInsert.jsp");
+		}
+    	
+    	//답글 작성하기
+		else if(url_Command.equals("/myBoardReInsert.my")) {    	
+    	action = new ReInsertMyBoardAction();
+    	forward = action.execute(request, response);
+		}
     	
     	//뷰 지정하기
     	if(forward != null) {

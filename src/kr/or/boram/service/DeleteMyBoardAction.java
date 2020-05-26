@@ -1,28 +1,34 @@
 package kr.or.boram.service;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.MyBoardDAO;
-import kr.or.boram.dto.MyBoard;
 
-public class SelectMyBoardListAction implements Action {
+//사원 삭제하기
+public class DeleteMyBoardAction implements Action {	
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
-		MyBoardDAO dao = new MyBoardDAO();
+		int diaryNo = Integer.parseInt(request.getParameter("diaryNo"));
 		
-		//글 목록 가져오기
-		List<MyBoard> list = dao.selectMyBoardList();
-		request.setAttribute("myBoardList", list);
+		MyBoardDAO dao = new MyBoardDAO();
+		int result = dao.deleteMyBoard(diaryNo);
+		
+		String msg = "";
+		if(result > 0) {
+			msg = "삭제되었습니다.";
+		} else {
+			msg = "삭제 실패";
+		}
+		
+		request.setAttribute("msg", msg);
 		
 		ActionForward forward = new ActionForward();
 		forward.setRedirect(false);
-		forward.setPath("WEB-INF/views/myBoard/myBoardList.jsp");
+		forward.setPath("/myBoardList.my");
 		
 		return forward;
 	}

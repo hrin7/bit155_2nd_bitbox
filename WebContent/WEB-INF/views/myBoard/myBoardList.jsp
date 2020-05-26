@@ -5,12 +5,12 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Diary</title>
+		<title>DIARY</title>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-			<link rel="stylesheet" href="../../assets/css/main.css" />
+			<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
 			<link href="https://cdn.jsdelivr.net/npm/remixicon@2.4.0/fonts/remixicon.css" rel="stylesheet"> <!-- 아이콘 -->
-			<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+			<noscript><link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/noscript.css" /></noscript>
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 	<script type="text/javascript">
@@ -43,45 +43,29 @@
                         	<table>
                         		<thead>
 									<tr>
-										<th width="15%">글번호</th>
-										<th width="55%">제목</th>
-										<th width="15%">작성일</th>
-										<th width="15%">조회</th>
+										<th width="10%">글번호</th>
+										<th width="65%">제목</th>
+										<th width="25%">작성일</th>
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="board" items="${requestScope.boardList}">
+									<c:forEach var="myBoardList" items="${requestScope.myBoardList}">
 										<tr>
-											<td>${board.boardNum}</td>
-											<td>
-												<c:forEach var="i" begin="1" end="${board.boardReLev}">
-												&nbsp;&nbsp;&nbsp;
-												</c:forEach>
-												<!-- depth가 0보다 큰것은 답글. 답글인 경우에는 이미지를 붙여준다 -->
-												<c:if test="${board.boardReLev > 0}">
-													<i class="ri-arrow-right-s-line"></i>
-												</c:if>
-                                    			<a href="selectBoard.board?boardNum=${board.boardNum}">${board.boardSubject}</a>
-												<!-- boardFile이 존재하는 경우에는 이미지를 붙여준다 -->
-                                    			<c:if test="${!empty board.boardFile}">
-                                    				<i class="ri-image-line"></i>
-                                    			</c:if>
-												<!-- comment cnt가 존재하는 경우 -->
-                                    			<c:if test="${board.commentCnt > 0}">
-													[${board.commentCnt}]
-												</c:if>
-											</td>
-											<td>${board.boardDate}</td>
-											<td>${board.boardReadcount}</td>
+											<td>${myBoardList.diaryNo}</td>
+											<td><a href="myBoardSelect.my?diaryNo=${myBoardList.diaryNo}">${myBoardList.diaryTitle}</a></td>
+											<td>${myBoardList.diaryDate}</td>
 										</tr>
 									</c:forEach>
 								</tbody>
-							</table>                        
-							<!-- 페이징 -->
-							<!-- 이전 링크 --> 
+							</table>
+							<p align="right"><a href="<%=request.getContextPath()%>/myBoardInsertForm.my" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a></p>
+														
+							<!-- 페이징 -->							
+							<p align="center">
+							<!--이전 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage > 1}">
-									<a href="boardList.board?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-line"></i></a>
+									<a href="boardList.board?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}" class="button alt small">&lt;</a>
 								</c:when>
 								<c:otherwise>
 									<a href="#"><i class="ri-arrow-left-s-line"></i></a>
@@ -91,40 +75,40 @@
 							<c:forEach var="i" begin="1" end="${requestScope.pageCount}" step="1">
 								<c:choose>
 									<c:when test="${requestScope.cpage == i}">
-										<a href="#">${i}</a>
+										<a href="#" class="button small">${i}</a>
 									</c:when>
 									<c:otherwise>
-										<a href="boardList.board?cp=${i}&ps=${requestScope.pageSize}">${i}</a>
+										<a href="boardList.board?cp=${i}&ps=${requestScope.pageSize}" class="button alt small">${i}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
-							<!-- 다음 링크 -->
+							<!--다음 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage < requestScope.pageCount}">
-									<a href="boardList.board?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-line"></i></a>
+									<a href="boardList.board?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}" class="button alt small">&gt;</a>
 								</c:when>
 								<c:otherwise>
 									<a href="#"><i class="ri-arrow-right-s-line"></i></a>
 								</c:otherwise>
-                        	</c:choose>
-                     	</div>
-						<br>
-						<a href="../myBoardInsertForm.my" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
+	                        </c:choose>
+							</p>
+							
+						</div>
 					</div>
-				</section>	
+				</section>
 			</article>
         	<!-- Footer -->
 			<jsp:include page="/common/footer.jsp"></jsp:include>
 		</div>
 		
 		<!-- Scripts -->
-		<script src="../assets/js/jquery.min.js"></script>
-		<script src="../assets/js/jquery.scrollex.min.js"></script>
-		<script src="../assets/js/jquery.scrolly.min.js"></script>
-		<script src="../assets/js/browser.min.js"></script>
-		<script src="../assets/js/breakpoints.min.js"></script>
-		<script src="../assets/js/util.js"></script>
-		<script src="../assets/js/main.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrollex.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/jquery.scrolly.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/browser.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/breakpoints.min.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
+		<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 		
 		<script type="text/javascript">		
 		//개인 계정으로만 접근 가능

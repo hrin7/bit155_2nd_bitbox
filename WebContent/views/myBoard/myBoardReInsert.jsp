@@ -33,35 +33,30 @@
 					<section class="wrapper style5">
 						<div class="inner">							
 							<div class="row">
-					<div class="col-12">
-						<!-- Form -->
-						<section class="box">
-							
-							<form method="post" action="<%=request.getContextPath()%>/myBoardInsert.my" enctype="multipart/form-data">
-								<div class="row gtr-uniform gtr-50">
-									<div class="col-6 col-12-mobilep">
-										<input type="text" name="title" id="title" placeholder="Title" />
-									</div>
-									<div class="col-6 col-12-mobilep">
-										<input type="file" name="file" id="file"/>
-									</div>
-									<div class="col-12">
-										<textarea id="summernote" name="message"></textarea>
-									</div>
-									<div class="col-12">
-										<ul class="actions">
-											<li><input type="submit" value="확인" /></li>
-										</ul>
-									</div>
+								<div class="col-12">
+									<!-- Form -->
+									<section class="box">
+										<form method="post" action="<%=request.getContextPath()%>/myBoardReInsert.my?diaryNo=${requestScope.diaryNo}" enctype="multipart/form-data">
+											<div class="row gtr-uniform gtr-50">
+												<div class="col-6 col-12-mobilep">
+													<input type="text" name="title" id="title" placeholder="Title" />
+												</div>
+												<div class="col-6 col-12-mobilep">
+													<input type="file" name="file" id="file"/>
+												</div>
+												<div class="col-12">
+													<textarea id="summernote" name="message"></textarea>
+												</div>
+												<div class="col-12">
+													<ul class="actions">
+														<li><input type="submit" value="확인" /></li>
+													</ul>
+												</div>
+											</div>
+										</form>							
+										<a href="<%=request.getContextPath()%>/myBoardList.my" id="">LIST</a>							
+									</section>
 								</div>
-							</form>
-							
-							<a href="<%=request.getContextPath()%>/myBoardList.my" id="">LIST</a>
-							<hr />
-							
-						</section>
-					</div>
-
 							</div>
 						</div>
 					</section>
