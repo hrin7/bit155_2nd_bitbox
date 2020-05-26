@@ -1,7 +1,5 @@
 package kr.or.boram.service;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,19 +8,22 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.MyBoardDAO;
 import kr.or.boram.dto.MyBoard;
 
-public class SelectMyBoardListAction implements Action {
+
+
+public class SelectMyBoardByNoAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
-		MyBoardDAO dao = new MyBoardDAO();
+		String diaryNo = request.getParameter("diaryNo");
+		System.out.println(diaryNo);
+		MyBoardDAO dao = new MyBoardDAO();			
+		MyBoard board = dao.selectMyBoardByNo(Integer.parseInt(diaryNo));
 		
-		//글 목록 가져오기
-		List<MyBoard> list = dao.selectMyBoardList();
-		request.setAttribute("myBoardList", list);
+		request.setAttribute("myBoard", board);
+		//System.out.println(board); //잘 넘어 왔나 찍어보기
 		
 		ActionForward forward = new ActionForward();
-		forward.setRedirect(false);
-		forward.setPath("WEB-INF/views/myBoard/myBoardList.jsp");
+		forward.setPath("WEB-INF/views/myBoard/myBoardDetail.jsp");
 		
 		return forward;
 	}

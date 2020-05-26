@@ -15,7 +15,7 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.MyBoardDAO;
 import kr.or.boram.dto.MyBoard;
 
-public class InsertMyBoardAction implements Action {
+public class ReInsertMyBoardAction implements Action {
 	
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
@@ -39,6 +39,7 @@ public class InsertMyBoardAction implements Action {
 			);
 			
 			Enumeration filenames = multi.getFileNames();
+			
 			String file = (String)filenames.nextElement();
 			fileName = multi.getFilesystemName(file);
 			oriFileName = multi.getOriginalFileName(file);
@@ -58,16 +59,16 @@ public class InsertMyBoardAction implements Action {
 		board.setDiaryFileName(fileName);
       
 		//파일 처리하는 부분
-//		if(filename == null) {
-//		emp.setImage("user.png");
-//		} else {
-//		emp.setImage(filename);
-//		}
+//			if(filename == null) {
+//			emp.setImage("user.png");
+//			} else {
+//			emp.setImage(filename);
+//			}
 		
 		//System.out.println("보드 : " + board); //board 찍어보기
 		MyBoardDAO dao = new MyBoardDAO();
 		int result = dao.insertMyBoard(board);
-		//System.out.println("result : " + result); //result 찍어보기
+		System.out.println("result : " + result); //result 찍어보기
 		
 		String msg = "";
 		
