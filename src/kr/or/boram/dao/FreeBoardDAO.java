@@ -72,6 +72,41 @@ public class FreeBoardDAO {
 	}
 	
 	//게시글 상세보기
+	public Board selectBoardByNo(int no) {
+		Board board = null;
+		
+		try {
+			conn = ds.getConnection();
+			String sql = "select no, id, title, content, write_date, views from board where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				board = new Board();
+				board.setNo(rs.getInt("no"));
+				board.setId(rs.getString("id"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setWriteDate(rs.getString("write_date"));
+				board.setViews(rs.getInt("views"));
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e2) {
+				System.out.println(e2.getMessage());
+			}
+		}
+		
+		return board;
+	}
+	
+	//게시글 카테고리
 	public List<Object> selectBoardByNo(int no, int board_code) {
 		List<Object> boardAndBoardName = new ArrayList<>();
 		Board board = null;
@@ -115,6 +150,7 @@ public class FreeBoardDAO {
 				System.out.println(e2.getMessage());
 			}
 		}
+		System.out.println(boardAndBoardName);
 		return boardAndBoardName;
 	}
 	
