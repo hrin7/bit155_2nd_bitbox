@@ -71,3 +71,12 @@
 .font-design, .modal, .modal-title {
 	color: #707090 !important; 
 }
+
+#textarea:focus {
+	height: 150px;
+	background-color: white;
+}
+
+#kanbanContent {
+	width: 100%;
+}
