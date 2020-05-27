@@ -114,7 +114,7 @@ $('#outer').on('click', '.addCardBtn', function() {
 
 ////////////////////////////////////////////////////////////////////////////
 
-/*
+
 //목록 그리는 함수
 function makeKanbanList(resData) {
 	let html = "";
@@ -145,25 +145,17 @@ function makeKanbanList(resData) {
 	$('#outer').append(html);
 }
 
-//전체글 보기
-$.ajax({
-	url: "SelectKanban.ajax",
-	dataType: "json",
-	success: function(resData) {
-		makeKanbanList(resData);
-	}
-});
- */
-
 //모달 닫기 감지해서 닫을때마다 리스트 만들기
-console.log($('#myModal'));
-$('#myModal').on('show.bs.modal', function(event){
-	console.log($(this));
-	console.log('들어오나??');
-});
 $('#myModal').on('hide.bs.modal', function(event){
-	console.log($(this));
-	console.log('들어오나??');
+	//전체 리스트
+	$.ajax({
+		url: "SelectKanban.ajax",
+		dataType: "json",
+		success: function(resData) {
+			$('#outer').empty();
+			makeKanbanList(resData);
+		}
+	});
 });
 
 //상세글 보기
