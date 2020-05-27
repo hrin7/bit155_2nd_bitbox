@@ -26,7 +26,7 @@ public class InsertKanbanCardName extends HttpServlet {
     	
     	HttpSession session = request.getSession();
     	KanbanBoard kanbanBoard = new KanbanBoard();
-    	kanbanBoard.setId("hyerin");
+    	kanbanBoard.setId((String)session.getAttribute("userID"));
     	kanbanBoard.setKanbanTitle(request.getParameter("cardTitle"));
     	
     	KanbanBoardDAO dao = new KanbanBoardDAO();
@@ -35,7 +35,7 @@ public class InsertKanbanCardName extends HttpServlet {
     	
     	//insert하고 현재 시퀀스값 가져오기
     	int kanbanNo = dao.insertKanbanCardName(kanbanBoard);
-    	
+    	System.out.println(kanbanBoard);
     	PrintWriter out = response.getWriter();
 		out.print(kanbanNo);
 		out.close();

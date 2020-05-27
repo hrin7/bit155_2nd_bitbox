@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
@@ -21,8 +22,11 @@ public class SelectKanbanListAction implements Action {
 		List<KanbanGroup> kanbanGroupList = dao.selectKanbanCode();
 		request.setAttribute("kanbanGroupList", kanbanGroupList);
 		
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("userID");
+		
 		//보드리스트 가져오기
-		List<List<KanbanBoard>> allList = dao.selectList();
+		List<List<KanbanBoard>> allList = dao.selectList(id);
 		request.setAttribute("allList", allList);
 		
 		ActionForward forward = new ActionForward();

@@ -124,6 +124,12 @@
 							<br><br><br>
 							<p id="kanbanContent" style="clear: both;"></p>
 							<br>
+							<!-- <form name="uploadForm" id="uploadForm" enctype="multipart/form-data" method="post">
+								<div id="fileArea">
+									<input type="file" name="file" id="file" class="font-design"/>
+								</div>
+								<input type="submit" value="Upload" class="button primary small"/>
+							</form> -->
 							<p id="kanbanDate"></p>
 							
 							<h2 class="font-design">Activity</h2>

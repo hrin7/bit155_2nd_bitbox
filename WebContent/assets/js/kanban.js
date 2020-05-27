@@ -8,7 +8,15 @@ memoSectionDivHtml += 		'<button class="button primary small addListBtn">Add Lis
 memoSectionDivHtml += 		'<a href="javascript:void(0);" class="listCancelBtn"><i class="ri-close-fill ri-xl"></i></a>';
 memoSectionDivHtml += 	'</div>';
 memoSectionDivHtml += '</div>';
-	
+
+//리스트 만들기
+$('#createListBtn').click(function() {
+	$(this).hide();
+	$('#createListBtnBefore').before(memoSectionDivHtml);
+	$('input').focus();
+});
+
+//리스트 이름 입력받은 후 만들기 버튼눌렀을 때
 $('#outer').on('click', '.addListBtn', function() {
 	let listName = $(this).prev().val();
 	if(listName == "") {
@@ -16,6 +24,7 @@ $('#outer').on('click', '.addListBtn', function() {
 		$(this).prev().focus();
 		return;
 	}
+	$('input').blur();
 	
 	//버튼의 형제들 삭제
 	$(this).siblings().remove();
@@ -32,20 +41,48 @@ $('#outer').on('click', '.addListBtn', function() {
 		data: {listName: listName},
 		success: function() {
 		}
-	})
+	});
 });
 
+//리스트 만들기 캔슬
 $('#outer').on('click', '.listCancelBtn', function() {
 	$(this).parent().parent().hide();
 	$('#createListBtn').show();
 });
 
-$('#createListBtn').click(function() {
-	$(this).hide();
-	$('#createListBtnBefore').before(memoSectionDivHtml);
-	$('input').focus();
-});
-
+//리스트 이름 바꾸기
+//$('#outer').on('click', '.memoTitle', function() {
+//	let memoTitle = $(this);
+//	let listName = $(this).text();
+//	$(this).before("<input type='text' value='"+listName+"' id='listNameInput'/>");
+//	$('#listNameInput').focus();
+//	$(this).hide();
+//	
+//	$('#listNameInput').blur(function() {
+//		if($(this).val() == "") {
+//			alert('list Name을 입력하세요');
+//			$(this).focus();
+//			return;
+//		}
+//		
+//		memoTitle.show();
+//		memoTitle.text($(this).val());
+//		$(this).remove();
+//		
+//		if(listName != $(this).val()) {
+//			$.ajax({
+//				url: "UpdateKanbanListName.ajax",
+//				data: {
+//					oriListName: listName,
+//					updateListName: $(this).val()
+//				},
+//				success: function() {
+//					$('#listNameInput').blur();
+//				}
+//			});
+//		}
+//	});
+//});
 /////////////////////////////////////////////
 
 var memoContentHtml = "";
@@ -116,46 +153,47 @@ $('#outer').on('click', '.addCardBtn', function() {
 
 
 //목록 그리는 함수
-function makeKanbanList(resData) {
-	let html = "";
-	$.each(resData[0].allKanbanList, function(index, obj) {
-		html += '<div class="memoSectionDiv shadow" data-title="'+resData[0].kanbanGroupList[index].listName+'">';
-		html += 	'<div class="memoTopHr"></div>';
-		html += 	'<div class="memoTitle">'+resData[0].kanbanGroupList[index].listName+'</div>';
-		$.each(obj, function(index2, obj2) {
-			html += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+obj2.kanbanNo+"' data-title='"+resData[0].kanbanGroupList[index].listName+"'>";
-			html += 	obj2.kanbanTitle+'<br>';
-			if(obj2.kanbanContent != "") {
-				html += '<i class="ri-align-left"></i>';
-			}
-			if(obj2.kanbanCommentCount != 0) {
-				html += '<i class="ri-chat-3-line"></i>'+obj2.kanbanCommentCount;
-			}
-			if(obj2.kanbanFileCount != 0) {
-				html += '<i class="ri-chat-3-line"></i>'+obj2.kanbanFileCount;
-			}
-			html += '</div>';
-		});
-		html += 	'<div id="createMemoContentBtnBefore">';
-		html += 		'<div class="createMemoContentBtn">+ Add a card</div>';
-		html += 	'</div>';
-		html += '</div>';
-	});
-	html += '<div id="createListBtnBefore"><div id="createListBtn">+ Add a list</div></div>';
-	$('#outer').append(html);
-}
+//function makeKanbanList(resData) {
+//	let html = "";
+//	$.each(resData[0].allKanbanList, function(index, obj) {
+//		html += '<div class="memoSectionDiv shadow" data-title="'+resData[0].kanbanGroupList[index].listName+'">';
+//		html += 	'<div class="memoTopHr"></div>';
+//		html += 	'<div class="memoTitle">'+resData[0].kanbanGroupList[index].listName+'</div>';
+//		$.each(obj, function(index2, obj2) {
+//			html += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+obj2.kanbanNo+"' data-title='"+resData[0].kanbanGroupList[index].listName+"'>";
+//			html += 	obj2.kanbanTitle+'<br>';
+//			if(obj2.kanbanContent != "") {
+//				html += '<i class="ri-align-left"></i>';
+//			}
+//			if(obj2.kanbanCommentCount != 0) {
+//				html += '<i class="ri-chat-3-line"></i>'+obj2.kanbanCommentCount;
+//			}
+//			if(obj2.kanbanFileCount != 0) {
+//				html += '<i class="ri-chat-3-line"></i>'+obj2.kanbanFileCount;
+//			}
+//			html += '</div>';
+//		});
+//		html += 	'<div id="createMemoContentBtnBefore">';
+//		html += 		'<div class="createMemoContentBtn">+ Add a card</div>';
+//		html += 	'</div>';
+//		html += '</div>';
+//	});
+//	html += '<div id="createListBtnBefore"><div id="createListBtn">+ Add a list</div></div>';
+//	$('#outer').append(html);
+//}
 
-//모달 닫기 감지해서 닫을때마다 리스트 만들기
+//모달 닫을때마다 리스트 만들기
 $('#myModal').on('hide.bs.modal', function(event){
 	//전체 리스트
-	$.ajax({
-		url: "SelectKanban.ajax",
-		dataType: "json",
-		success: function(resData) {
-			$('#outer').empty();
-			makeKanbanList(resData);
-		}
-	});
+//	$.ajax({
+//		url: "SelectKanban.ajax",
+//		dataType: "json",
+//		success: function(resData) {
+//			$('#outer').empty();
+//			makeKanbanList(resData);
+//		}
+//	});
+	location.reload();
 });
 
 //상세글 보기
@@ -212,56 +250,71 @@ $('#cardName').click(function() {
 	});
 });
 
-//모달창이 떴을 때
+//모달창이 떴을 때 내용 업뎃하기
 $('#myModal').on('shown.bs.modal', function () {
-	setTimeout(function(){
+//	setTimeout(function(){
 		//상세보기에서 카드내용 클릭해서 update
-		let updateCardContent = $('#kanbanContent').text();
-		if(updateCardContent != "") {
-			updateCardContent = $(this).text();
-			console.log(updateCardContent);
-			$('#kanbanContent').click(function() {
-				$(this).after("<textarea placeholder='Add a more detailed description...' style='resize: none;' id='textarea'>"+updateCardContent+"</textarea>");
-				$("#textarea").focus();
-				$('#kanbanContent').hide();
+		$('#kanbanContent').click(function() {
+			let cardContentText = $(this).text();
+			//기존에 내용이 있으면
+			if(cardContentText != "") {
+				$(this).after("<textarea placeholder='Add a more detailed description...' style='resize: none;' id='textarea'>"+cardContentText+"</textarea>");
+				setTimeout(function(){
+					$("#textarea").focus();
+					$('#kanbanContent').hide();
+				}, 100);
 				
-				//카드내용 update
-				updateContent();
-			});
-		} else {
-			$('#textarea').blur(function() {
-				if(updateCardContent != "") {
-					//카드내용 update
-					updateContent();
-				}
-			})
-		}
-	}, 100);
+				//textarea에서 나왔을 때 카드내용 update
+				$('#textarea').blur(function() {
+					let updateCardContent = $(this).val();
+					//기존의 내용과 다르면 ajax 호출
+					if(updateCardContent != cardContentText) {
+						updateContent(updateCardContent);
+					} else {
+						$('#kanbanContent').show();
+						$('#kanbanContent').text(updateCardContent);
+						$('#editBtn').show();
+						$("#textarea").remove();
+					}
+				});
+			//기존에 내용이 없으면
+			} else {
+				//textarea에서 나왔을 때 카드내용 update
+				$('#textarea').blur(function() {
+					let updateCardContent = $(this).val();
+					if(updateCardContent != "") {
+						updateContent(updateCardContent);
+					}
+				});
+			}
+		});
+//	}, 100);
 });
 
 //내용 update하는 함수
-function updateContent() {
-	$('#textarea').blur(function() {
-		let updateCardContent = $(this).val();
-		$.ajax({
-			url: "UpdateKanbanCardContent.ajax",
-			type: "post",
-			async : false,
-			data: {
-				kanbanContent: updateCardContent,
-				kanbanNo: kanbanNo
-			},
-			success: function() {
-				if(updateCardContent == "") {
-					$('#editBtn').hide();
-					return;
-				} else {
-					$('#kanbanContent').show();
-					$('#kanbanContent').text(updateCardContent);
-					$('#editBtn').show();
-					$("#textarea").remove();
-				}
+function updateContent(updateCardContent) {
+	console.log("에이젝스호출");
+	$.ajax({
+		url: "UpdateKanbanCardContent.ajax",
+		type: "post",
+		async : false,
+		data: {
+			kanbanContent: updateCardContent,
+			kanbanNo: kanbanNo
+		},
+		success: function() {
+			if(updateCardContent == "") {
+				$('#editBtn').hide();
+				return;
+			} else {
+				$('#kanbanContent').show();
+				$('#kanbanContent').text(updateCardContent);
+				$('#editBtn').show();
+				$("#textarea").remove();
 			}
-		});
+		}
 	});
 }
+
+
+

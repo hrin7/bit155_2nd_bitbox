@@ -62,7 +62,7 @@ public class KanbanBoardDAO {
 	}
 	
 	//칸반보드 리스트가져오기
-	public List<List<KanbanBoard>> selectList() {
+	public List<List<KanbanBoard>> selectList(String id) {
 		List<KanbanGroup> kanbanGroupList = null;
 		List<KanbanBoard> groupList = null;
 		List<List<KanbanBoard>> allList = null;
@@ -82,12 +82,13 @@ public class KanbanBoardDAO {
 			}
 			
 			String sql = "select kanban_code, kanban_no, id, kanban_title, kanban_content, kanban_comment_count, kanban_file_count "
-					   + "from kanban where kanban_code=? order by kanban_no";
+					   + "from kanban where kanban_code=? and id=? order by kanban_no";
 			pstmt = conn.prepareStatement(sql);
 			
 			allList = new ArrayList<>();
 			for(KanbanGroup kanbanGroup : kanbanGroupList) {
 				pstmt.setInt(1, kanbanGroup.getKanbanCode());
+				pstmt.setString(2, kanbanGroup.get);
 				rs = pstmt.executeQuery();
 				
 				groupList = new ArrayList<>();
@@ -221,8 +222,8 @@ public class KanbanBoardDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = "insert into kanban(id, kanban_no, kanban_title, kanban_code)" +
-						 "values(?, kanban_no_seq.nextval, ?, ?)";
+			String sql = "insert into kanban(id, kanban_no, kanban_title, kanban_code, kanban_date)" +
+						 "values(?, kanban_no_seq.nextval, ?, ?, sysdate)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, kanbanBoard.getId());
 			pstmt.setString(2, kanbanBoard.getKanbanTitle());
@@ -251,6 +252,44 @@ public class KanbanBoardDAO {
 			}
 		}
 		return kanbanNo;
+	}
+	
+	//칸반 list이름 update하기
+	public int updateKanbanListName(String oriListName, String updateListName) {
+		int row = 0;
+		int kanbanCode = 0;
+		String listName = null;
+		
+		try {
+			conn = ds.getConnection();
+			//파라미터로 넘어온 listName으로 칸반코드 찾기
+			String selectSql = "select kanban_code from kanban_group where list_name=?";
+			pstmt = conn.prepareStatement(selectSql);
+			pstmt.setString(1, oriListName);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				kanbanCode = rs.getInt("kanban_code");
+			}
+			
+			String sql = "update kanban_group set list_name=? where kanban_code=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, updateListName);
+			pstmt.setInt(2, kanbanCode);
+			
+			row = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.out.println("updateKanbanListName 오류: " + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+			    conn.close();
+			} catch (Exception e2) {
+				e2.getStackTrace();
+			}
+		}
+		return row;
 	}
 	
 	//칸반 card이름 update하기
@@ -289,6 +328,34 @@ public class KanbanBoardDAO {
 			conn = ds.getConnection();
 			
 			String sql = "update kanban set kanban_content=? where kanban_no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, kanbanBoard.getKanbanContent());
+			pstmt.setInt(2, kanbanBoard.getKanbanNo());
+			
+			row = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.out.println("updateKanbanCardContent 오류: " + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+			    conn.close();
+			} catch (Exception e2) {
+				e2.getStackTrace();
+			}
+		}
+		return row;
+	}
+
+	//칸반 card file update하기
+	public int updateKanbanCardFile(KanbanBoard kanbanBoard) {
+		int row = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = "update kanban set kanban_file_name=? where kanban_no=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, kanbanBoard.getKanbanContent());
 			pstmt.setInt(2, kanbanBoard.getKanbanNo());

@@ -9,27 +9,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.dao.KanbanBoardDAO;
-import kr.or.boram.dto.KanbanBoard;
 
-@WebServlet("/UpdateKanbanCardName.ajax")
-public class UpdateKanbanCardName extends HttpServlet {
+@WebServlet("/UpdateKanbanListName.ajax")
+public class UpdateKanbanListName extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public UpdateKanbanCardName() {
+    public UpdateKanbanListName() {
         super();
     }
 
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("utf-8");
     	
-    	KanbanBoard kanbanBoard = new KanbanBoard();
-    	kanbanBoard.setKanbanTitle(request.getParameter("cardTitle"));
-    	kanbanBoard.setKanbanNo(Integer.parseInt(request.getParameter("kanbanNo")));
+    	String oriListName = request.getParameter("oriListName");
+    	String updateListName = request.getParameter("updateListName");
     	
     	KanbanBoardDAO dao = new KanbanBoardDAO();
     	
-    	//update card name
-    	dao.updateKanbanCardName(kanbanBoard);
+    	//update list name
+    	dao.updateKanbanListName(oriListName, updateListName);
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
