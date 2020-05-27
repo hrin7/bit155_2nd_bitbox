@@ -12,7 +12,7 @@
 		<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 		<script type="text/javascript">
 			$(function() {
-				$('#hiddenImg').val('${#}');
+				$('#hiddenImg').val('${myBoard.diaryFileName}');
 			});
 		</script>
 	</head>
@@ -45,7 +45,8 @@
 												<input type="text" name="title" id="title" value="${myBoard.diaryTitle}" />
 											</div>
 											<div class="col-6 col-12-mobilep">
-												<input type="file" name="file" id="file" value="${myBoard.diaryFileName}" />
+												<input type="file" name="file" id="file" />
+												<input type="hidden" name="image" id="hiddenImg"/>
 											</div>
 											<div class="col-12">
 												<textarea id="summernote" name="message">${myBoard.diaryContent}</textarea>

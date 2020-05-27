@@ -17,6 +17,7 @@
 				alert("${requestScope.msg}");
 			}
 			//console.log("${requestScope.msg}")
+			
 			//사진
 			$('#image').attr('src', 'upload/${myBoard.diaryFileName}');
 			/* $('#hiddenImg').val('${board.boardFile}'); */
@@ -47,22 +48,21 @@
                         <blockquote>                           
                         	<h3>${myBoard.diaryTitle}</h3><br>
                            	${myBoard.diaryDate}<br>
+                           	<c:if test="${!empty myBoard.diaryFileName}">
+								첨부파일 <a href='upload/${myBoard.diaryFileName}' download>${myBoard.diaryFileName}</a>
+							</c:if>
                         </blockquote>
                         <pre>
 							<c:if test="${!empty myBoard.diaryFileName}">
-								첨부파일  <a href='upload/${myBoard.diaryFileName}' download>${myBoard.diaryFileName}</a>
-							</c:if>
-							<c:if test="${!empty board.boardFile}">
 								<img id="image" width="500px"/>
 								<br>
 							</c:if>
-							${myBoard.diaryContent}                        	
-                        </pre>                        
+							${myBoard.diaryContent}
+                        </pre>
                         <a href="myBoardUpdateInfo.my?diaryNo=${myBoard.diaryNo}" class="button small">Edit</a>
                         <a href="myBoardDelete.my?diaryNo=${myBoard.diaryNo}" class="button small">Delete</a>
                         <a href="myBoardReInsertForm.my?diaryNo=${myBoard.diaryNo}" class="button small">Reply</a>
                         <hr>
-                     	
                         
                         <!-- 댓글 -->
                         <div id="com">

@@ -21,7 +21,7 @@ public class UpdateMyBoardInfoAction implements Action {
 		request.setAttribute("myBoard", board);		
 		
 		ActionForward forward = new ActionForward();
-		forward.setPath("WEB-INF/views/myBoard/myBoardUpdateForm.jsp");
+		forward.setPath("WEB-INF/views/myBoard/myBoardUpdate.jsp");
 		
 		return forward;
 	}
