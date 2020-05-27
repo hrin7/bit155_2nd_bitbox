@@ -23,14 +23,14 @@
 							<a href="<%=request.getContextPath()%>/logout.user" class="button">logout</a>
 							
 							</li>
-							<li><br><a href="template.jsp">My Board</a></li>
-							<li><a href="selectList.kanban">CanBan</a></li>
+							<li><br><a href="myBoardList.my">My Board</a></li>
+							<li><a href="selectList.kanban">KanBan</a></li>
 							<li><a href="template.jsp">Scheduler</a></li>
 							<li><a href="template.jsp">To-do-List</a></li>
 							
 							<!-- 로그인 안해도 보이는 메뉴 -->
 							<li><br><a href="template.jsp">Notice</a></li>
-							<li><a href="elements.html">Free Board</a></li>
+							<li><a href="selectBoardList.free">Free Board</a></li>
 							
 							<!-- admin 계정으로 로그인시 보이는 메뉴 -->
 							<li><a href="#">회원정보관리</a></li>
