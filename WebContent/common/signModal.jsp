@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <script type="text/javascript">
-
+	
+	//회원가입 체크 로직 부분 
 	function check() {
 		  
 		      if (!checkUserId(joinForm.id.value)) {
@@ -161,6 +162,46 @@
 		        return true; //확인이 완료되었을 때
 		  }
 
+		  
+		  
+		 ////////////////////////////////////////// 로그인 체크 함수 부분 //////////////////////////////////////////////////////
+		 
+		 function loginCheck(){
+			 
+			 var flag = false;		  
+		     var userData = {"userid":$('#userid').val() , "userpwd":$('#userpwd').val() };
+
+		      //alert("userDate 객체"+userData.userid+userData.userpwd); //객체 값 뽑는것까진 성공 
+		      
+		      $.ajax({
+					url : "UserLoginCheck.ajax", //요청할 URL 주소
+					type : "POST",
+					async : false, 
+					data :{"userid":$('#userid').val() , "userpwd":$('#userpwd').val() }, 
+					dataType : "html", //보낼데이터가 html타입이 아니라 json 형태로 보내서 서버에서 받고싶음
+					success : function(result){ //성공적으로 데이터를 보냈다면 result에 반환값이 담김	
+						console.log("result 값:"+result);
+						if(result == 0){
+							swal("해당 ID는 존재하지 않습니다");
+						}else if(result == 1){
+							flag = true; //로그인 성공시 
+						}else if(result == 2){
+							swal("패스워드가 틀립니다(5회 틀릴시 24시간동안 계정잠금)");
+						}else if(result == -1){
+							swal("데이터 베이스 오류");
+						}
+					}  
+						
+				});	
+		      
+		      
+		      return flag;
+			 
+			 
+			 
+		 }//loginCheck() 끝 
+		 
+		  
 </script>
 	
 <div class="modal fade" id="myModal" role="dialog">
@@ -175,7 +216,7 @@
 				<h2 style="color: #6a51a7 !important;">Welcome back,</h2>
 				
 				<!-- 로그인 Form -->
-				<form action="login.user" method="post" name="loginForm" id="loginForm">
+				<form action="login.user" method="post" name="loginForm" id="loginForm" onsubmit="return loginCheck();">
 					<label>
 						<span>ID</span>
 						<input type="text" name="userid" id="userid"/>

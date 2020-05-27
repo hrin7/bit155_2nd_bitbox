@@ -12,56 +12,29 @@
 		<link rel="stylesheet" href="assets/css/modal.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="assets/js/signUp.js"></script> <!-- 회원가입시 로직함수 -->
+		<script type="text/javascript" src="assets/js/idCheck_msg.js"></script> <!-- ID중복체크 로직함수+메시지띄우기(동률)-->
+		<script type="text/javascript" src="assets/js/signUp.js"></script> <!-- 회원가입시 로직함수(동률)-->
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script><!-- 이쁜 알람창 CDN(동률) -->
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script><!-- 이쁜 알람창 CDN -->
 		<script type="text/javascript">
-		$(function() {
-			if("${requestScope.msg}" == "정상적으로 회원가입이 완료되었습니다") {
-				alert("${requestScope.msg}");
-			}else if("${requestScope.msg}" == "회원가입중 에러 발생...다시 회원가입 바람"){
-				alert("${requestScope.msg}");
-			}
-		});
-		
-		//비동기 방식으로 ID중복체크 클릭시 중복되는ID면 알람창으로 해당ID를 사용할수 없다고 알려주기
-		function id_duplicate_check(){
-			var userID = $('#id').val();
-			//alert("중복체크 클릭시 "+userID);
-			var idRegExp = /^[a-zA-z0-9]{4,12}$/; //아이디 유효성 검사
-			
-			if(userID == null || userID == ""){
-				swal("ID를 입력해주세요");
-				return false;
-			}
-			
-			if(!idRegExp.test(userID)) { //입력받은 ID 값이 정규표현식에 일치하는지 테스트 
-		          swal("아이디는 4~12자 영문 대소문자 또는 숫자 입력바람");
-		          return false;
-		    }
-			
-			$.ajax({
-				url : "UserIdCheck.ajax", //요청할 URL 주소
-				type : "POST",
-				data :{id : userID}, 
-				dataType : "text",
-				success : function(result){ //성공적으로 데이터를 보냈다면 result에 반환값이 담김
-					
-					console.log("반환값"+result);
-					if(result == 1){
-						swal("사용할수 없는 ID입니다");
-					}else if(result == 0){
-						swal("사용 가능한 ID입니다");
-					}else{
-						swal("데이터 베이스 오류발생");
-					}
+			$(function() {
+				if("${requestScope.msg}" == "정상적으로 회원가입이 완료되었습니다") {
+					alert("${requestScope.msg}");
+				}else if("${requestScope.msg}" == "회원가입중 에러 발생...다시 회원가입 바람"){
+					alert("${requestScope.msg}");
+				}else if("${requestScope.msg}" == "로그인 성공 메인페이지로 이동"){
+					alert("${requestScope.msg}");
 				}
-					
 			});
-		}
+		</script>
+		<!-- 로그아웃후 메인페이지로 이동하는데 뒤로가기 버튼을 막는 함수 -->
+		 <script type="text/javascript">
+			 window.history.forward();
+			 function noBack(){window.history.forward();}
 		</script>
 	</head>
-	<body class="landing is-preload">
+	<!-- 로그아웃후 메인페이지로 뒤로가기가 안될 페이지 설정 -->
+	<body class="landing is-preload" onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
 
 		<!-- Page Wrapper -->
 		<div id="page-wrapper">
@@ -95,7 +68,7 @@
 		</div>
 		
 		<!-- sign Modal -->
-		<jsp:include page="common/signModal.jsp"></jsp:include>
+		<jsp:include page="/common/signModal.jsp"></jsp:include>
 		
 		<!-- Scripts -->
 		<script src="assets/js/jquery.min.js"></script>
