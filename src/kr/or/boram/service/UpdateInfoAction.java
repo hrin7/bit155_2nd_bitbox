@@ -1,7 +1,5 @@
 package kr.or.boram.service;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,7 +8,7 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.FreeBoardDAO;
 import kr.or.boram.dto.Board;
 
-public class UpdadeInfoAction implements Action {
+public class UpdateInfoAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {

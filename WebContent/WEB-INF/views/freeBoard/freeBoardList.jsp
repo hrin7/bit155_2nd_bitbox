@@ -66,7 +66,7 @@
 							<!-- 이전 링크 --> 
 							<c:choose>
 								<c:when test="${requestScope.cpage > 1}">
-									<a href="boardList.board?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-line"></i></a>
+									<a href="selectBoardList.free?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-line"></i></a>
 								</c:when>
 								<c:otherwise>
 									<a href="#"><i class="ri-arrow-left-s-line"></i></a>
@@ -79,14 +79,14 @@
 										<a href="#">${i}</a>
 									</c:when>
 									<c:otherwise>
-										<a href="boardList.board?cp=${i}&ps=${requestScope.pageSize}">${i}</a>
+										<a href="selectBoardList.free?cp=${i}&ps=${requestScope.pageSize}">${i}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							<!-- 다음 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage < requestScope.pageCount}">
-									<a href="boardList.board?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-line"></i></a>
+									<a href="selectBoardList.free?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-line"></i></a>
 								</c:when>
 								<c:otherwise>
 									<a href="#"><i class="ri-arrow-right-s-line"></i></a>
@@ -119,6 +119,8 @@
 //				alert('로그인 후 이용가능합니다.');
 //			});
 //		}
+
+		
 		</script>
       
 	</body>

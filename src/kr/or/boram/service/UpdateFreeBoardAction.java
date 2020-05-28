@@ -72,7 +72,7 @@ public class UpdateFreeBoardAction implements Action {
 		request.setAttribute("msg", msg);
 		ActionForward forward = new ActionForward();
 		forward.setRedirect(false);
-		forward.setPath("selectBoard.free?no=" + no);
+		forward.setPath("selectBoard.free?no=" + no + "&boardCode=" + boardCode);
 		
 		return forward;
 	}
