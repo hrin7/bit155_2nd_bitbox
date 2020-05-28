@@ -11,6 +11,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import kr.or.boram.dto.KanbanBoard;
+import kr.or.boram.dto.KanbanBoardAndGroup;
 import kr.or.boram.dto.KanbanGroup;
 
 public class KanbanBoardDAO {
@@ -31,13 +32,14 @@ public class KanbanBoardDAO {
 	}
 	
 	//KanbanCode, 리스트이름 구하기
-	public List<KanbanGroup> selectKanbanCode() {
+	public List<KanbanGroup> selectKanbanGroupList(String id) {
 		List<KanbanGroup> kanbanGroupList = null;
 		
 		try {
 			conn = ds.getConnection();
-			String sql = "select kanban_code, list_name from kanban_group";
+			String sql = "select kanban_code, list_name from kanban_group  where id = ?";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
 			
 			rs = pstmt.executeQuery();
 			kanbanGroupList = new ArrayList<KanbanGroup>();
@@ -62,51 +64,39 @@ public class KanbanBoardDAO {
 	}
 	
 	//칸반보드 리스트가져오기
-	public List<List<KanbanBoard>> selectList(String id) {
-		List<KanbanGroup> kanbanGroupList = null;
-		List<KanbanBoard> groupList = null;
-		List<List<KanbanBoard>> allList = null;
+	public List<KanbanBoardAndGroup> selectList(String id) {
+		List<KanbanBoardAndGroup> kanbanList = null;
 		
 		try {
 			conn = ds.getConnection();
-			//그룹코드 가져오기
-			String codeSql = "select kanban_code, list_name from kanban_group";
-			pstmt = conn.prepareStatement(codeSql);
-			rs = pstmt.executeQuery();
-			kanbanGroupList = new ArrayList<>();
-			while(rs.next()) {
-				KanbanGroup kanbanGroup = new KanbanGroup();
-				kanbanGroup.setKanbanCode(rs.getInt("kanban_code"));
-				kanbanGroup.setListName(rs.getString("list_name"));
-				kanbanGroupList.add(kanbanGroup);
-			}
-			
-			String sql = "select kanban_code, kanban_no, id, kanban_title, kanban_content, kanban_comment_count, kanban_file_count "
-					   + "from kanban where kanban_code=? and id=? order by kanban_no";
+			String sql = "select g.kanban_code, g.id, g.list_name, k.kanban_no, k.kanban_title, k.kanban_content, k.kanban_date, k.kanban_file_name, k.kanban_file_count, k.kanban_comment_count," + 
+						 "  	 (select count(*) from kanban_comment where kanban_no=k.kanban_no) cnt" + 
+						 "  from kanban_group g" + 
+						 "  left outer join kanban k" + 
+						 "    on g.kanban_code = k.kanban_code" + 
+						 "   and g.id = k.id" + 
+						 " where g.id = ?" + 
+						 " order by g.kanban_code, k.kanban_no";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
 			
-			allList = new ArrayList<>();
-			for(KanbanGroup kanbanGroup : kanbanGroupList) {
-				pstmt.setInt(1, kanbanGroup.getKanbanCode());
-				pstmt.setString(2, kanbanGroup.get);
-				rs = pstmt.executeQuery();
-				
-				groupList = new ArrayList<>();
-				while(rs.next()) {
-					KanbanBoard kanban = new KanbanBoard();
-					kanban.setKanbanCode(rs.getInt("kanban_code"));
-					kanban.setKanbanNo(rs.getInt("kanban_no"));
-					kanban.setId(rs.getString("id"));
-					kanban.setKanbanTitle(rs.getString("kanban_title"));
-					kanban.setKanbanContent(rs.getString("kanban_content"));
-					kanban.setKanbanCommentCount(rs.getInt("kanban_comment_count"));
-					kanban.setKanbanFileCount(rs.getInt("kanban_file_count"));
-					groupList.add(kanban);
-				}
-				allList.add(groupList);
+			kanbanList = new ArrayList<>();
+			while(rs.next()) {
+				KanbanBoardAndGroup kanban = new KanbanBoardAndGroup();
+				kanban.setKanbanCode(rs.getInt("kanban_code"));
+				kanban.setKanbanNo(rs.getInt("kanban_no"));
+				kanban.setId(id);
+				kanban.setKanbanTitle(rs.getString("kanban_title"));
+				kanban.setKanbanContent(rs.getString("kanban_content"));
+				kanban.setKanbanCommentCount(rs.getInt("kanban_comment_count"));
+				kanban.setKanbanFileCount(rs.getInt("kanban_file_count"));
+				kanban.setListName(rs.getString("list_name"));
+				kanban.setKanbanCommentCount(rs.getInt("cnt"));
+				kanbanList.add(kanban);
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("selectList에러 : " + e.getMessage());
 		} finally {
 			try {
 				pstmt.close();
@@ -116,7 +106,7 @@ public class KanbanBoardDAO {
 				System.out.println(e2.getMessage());
 			}
 		}
-		return allList;
+		return kanbanList;
 	}
 	
 	//단일 select 함수
@@ -159,16 +149,17 @@ public class KanbanBoardDAO {
 	}
 	
 	//칸반그룹(list) 만들기
-	public int insertKanbanGroup(String listName) {
+	public int insertKanbanGroup(KanbanGroup kanbanGroup) {
 		int row = 0;
 		
 		try {
 			conn = ds.getConnection();
 			
-			String sql = "insert into kanban_group(kanban_code, list_name)" +
-						 "values(kanban_code_seq.nextval, ?)";
+			String sql = "insert into kanban_group(kanban_code, id, list_name)" +
+						 "values(kanban_code_seq.nextval, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, listName);
+			pstmt.setString(1, kanbanGroup.getId());
+			pstmt.setString(2, kanbanGroup.getListName());
 			
 			row = pstmt.executeUpdate();
 		} catch (Exception e) {
@@ -222,7 +213,7 @@ public class KanbanBoardDAO {
 		try {
 			conn = ds.getConnection();
 			
-			String sql = "insert into kanban(id, kanban_no, kanban_title, kanban_code, kanban_date)" +
+			String sql = "insert into kanban(id, kanban_no, kanban_title, kanban_code, kanban_date)" + 
 						 "values(?, kanban_no_seq.nextval, ?, ?, sysdate)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, kanbanBoard.getId());
@@ -258,7 +249,6 @@ public class KanbanBoardDAO {
 	public int updateKanbanListName(String oriListName, String updateListName) {
 		int row = 0;
 		int kanbanCode = 0;
-		String listName = null;
 		
 		try {
 			conn = ds.getConnection();
@@ -338,6 +328,7 @@ public class KanbanBoardDAO {
 			System.out.println("updateKanbanCardContent 오류: " + e.getMessage());
 		} finally {
 			try {
+				System.out.println("updateKanbanCardContent");
 				pstmt.close();
 				rs.close();
 			    conn.close();

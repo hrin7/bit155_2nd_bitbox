@@ -23,17 +23,24 @@
 
 			<!-- Header -->
 			<header id="header">
-				<h1><a href="index.jsp">BitBox</a></h1>
-				<nav id="nav">
-					<ul>
-						<li class="special">
-							<a href="#menu" class="menuToggle"><span>Menu</span></a>
-							<div id="menu">
-								<ul>
-									<!-- 로그인 시 보이는 메뉴 -->
+			<h1><a href="index.jsp">BitBox</a></h1>
+			<nav id="nav">
+				<ul>
+					<li class="special">
+						<a href="#menu" class="menuToggle"><span>Menu</span></a>
+						<div id="menu">
+							<ul>
+								<!-- 로그인 시 보이는 메뉴 -->
+								<%
+									if(session.getAttribute("userID") == "admin"){
+									
+								%>
+									<!-- admin 계정으로 로그인한 경우  -->
 									<li>
-										<img src="../images/user.png" width="150px;" height="150px;">
-										<a href="#">누구누구님</a>
+									<img src="<%=request.getContextPath()%>/images/user.png" width="150px;" height="150px;">
+									<a href="#"><%=session.getAttribute("userID")+"님" %></a>
+									<a href="<%=request.getContextPath()%>/logout.user" class="button">logout</a>
+									
 									</li>
 									<li><br><a href="myBoardList.my">My Board</a></li>
 									<li><a href="selectList.kanban">KanBan</a></li>
@@ -43,6 +50,37 @@
 									<!-- 로그인 안해도 보이는 메뉴 -->
 									<li><br><a href="template.jsp">Notice</a></li>
 									<li><a href="selectBoardList.free">Free Board</a></li>
+									
+									<!-- admin 계정으로 로그인시 보이는 메뉴 -->
+									<li><a href="#">회원정보관리</a></li>
+								<%
+									}else if(session.getAttribute("userID") == null || session.getAttribute("userID") == ""){
+								%>
+															
+									<!-- 로그인 안해도 보이는 메뉴 -->
+									<li><br><a href="template.jsp">Notice</a></li>
+									<li><a href="elements.html">Free Board</a></li>
+								
+								<%
+									}else if(session.getAttribute("userID") != "admin"){
+								%>
+									<!-- 일반 계정으로 로그인한 경우  -->
+									<li>
+									<img src="<%=request.getContextPath()%>/images/user.png" width="150px;" height="150px;">
+									<a href="#"><%=session.getAttribute("userID")+"님" %></a>
+									<a href="<%=request.getContextPath()%>/logout.user" class="button">logout</a>
+									</li>
+									<li><br><a href="myBoardList.my">My Board</a></li>
+									<li><a href="selectList.kanban">KanBan</a></li>
+									<li><a href="template.jsp">Scheduler</a></li>
+									<li><a href="template.jsp">To-do-List</a></li>
+								
+									<!-- 로그인 안해도 보이는 메뉴 -->
+									<li><br><a href="template.jsp">Notice</a></li>
+									<li><a href="selectBoardList.free">Free Board</a></li>
+								<%			
+									}
+								%>
 								</ul>
 							</div>
 						</li>
@@ -55,26 +93,30 @@
 				<section class="wrapper style5" style="overflow: auto; white-space: nowrap;">
 					<!-- <div class="inner"> -->
 						<div id="outer">
-							<c:set var="kanbanGroup" value="${requestScope.kanbanGroupList}"/>
-							<c:forEach var="all" items="${requestScope.allList}" varStatus="status">
-								<div class="memoSectionDiv shadow" data-title='${kanbanGroup[status.index].listName}'>
+							<c:forEach var="kanbanGroup" items="${requestScope.kanbanGroupList}">
+								<div class="memoSectionDiv shadow" data-title='${kanbanGroup.listName}'>
 									<div class="memoTopHr"></div>
-										<div class="memoTitle">${kanbanGroup[status.index].listName}</div>
-										<c:forEach var="list" items="${all}">
-											<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='${list.kanbanNo}' data-title='${kanbanGroup[status.index].listName}'>
-												${list.kanbanTitle}<br>
-												<c:if test="${!empty list.kanbanContent}">
-													<i class="ri-align-left"></i>
-												</c:if>
-												<c:if test="${list.kanbanCommentCount != 0}">
-													<i class="ri-chat-3-line"></i>${list.kanbanCommentCount}
-												</c:if>
-												<c:if test="${list.kanbanFileCount != 0}">
-													<i class="ri-attachment-2"></i>${list.kanbanFileCount}
-												</c:if>
-												
-											</div>
-										</c:forEach>
+									<div class="memoTitle" style="float: left;">${kanbanGroup.listName}</div>
+									<div class="deleteListDiv"><a href="javascript:void(0);" class="deleteListBtn" style="text-decoration: none !important;"><i class="ri-close-fill"></i></a></div>
+									
+									<c:forEach var="kanban" items="${requestScope.kanbanList}" varStatus="status">
+										<c:if test="${kanbanGroup.kanbanCode == kanban.kanbanCode}">
+											<c:if test="${!empty kanban.kanbanTitle}">
+												<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='${kanban.kanbanNo}' data-title='${kanban.listName}' style="clear: both;">
+													${kanban.kanbanTitle}<br>
+													<c:if test="${!empty kanban.kanbanContent}">
+														<i class="ri-align-left"></i>
+													</c:if>
+													<c:if test="${kanban.kanbanCommentCount != 0}">
+														<i class="ri-chat-3-line"></i>${kanban.kanbanCommentCount}
+													</c:if>
+													<c:if test="${kanban.kanbanFileCount != 0}">
+														<i class="ri-attachment-2"></i>${kanban.kanbanFileCount}
+													</c:if>
+												</div>
+											</c:if>
+										</c:if>
+									</c:forEach>
 									
 									<div id="createMemoContentBtnBefore">
 										<div class="createMemoContentBtn">+ Add a card</div>
@@ -115,6 +157,7 @@
 						<div class="modal-header">
 							<h2 class="modal-title" id="cardName"></h2>
 							<h5 class="modal-title" id="listName"></h5>
+							<input type="hidden" id="kanbanNo"/>
 						</div>
 			
 						<!-- Modal body -->
@@ -130,10 +173,16 @@
 								</div>
 								<input type="submit" value="Upload" class="button primary small"/>
 							</form> -->
-							<p id="kanbanDate"></p>
+							<p id="kanbanDate" style="font-size: 10px;"></p>
 							
+							<!-- 댓글 -->
 							<h2 class="font-design">Activity</h2>
-							<input type="text"/>
+							<div id="com"></div>
+						
+							<b class="font-design">${sessionScope.userID}</b>
+							<input type="text" name="comment" id="comment" placeholder="Enter your comment"/>
+							<br>
+							<button class="button special small font-design" id="commWrite">등록</button>
 						</div>
 			
 						<!-- Modal footer -->

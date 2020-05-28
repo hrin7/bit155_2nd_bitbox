@@ -152,44 +152,59 @@ ALTER TABLE diary
 
 /* 일기장댓글 */
 CREATE TABLE diary_comment (
+    diary_comment_no NUMBER NOT NULL, /* 다이어리댓글식별번호 */
 	id VARCHAR2(50) NOT NULL, /* 회원아이디 */
 	diary_no NUMBER NOT NULL, /* 글번호 */
 	diary_comment_content VARCHAR2(1000) NOT NULL, /* 댓글내용 */
 	diary_comment_date DATE NOT NULL /* 댓글작성일 */
 );
 
+ALTER TABLE diary_comment
+	ADD
+		CONSTRAINT PK_diary_comment
+		PRIMARY KEY (
+			diary_comment_no
+		);
+
 /* 칸반보드댓글 */
 CREATE TABLE kanban_comment (
-	id VARCHAR2(50) NOT NULL, /* 회원아이디 */
+	kanban_comment_no NUMBER NOT NULL, /* 칸반댓글식별번호 */
 	kanban_no NUMBER NOT NULL, /* 글번호 */
 	kanban_comment_content VARCHAR2(1000) NOT NULL, /* 댓글내용 */
 	kanban_comment_date DATE NOT NULL /* 댓글작성일 */
 );
 
+ALTER TABLE kanban_comment
+	ADD
+		CONSTRAINT PK_kanban_comment
+		PRIMARY KEY (
+			kanban_comment_no
+		);
+
 /* 칸반보드 */
 CREATE TABLE kanban (
-	id VARCHAR2(50) NOT NULL, /* 회원아이디 */
 	kanban_no NUMBER NOT NULL, /* 글번호 */
 	kanban_title VARCHAR2(100) NOT NULL, /* 글제목 */
 	kanban_content VARCHAR2(2000), /* 글내용 */
-	kanban_date DATE, /* 작성일 */
+	kanban_date DATE NOT NULL, /* 작성일 */
 	kanban_file_name VARCHAR2(110), /* 파일이름 */
-	kanban_file_count NUMBER default 0, /* 파일개수 */
-	kanban_comment_count NUMBER default 0, /* 댓글개수 */
-	kanban_code NUMBER NOT NULL /* 칸반리스트 코드 */
+	kanban_file_count NUMBER  default 0, /* 파일개수 */
+	kanban_comment_count NUMBER  default 0, /* 댓글개수 */
+	kanban_code NUMBER  NOT NULL, /* 칸반리스트 코드 */
+	id VARCHAR2(50) NOT NULL /* 회원아이디 */
 );
 
 ALTER TABLE kanban
 	ADD
 		CONSTRAINT PK_kanban
 		PRIMARY KEY (
-			id,
 			kanban_no
 		);
 
 /* 칸반 그룹 */
 CREATE TABLE kanban_group (
 	kanban_code NUMBER NOT NULL, /* 칸반리스트 코드 */
+	id VARCHAR2(50) NOT NULL, /* 회원아이디 */
 	list_name VARCHAR2(100) NOT NULL /* 칸반리스트 이름 */
 );
 
@@ -197,7 +212,8 @@ ALTER TABLE kanban_group
 	ADD
 		CONSTRAINT PK_kanban_group
 		PRIMARY KEY (
-			kanban_code
+			kanban_code,
+			id
 		);
 
 ALTER TABLE board
@@ -316,17 +332,27 @@ ALTER TABLE kanban_comment
 	ADD
 		CONSTRAINT FK_kanban_TO_kanban_comment
 		FOREIGN KEY (
-			id,
 			kanban_no
 		)
 		REFERENCES kanban (
-			id,
 			kanban_no
 		);
 
 ALTER TABLE kanban
 	ADD
-		CONSTRAINT FK_member_TO_kanban
+		CONSTRAINT FK_kanban_group_TO_kanban
+		FOREIGN KEY (
+			kanban_code,
+			id
+		)
+		REFERENCES kanban_group (
+			kanban_code,
+			id
+		);
+
+ALTER TABLE kanban_group
+	ADD
+		CONSTRAINT FK_member_TO_kanban_group
 		FOREIGN KEY (
 			id
 		)
@@ -334,22 +360,14 @@ ALTER TABLE kanban
 			id
 		);
 
-ALTER TABLE kanban
-	ADD
-		CONSTRAINT FK_kanban_group_TO_kanban
-		FOREIGN KEY (
-			kanban_code
-		)
-		REFERENCES kanban_group (
-			kanban_code
-		);
-
 create SEQUENCE no_seq;
 create SEQUENCE comment_no_seq;
 create SEQUENCE file_no_seq;
 create SEQUENCE reply_no_seq;
 create SEQUENCE diary_no_seq;
+create SEQUENCE diary_comment_no_seq;
 create SEQUENCE kanban_no_seq;
 create SEQUENCE kanban_code_seq;
+create SEQUENCE kanban_comment_no_seq;
 create SEQUENCE schedule_no_seq;
 create SEQUENCE todo_no_seq;
