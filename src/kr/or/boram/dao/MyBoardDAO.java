@@ -25,18 +25,35 @@ public class MyBoardDAO {
 			 Context envctx= (Context)ctx.lookup("java:comp/env"); //기본설정
 			 ds =(DataSource)envctx.lookup("/jdbc/oracle");//context.xml 에서 name="jdbc/oracle"
 		} catch (Exception e) {
-			System.out.println("look up Fail : " + e.getMessage());
+			System.out.println("look up 에러 : " + e.getMessage());
 		}
 	}
 	
 	//글 목록 가져오기
-	public List<MyBoard> selectMyBoardList() {
+	public List<MyBoard> selectMyBoardList(int cpage, int pageSize) {
 		List<MyBoard> list = null;
 		
 		try {
 			conn = ds.getConnection(); //dbcp 연결 객체 얻기
-			String sql = "select id, diary_no, diary_title, diary_content, diary_date, diary_refer, diary_depth, diary_step, diary_file_name, diary_comment_count from diary order by diary_no desc";
+			String sql = "select *" + 
+						 "from (" + 
+						 "	select rownum rn, id, diary_no, diary_title, diary_content, diary_date, diary_file_name, diary_refer, diary_depth, diary_step," + 
+						 "					  (select count(*) from diary_comment where diary_no=b.diary_no) as cnt" + 
+						 "	from (" + 
+						 "		select *" + 
+						 "		from diary" + 
+						 "		order by diary_refer desc, diary_step asc" + 
+						 "	) b" + 
+						 "	where rownum <= ?" + 
+						 ")" + 
+						 "where rn >= ?";
 			pstmt = conn.prepareStatement(sql);
+			
+			int start = cpage * pageSize - (pageSize-1); // 1*5-(5-1) >> 1
+			int end = cpage * pageSize; // 1*5 >> 5
+			
+			pstmt.setInt(1, end);
+			pstmt.setInt(2, start);
 			
 			rs = pstmt.executeQuery();
 			list = new ArrayList<MyBoard>();
@@ -47,30 +64,31 @@ public class MyBoardDAO {
 				board.setDiaryTitle(rs.getString("diary_title"));
 				board.setDiaryContent(rs.getString("diary_content"));
 				board.setDiaryDate(rs.getString("diary_date"));
+				board.setDiaryFileName(rs.getString("diary_file_name"));
 				board.setDiaryRefer(rs.getInt("diary_refer"));
 				board.setDiaryDepth(rs.getInt("diary_depth"));
 				board.setDiaryStep(rs.getInt("diary_step"));
-				board.setDiaryFileName(rs.getString("diary_file_name"));
-				board.setDiaryCommentCount(rs.getInt("diary_comment_count"));
+				board.setDiaryCommentCount(rs.getInt("cnt"));
+				
 				list.add(board);
 			}
 		} catch (Exception e) {
-			System.out.println("에러 : " + e.getMessage());
+			System.out.println("에러1 : " + e.getMessage());
 		} finally {
 			try {
 				pstmt.close();
 				rs.close();
 				conn.close(); //connection pool에 반환하기
 			} catch (Exception e2) {
-				System.out.println("에러 : " + e2.getMessage());
+				System.out.println("에러2 : " + e2.getMessage());
 			}
 		}
-		//System.out.println("리스트 : " + list); //list가 잘 넘어오는지 확인하기
+		System.out.println("리스트 : " + list); //list가 잘 넘어오는지 확인하기
 		return list;
 	}
 	
 	//게시물 총 건수
-	public int TotalCountMyBoard() {
+	public int totalCountMyBoard() {
 		int totalCount = 0;
 		
 		try {
@@ -259,7 +277,7 @@ public class MyBoardDAO {
 			//현재 내가 읽은 글의 refer, depth, step
 			String refer_depth_step_sql ="select diary_refer, diary_depth, diary_step from diary where diary_no=?";
 			
-			//순서 (최근 답글을 가장 위로 오게 만들기 : step asc)
+			//순서
 			String step_sql = "select nvl(min(diary_step), 0) diary_step from diary where diary_refer=? and diary_depth<=? and diary_step>?";
 			
 			//insert
@@ -279,7 +297,26 @@ public class MyBoardDAO {
 				pstmt.setInt(1, refer);
 				pstmt.setInt(2, depth);
 				pstmt.setInt(3, step);
-				pstmt.executeUpdate();
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					step = rs.getInt("diary_step");
+					if(step == 0) {
+						String maxStep = "select max(diary_step)+1 maxStep from diary where diary_refer=?";
+						pstmt = conn.prepareStatement(maxStep);
+						pstmt.setInt(1, refer); //원본글 ref
+						rs = pstmt.executeQuery();
+						if(rs.next()) {
+							step = rs.getInt("maxStep");
+						}
+					} else {
+						String updateStep = "update diary set diary_step=diary_step+1 where diary_refer=? and diary_step>=?";
+						pstmt = conn.prepareStatement(updateStep);
+						pstmt.setInt(1, refer); //원본글 ref
+						pstmt.setInt(2, step);
+						pstmt.executeUpdate();
+					}
+				}
 				
 				pstmt = conn.prepareStatement(reply_sql); //컴파일
 				pstmt.setString(1, title);

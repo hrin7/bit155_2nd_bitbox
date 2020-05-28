@@ -19,6 +19,12 @@ public class MyBoardComment {
 	public void setDiaryNo(int diaryNo) {
 		this.diaryNo = diaryNo;
 	}
+	public int getDiaryCommentNo() {
+		return diaryCommentNo;
+	}
+	public void setDiaryCommentNo(int diaryCommentNo) {
+		this.diaryCommentNo = diaryCommentNo;
+	}
 	public String getDiaryCommentContent() {
 		return diaryCommentContent;
 	}
@@ -34,11 +40,12 @@ public class MyBoardComment {
 	
 	@Override
 	public String toString() {
-		return "MyBoardComment [id=" + id + ", diaryNo=" + diaryNo + ", diaryCommentContent=" + diaryCommentContent
-				+ ", diaryCommentDate=" + diaryCommentDate + ", getId()=" + getId() + ", getDiaryNo()=" + getDiaryNo()
-				+ ", getDiaryCommentContent()=" + getDiaryCommentContent() + ", getDiaryCommentDate()="
-				+ getDiaryCommentDate() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
+		return "MyBoardComment [id=" + id + ", diaryNo=" + diaryNo + ", diaryCommentNo=" + diaryCommentNo
+				+ ", diaryCommentContent=" + diaryCommentContent + ", diaryCommentDate=" + diaryCommentDate
+				+ ", getId()=" + getId() + ", getDiaryNo()=" + getDiaryNo() + ", getDiaryCommentNo()="
+				+ getDiaryCommentNo() + ", getDiaryCommentContent()=" + getDiaryCommentContent()
+				+ ", getDiaryCommentDate()=" + getDiaryCommentDate() + ", getClass()=" + getClass() + ", hashCode()="
+				+ hashCode() + ", toString()=" + super.toString() + "]";
 	}
 	
 }

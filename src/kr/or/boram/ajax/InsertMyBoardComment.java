@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.bit.dao.CommentDao;
-import kr.or.bit.dto.Comment;
+import kr.or.boram.dao.MyBoardCommentDAO;
+import kr.or.boram.dto.MyBoardComment;
 import net.sf.json.JSONArray;
 
-@WebServlet("/InsertComment.ajax")
+@WebServlet("/InsertMyBoardComment.ajax")
 public class InsertMyBoardComment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -25,16 +25,15 @@ public class InsertMyBoardComment extends HttpServlet {
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("utf-8");
     	
-    	Comment comment = new Comment();
-    	comment.setBoardNum(Integer.parseInt(request.getParameter("boardNum")));
-    	comment.setCommentName(request.getParameter("name"));
-    	comment.setCommentContent(request.getParameter("content"));
+    	MyBoardComment comment = new MyBoardComment();
+    	comment.setDiaryNo(Integer.parseInt(request.getParameter("diaryNo")));
+    	comment.setDiaryCommentContent(request.getParameter("diaryCommentContent"));
     	
-    	CommentDao dao = new CommentDao();
+    	MyBoardCommentDAO dao = new MyBoardCommentDAO();
     	//댓글등록
-    	dao.insertComment(comment);
+    	dao.insertMyBoardComment(comment);
     	//댓글 select
-    	List<Comment> commentResult = dao.selectCommentList(Integer.parseInt(request.getParameter("boardNum")));
+    	List<MyBoardComment> commentResult = dao.selectMyBoardCommentList(Integer.parseInt(request.getParameter("diaryNo")));
 		
     	JSONArray obj = JSONArray.fromObject(commentResult);
     	

@@ -14,11 +14,11 @@ import kr.or.boram.dao.MyBoardCommentDAO;
 import kr.or.boram.dto.MyBoardComment;
 import net.sf.json.JSONArray;
 
-@WebServlet("/DeleteMyBoardComment.ajax")
-public class DeleteMyBoardComment extends HttpServlet {
+@WebServlet("/UpdateMyBoardComment.ajax")
+public class UpdateMyBoardComment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public DeleteMyBoardComment() {
+    public UpdateMyBoardComment() {
         super();
     }
     
@@ -27,14 +27,16 @@ public class DeleteMyBoardComment extends HttpServlet {
     	
     	int diaryNo = Integer.parseInt(request.getParameter("diaryNo"));
     	int diaryCommentNo = Integer.parseInt(request.getParameter("diaryCommentNo"));
+    	String diaryCommentContent = request.getParameter("diaryCommentContent");
     	
     	MyBoardComment comment = new MyBoardComment();
     	comment.setDiaryNo(diaryNo);
     	comment.setDiaryCommentNo(diaryCommentNo);
+    	comment.setDiaryCommentContent(diaryCommentContent);
     	
     	MyBoardCommentDAO dao = new MyBoardCommentDAO();
-    	//댓글삭제
-    	dao.deleteMyBoardComment(comment);
+    	//댓글수정
+    	dao.updateMyBoardComment(comment);
     	//댓글 select
     	List<MyBoardComment> commentResult = dao.selectMyBoardCommentList(diaryNo);
 		

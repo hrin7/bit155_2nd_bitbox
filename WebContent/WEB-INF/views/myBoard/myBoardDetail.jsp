@@ -65,16 +65,10 @@
                         <br><br><br>
                         
                         <!-- 댓글 -->
-                        <div id="com">
-                           <blockquote>
-                              <a href='javascript:void(0);' data-value='' class='updateComment'><i class='ri-pencil-line'></i></a>
-                              <a href='javascript:void(0);' data-value='' class='deleteComment'><i class='ri-delete-bin-line'></i></a><br>
-                              <!-- <pre><code> 코멘트 </code></pre> -->
-                           </blockquote>
-                        </div>
+                        <div id="com"></div>
                         <textarea name="comment" id="comment" placeholder="Comment" rows="3"></textarea>
                         <br>
-                        <p align="right"><button class="button small" id="commWrite"><i class="ri-check-line"></i>OK</button></p>
+                        <p align="right"><button class="button small" id="commentInsert"><i class="ri-check-line"></i>OK</button></p>
                         <br><br>
                         <a href="<%=request.getContextPath()%>/myBoardList.my" id="">LIST</a>
 
@@ -97,7 +91,8 @@
 		<script src="assets/js/main.js"></script>
       
 		<script type="text/javascript">
-      	//댓글 목록
+		
+		//댓글 목록
 		$.ajax({
 			url: "SelectMyBoardCommentList.ajax",
 			data: {diaryNo:'${myBoard.diaryNo}'},
@@ -110,7 +105,7 @@
 		//댓글 등록
 		$('#commentInsert').click(function() {
 			if($('#comment').val() == "") {
-				alert('내용을 입력하세요');
+				alert('댓글을 입력하세요');
 				return false;
 			}
 			
@@ -118,30 +113,13 @@
 				url: "InsertMyBoardComment.ajax",
 				data: {
 					diaryNo:'${myBoard.diaryNo}',
-					name:'${requestScope.name}',
-					content:$('#comment').val()
+					diaryCommentContent:$('#comment').val()
 				},
 				dataType: "json",
 				success: function(resData) {
 					$('#com').empty();
 					makeComment(resData);
 					$('#comment').val("");
-				}
-			});
-		});
-		
-		//댓글 삭제
-		$('#com').on('click', '.deleteComment', function() {
-			$.ajax({
-				url: "DeleteComment.ajax",
-				data: {
-					boardNum: '${myBoard.diaryNo}',
-					commentNum: $(this).data("value")
-				},
-				dataType: "json",
-				success: function(resData) {
-					$('#com').empty();
-					makeComment(resData);
 				}
 			});
 		});
@@ -166,40 +144,41 @@
 				//input태그 append하기(value에는 기존의 값 셋팅하고, 포커스주기)
 				var html = "";
 				html += '<div id="updateDiv">';
-				html += '<input type="text" value="'+codeText+'" name="content" id="updateContent">';
+				html += '<input type="text" value="'+ codeText +'" name="diaryCommentContent" id="updateContent">';
 				html += '<button class="button special small alt" id="commUpdateBtn">Edit</button>';
 				html += '</div>';
 				parentTag.append(html);
-				parentTag.find('input').focus();
+				parentTag.find('input').focus();				
 				
-				var commentNum = $(this).data("value");
+				var diaryCommentNo = $(this).data("value");
 				$('#commUpdateBtn').click(function() {
-					if($('#comment').val() == "") {
-						alert('내용을 입력하세요');
+					if($('#updateContent').val() == "") {
+						alert('댓글을 입력하세요');
 						return false;
 					}
 					
 					$.ajax({
-						url: "UpdateComment.ajax",
+						url: "UpdateMyBoardComment.ajax",
 						data: {
-							boardNum: '${board.boardNum}',
-							commentNum: commentNum,
-							content: $('#updateContent').val()
+							diaryNo:'${myBoard.diaryNo}',
+							diaryCommentNo: diaryCommentNo,
+							diaryCommentContent: $('#updateContent').val()
 						},
 						dataType: "json",
 						success: function(resData) {
 							$('#com').empty();
 							makeComment(resData);
+							check = true;
 						}
 					});
 				});
 			}
 			
-			//수정 취소 눌렀을 경우 리스트 다시 불러오기
+			//수정 눌렀을 경우 리스트 다시 불러오기
 			$('#com').on('click', '.cancelUpdate', function() {
 				$.ajax({
 					url: "SelectMyBoardCommentList.ajax",
-					data: {boardNum:'${myBoard.diaryNo}}'},
+					data: {diaryNo:'${myBoard.diaryNo}'},
 					dataType: "json",
 					success: function(resData) {
 						$('#com').empty();
@@ -210,18 +189,36 @@
 			});
 		});
 		
+		//댓글 삭제
+		$('#com').on('click', '.deleteComment', function() {
+			$.ajax({
+				url: "DeleteMyBoardComment.ajax",
+				data: {
+					diaryNo:'${myBoard.diaryNo}',
+					diaryCommentNo: $(this).data("value")
+				},
+				dataType: "json",
+				success: function(resData) {
+					$('#com').empty();
+					makeComment(resData);
+				}
+			});
+		});
+		
 		//게시판 목록 그리는 함수
 		function makeComment(result) {
 			var html = "";
 			$.each(result, function(index, obj) {
-				html += "<blockquote>" + obj.commentName + " " + obj.commentDate;
-				html += " <a href='javascript:void(0);' data-value='" + obj.commentNum + "' class='updateComment' ><i class='ri-pencil-line'></i></a>";
-				html += " <a href='javascript:void(0);' data-value='" + obj.commentNum + "' class='deleteComment'><i class='ri-delete-bin-line'></i></a><br>";
-				html += "<code>" + obj.commentContent + "</code></blockquote>";
+				html += "<blockquote>" + obj.diaryCommentDate + " ";
+				html += "<a href='javascript:void(0);' data-value='" + obj.diaryCommentNo + "' class='updateComment'><i class='ri-pencil-line'></i></a>";
+				html += "<a href='javascript:void(0);' data-value='" + obj.diaryCommentNo + "' class='deleteComment'><i class='ri-delete-bin-line'></i></a><br>";
+				html += "<code>" + obj.diaryCommentContent + "</code></blockquote>";
 			});
 			$('#com').append(html);
 		};
+		
 		</script>
 
    </body>
+   
 </html>

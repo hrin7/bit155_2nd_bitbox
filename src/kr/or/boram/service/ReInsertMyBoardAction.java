@@ -15,6 +15,7 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.MyBoardDAO;
 import kr.or.boram.dto.MyBoard;
 
+//실행하는 함수 : execute
 public class ReInsertMyBoardAction implements Action {
 	
 	@Override

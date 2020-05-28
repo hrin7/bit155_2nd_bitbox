@@ -24,10 +24,10 @@ public class SelectMyBoardCommentList extends HttpServlet {
     
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("utf-8");
-    	int boardNum = Integer.parseInt(request.getParameter("boardNum"));
+    	int diaryNo = Integer.parseInt(request.getParameter("diaryNo"));
     	
-    	CommentDao dao = new CommentDao();
-		List<Comment> commentList = dao.selectCommentList(boardNum);
+    	MyBoardCommentDAO dao = new MyBoardCommentDAO();
+		List<MyBoardComment> commentList = dao.selectMyBoardCommentList(diaryNo);
 		
 		JSONArray obj = JSONArray.fromObject(commentList);
 		
