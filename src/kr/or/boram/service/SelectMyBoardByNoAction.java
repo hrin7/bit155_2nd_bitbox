@@ -9,7 +9,6 @@ import kr.or.boram.dao.MyBoardDAO;
 import kr.or.boram.dto.MyBoard;
 
 
-
 public class SelectMyBoardByNoAction implements Action {
 
 	@Override

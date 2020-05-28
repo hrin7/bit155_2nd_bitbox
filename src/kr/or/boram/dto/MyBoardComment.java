@@ -3,6 +3,7 @@ package kr.or.boram.dto;
 public class MyBoardComment {
 	private String id;
 	private int diaryNo;
+	private int diaryCommentNo;
 	private String diaryCommentContent;
 	private String diaryCommentDate;
 	
