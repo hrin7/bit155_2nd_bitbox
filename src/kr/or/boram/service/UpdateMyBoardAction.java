@@ -44,10 +44,12 @@ public class UpdateMyBoardAction implements Action {
 	         
 	         String file = (String)filenames.nextElement();
 	         fileName = multi.getFilesystemName(file);
-//	         if(fileName == null) {
-//	        	 fileName = multi.getParameter("image");
-//	         }
-//	         oriFileName = multi.getOriginalFileName(file);
+	         
+	         //수정 시, 파일선택을 하지 않았으면 기존의 파일명으로 설정하기
+	         if(fileName == null) {
+	        	 fileName = multi.getParameter("image");
+	         }
+	         oriFileName = multi.getOriginalFileName(file);
 	         
 	         title = multi.getParameter("title");
 	         content = multi.getParameter("message");
@@ -63,9 +65,12 @@ public class UpdateMyBoardAction implements Action {
 		board.setDiaryNo(Integer.parseInt(diaryNo));
 		board.setDiaryTitle(title);
 		board.setDiaryContent(content);
+		board.setDiaryFileName(fileName);
 
 		MyBoardDAO dao = new MyBoardDAO();
 	    int result = dao.updateMyBoard(board);
+	    //System.out.println("보드 : " + board);
+	    System.out.println("result : " + result);
 	    
 		String msg = "";
 		if(result > 0) {

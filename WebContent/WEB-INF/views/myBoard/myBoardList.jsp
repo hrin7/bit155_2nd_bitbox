@@ -52,7 +52,12 @@
 									<c:forEach var="myBoardList" items="${requestScope.myBoardList}">
 										<tr>
 											<td>${myBoardList.diaryNo}</td>
-											<td><a href="myBoardSelect.my?diaryNo=${myBoardList.diaryNo}">${myBoardList.diaryTitle}</a></td>
+											<td>
+												<a href="myBoardSelect.my?diaryNo=${myBoardList.diaryNo}">${myBoardList.diaryTitle}</a>
+												<c:if test="${!empty myBoard.diaryFileName}">
+                                    				<i class="ri-image-line"></i>
+                                    			</c:if>
+											</td>
 											<td>${myBoardList.diaryDate}</td>
 										</tr>
 									</c:forEach>

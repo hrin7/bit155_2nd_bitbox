@@ -76,15 +76,16 @@ public class MyBoardDAO {
 		
 		try {
 			conn = ds.getConnection();
-			String sql = "insert into diary(id, diary_no, diary_title, diary_content, diary_date)"
-						+ "values('soyoung', diary_no_seq.nextval, ?, ?, sysdate)";
+			String sql = "insert into diary(id, diary_no, diary_title, diary_content, diary_file_name, diary_date)"
+						+ "values('soyoung', diary_no_seq.nextval, ?, ?, ?, sysdate)";
 			pstmt = conn.prepareStatement(sql);			
 			pstmt.setString(1, board.getDiaryTitle());
 			pstmt.setString(2, board.getDiaryContent());
+			pstmt.setString(3, board.getDiaryFileName());
 			row = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.getStackTrace();
-			//System.out.println("insert 에러 : " + e.getMessage()); //ORA-01400: cannot insert NULL into ("BITBOX"."DIARY"."ID")
+			System.out.println("insert 에러 : " + e.getMessage()); //ORA-01400: cannot insert NULL into ("BITBOX"."DIARY"."ID")
 		} finally {
 			try {
 				pstmt.close();
@@ -118,7 +119,7 @@ public class MyBoardDAO {
 			}
 			
 		} catch (Exception e) {
-			System.out.println("오류 : " + e.getMessage());
+			System.out.println("에러 : " + e.getMessage());
 			e.getStackTrace();
 		}finally {
 			try {
@@ -138,15 +139,16 @@ public class MyBoardDAO {
 		
 		try {
 			conn = ds.getConnection();
-			String sql = "update diary set diary_title=?, diary_content=? where diary_no=?";
+			String sql = "update diary set diary_title=?, diary_content=?, diary_file_name=? where diary_no=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, board.getDiaryTitle());
 			pstmt.setString(2, board.getDiaryContent());
-			pstmt.setInt(3, board.getDiaryNo());
+			pstmt.setString(3, board.getDiaryFileName());
+			pstmt.setInt(4, board.getDiaryNo());
 			row = pstmt.executeUpdate();
 		
 		} catch (Exception e) {
-			System.out.println("에러: " + e.getMessage());
+			System.out.println("에러 : " + e.getMessage());
 			e.getStackTrace();
 		}finally {
 			try {
@@ -180,7 +182,7 @@ public class MyBoardDAO {
 			} catch (Exception e2) {
 				System.out.println("delete : " + e2.getMessage());
 			}
-		}		
+		}
 		return row;
 	}
 	

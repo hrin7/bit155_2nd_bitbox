@@ -1,6 +1,6 @@
 package kr.or.boram.dto;
 
-public class User {
+public class UserDTO {
 	
 	private String userid;
 	private String userpwd;

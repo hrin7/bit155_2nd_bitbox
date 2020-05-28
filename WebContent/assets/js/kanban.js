@@ -176,7 +176,7 @@ $('#outer').on('click', '.memoContent', function() {
 			//내용이 없으면 textarea 뿌려주기
 			if(resData.kanbanContent == "") {
 				let html = "";
-				html += "<textarea rows='4' placeholder='Add a more detailed description...' style='resize: none;'></textarea>";
+				html += "<textarea rows='3' placeholder='Add a more detailed description...' style='resize: none;' id='textarea'></textarea>";
 				$('#kanbanContent').html(html);
 				$('#editBtn').hide();
 			} else {
@@ -187,13 +187,14 @@ $('#outer').on('click', '.memoContent', function() {
 	});
 })
 
-//상세보기에서 카드이름 바꾸기
+//상세보기에서 카드이름 update
 $('#cardName').click(function() {
 	let cardName = $(this).text();
 	$(this).parent().prepend("<input type='text' value='"+cardName+"' id='cardNameInput'/>");
 	$("#cardNameInput").focus();
 	$('#cardName').hide();
 	
+	//카드이름 update
 	$("#cardNameInput").blur(function() {
 		let updateCardName = $(this).val();
 		$.ajax({
@@ -208,7 +209,59 @@ $('#cardName').click(function() {
 				$("#cardNameInput").remove();
 			}
 		});
-		
 	});
 });
 
+//모달창이 떴을 때
+$('#myModal').on('shown.bs.modal', function () {
+	setTimeout(function(){
+		//상세보기에서 카드내용 클릭해서 update
+		let updateCardContent = $('#kanbanContent').text();
+		if(updateCardContent != "") {
+			updateCardContent = $(this).text();
+			console.log(updateCardContent);
+			$('#kanbanContent').click(function() {
+				$(this).after("<textarea placeholder='Add a more detailed description...' style='resize: none;' id='textarea'>"+updateCardContent+"</textarea>");
+				$("#textarea").focus();
+				$('#kanbanContent').hide();
+				
+				//카드내용 update
+				updateContent();
+			});
+		} else {
+			$('#textarea').blur(function() {
+				if(updateCardContent != "") {
+					//카드내용 update
+					updateContent();
+				}
+			})
+		}
+	}, 100);
+});
+
+//내용 update하는 함수
+function updateContent() {
+	$('#textarea').blur(function() {
+		let updateCardContent = $(this).val();
+		$.ajax({
+			url: "UpdateKanbanCardContent.ajax",
+			type: "post",
+			async : false,
+			data: {
+				kanbanContent: updateCardContent,
+				kanbanNo: kanbanNo
+			},
+			success: function() {
+				if(updateCardContent == "") {
+					$('#editBtn').hide();
+					return;
+				} else {
+					$('#kanbanContent').show();
+					$('#kanbanContent').text(updateCardContent);
+					$('#editBtn').show();
+					$("#textarea").remove();
+				}
+			}
+		});
+	});
+}

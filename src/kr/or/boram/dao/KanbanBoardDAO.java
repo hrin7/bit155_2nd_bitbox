@@ -23,8 +23,8 @@ public class KanbanBoardDAO {
 		InitialContext ctx;
 		try {
 			 ctx = new InitialContext();
-			 Context envctx= (Context)ctx.lookup("java:comp/env"); //기본설정
-			 ds =(DataSource)envctx.lookup("/jdbc/oracle");//context.xml 에서 name="jdbc/oracle"
+			 Context envctx = (Context)ctx.lookup("java:comp/env"); //기본설정
+			 ds = (DataSource)envctx.lookup("/jdbc/oracle");//context.xml 에서 name="jdbc/oracle"
 		}catch (Exception e) {
 			System.out.println("look up Fail : " + e.getMessage());
 		}
@@ -269,6 +269,34 @@ public class KanbanBoardDAO {
 		} catch (Exception e) {
 			e.getStackTrace();
 			System.out.println("updateKanbanCardName 오류: " + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+			    conn.close();
+			} catch (Exception e2) {
+				e2.getStackTrace();
+			}
+		}
+		return row;
+	}
+
+	//칸반 card 내용 update하기
+	public int updateKanbanCardContent(KanbanBoard kanbanBoard) {
+		int row = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = "update kanban set kanban_content=? where kanban_no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, kanbanBoard.getKanbanContent());
+			pstmt.setInt(2, kanbanBoard.getKanbanNo());
+			
+			row = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.getStackTrace();
+			System.out.println("updateKanbanCardContent 오류: " + e.getMessage());
 		} finally {
 			try {
 				pstmt.close();
