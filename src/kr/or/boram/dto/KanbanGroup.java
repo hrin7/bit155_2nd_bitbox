@@ -3,6 +3,13 @@ package kr.or.boram.dto;
 public class KanbanGroup {
 	private int kanbanCode;
 	private String listName;
+	private String id;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public int getKanbanCode() {
 		return kanbanCode;
 	}
@@ -17,6 +24,6 @@ public class KanbanGroup {
 	}
 	@Override
 	public String toString() {
-		return "KanbanGroup [kanbanCode=" + kanbanCode + ", listName=" + listName + "]";
+		return "KanbanGroup [kanbanCode=" + kanbanCode + ", listName=" + listName + ", id=" + id + "]";
 	}
 }

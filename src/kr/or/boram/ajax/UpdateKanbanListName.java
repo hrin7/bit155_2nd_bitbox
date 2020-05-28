@@ -1,8 +1,6 @@
 package kr.or.boram.ajax;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,29 +8,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.boram.dao.FreeBoardDAO;
-import kr.or.boram.dto.Board;
-import kr.or.boram.dto.BoardType;
-import net.sf.json.JSONArray;
+import kr.or.boram.dao.KanbanBoardDAO;
 
-@WebServlet("/SelectBoardType.ajax")
-public class SelectBoardType extends HttpServlet {
+@WebServlet("/UpdateKanbanListName.ajax")
+public class UpdateKanbanListName extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	public SelectBoardType() {
-		super();
-	}
-    
+       
+    public UpdateKanbanListName() {
+        super();
+    }
+
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	response.setCharacterEncoding("UTF-8");
-    	FreeBoardDAO freeBoardDao = new FreeBoardDAO();
-		List<BoardType> list = freeBoardDao.SelectBoardType();
-		
-		JSONArray obj = JSONArray.fromObject(list);
-		
-		PrintWriter out = response.getWriter();
-		out.print(obj);
-		out.close();
+    	response.setCharacterEncoding("utf-8");
+    	
+    	String oriListName = request.getParameter("oriListName");
+    	String updateListName = request.getParameter("updateListName");
+    	
+    	KanbanBoardDAO dao = new KanbanBoardDAO();
+    	
+    	//update list name
+    	dao.updateKanbanListName(oriListName, updateListName);
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,4 +37,5 @@ public class SelectBoardType extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
+
 }

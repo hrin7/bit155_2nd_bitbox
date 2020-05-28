@@ -11,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 import kr.or.boram.dao.KanbanBoardDAO;
 import kr.or.boram.dto.KanbanBoard;
 
-@WebServlet("/UpdateKanbanCardName.ajax")
-public class UpdateKanbanCardName extends HttpServlet {
+@WebServlet("/UpdateKanbanCardContent.ajax")
+public class UpdateKanbanCardContent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public UpdateKanbanCardName() {
+    public UpdateKanbanCardContent() {
         super();
     }
 
@@ -23,13 +23,13 @@ public class UpdateKanbanCardName extends HttpServlet {
     	response.setCharacterEncoding("utf-8");
     	
     	KanbanBoard kanbanBoard = new KanbanBoard();
-    	kanbanBoard.setKanbanTitle(request.getParameter("cardTitle"));
+    	kanbanBoard.setKanbanContent(request.getParameter("kanbanContent"));
     	kanbanBoard.setKanbanNo(Integer.parseInt(request.getParameter("kanbanNo")));
     	
     	KanbanBoardDAO dao = new KanbanBoardDAO();
     	
-    	//update card name
-    	dao.updateKanbanCardName(kanbanBoard);
+    	//update card content
+    	dao.updateKanbanCardContent(kanbanBoard);
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

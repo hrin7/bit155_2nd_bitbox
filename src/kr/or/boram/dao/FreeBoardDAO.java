@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import kr.or.boram.dto.Board;
+import kr.or.boram.dto.BoardAndType;
 import kr.or.boram.dto.BoardType;
 
 public class FreeBoardDAO {
@@ -32,13 +33,31 @@ public class FreeBoardDAO {
 	}
 	
 	//게시판 목록보기
-	public List<Board> boardList(){
+	public List<Board> boardList(int cpage, int pageSize){
 		List<Board> boardList = null;
 		
 		try {
 			conn = ds.getConnection();
-			String sql = "select board_code, no, id, title, content, views, write_date, comment_count from board where board_code=2 order by no desc";
+			String sql = "select * " + 
+						 "from ( " + 
+						 " 	select rownum rn, board_code, no, id, title, content, views, write_date, comment_count," +
+						 "  	   (select count(*) from board_comment where no=b.no) as cnt" +
+						 " 	from ( " + 
+						 " 		SELECT * " + 
+						 " 		FROM board " + 
+						 "  	ORDER BY no DESC" + 
+						 "  ) b" +
+						 " 	where rownum <= ?" + //end row
+						 ") " +
+						 "where rn >= ?"; //start row 
 			pstmt = conn.prepareStatement(sql);
+			
+			//공식같은 로직
+			int start = cpage * pageSize - (pageSize -1);
+			int end = cpage * pageSize;
+			
+			pstmt.setInt(1, end);
+			pstmt.setInt(2, start);
 			rs = pstmt.executeQuery();
 			
 			boardList = new ArrayList<Board>();
@@ -52,7 +71,7 @@ public class FreeBoardDAO {
 				board.setContent(rs.getString("content"));
 				board.setViews(rs.getInt("views"));
 				board.setWriteDate(rs.getString("write_date"));
-				board.setCommentCount(rs.getInt("comment_Count"));
+				board.setCommentCount(rs.getInt("comment_count"));
 				
 				boardList.add(board);
 				
@@ -71,28 +90,43 @@ public class FreeBoardDAO {
 		return boardList;
 	}
 	
-	//게시글 상세보기
-	public List<Object> selectBoardByNo(int no, int board_code) {
-		List<Object> boardAndBoardName = new ArrayList<>();
-		Board board = null;
-		String boardName = "";
+	//게시물 총 건수
+	public int totalBoardCount() {
+		int totalCount = 0;
 		
 		try {
 			conn = ds.getConnection();
-			String sql2 = "select board_name from board_type where board_code=?";
-			pstmt = conn.prepareStatement(sql2);
-			pstmt.setInt(1, board_code);
+			String sql = "select count(*) cnt from board";
+			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				boardName = rs.getString("board_name");
-				boardAndBoardName.add(boardName);
+				totalCount = rs.getInt("cnt");
 			}
-			
-			String sql = "select board_code, no, id, title, content, write_date, views from board where no=?";
+		} catch (Exception e) {
+			e.getStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close(); //반환하기
+			} catch (Exception e2) {
+				System.out.println(e2.getMessage());
+			}
+		}
+		return totalCount;
+	}
+	
+	//게시글 상세보기
+	public Board selectBoardByNo(int no) {
+		Board board = null;
+		
+		try {
+			conn = ds.getConnection();
+			String sql = "select no, id, title, content, write_date, views from board where no=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
-			rs = pstmt.executeQuery();
 			
+			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				board = new Board();
 				board.setNo(rs.getInt("no"));
@@ -101,7 +135,50 @@ public class FreeBoardDAO {
 				board.setContent(rs.getString("content"));
 				board.setWriteDate(rs.getString("write_date"));
 				board.setViews(rs.getInt("views"));
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e2) {
+				System.out.println(e2.getMessage());
+			}
+		}
+		
+		return board;
+	}
+	
+	//게시글 카테고리 join
+	public List<Object> selectBoardByNo(int no, int board_code){
+		List<Object> boardAndBoardName = new ArrayList<>();
+		BoardAndType board = null;
+		String boardName = "";
+		
+		try {
+			conn = ds.getConnection();
+			String sql = "select t.board_code, b.no, b.id, b.title, b.content, b.write_date, b.views, t.board_name" + 
+						  "  from board b join board_type t" + 
+					      "    on b.board_code = t.board_code" + 
+					      " where t.board_code =?  and b.no = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, board_code);
+			pstmt.setInt(2, no);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				board = new BoardAndType();
+				board.setNo(rs.getInt("no"));
+				board.setId(rs.getString("id"));
+				board.setTitle(rs.getString("title"));
+				board.setContent(rs.getString("content"));
+				board.setWriteDate(rs.getString("write_date"));
+				board.setViews(rs.getInt("views"));
 				board.setBoardCode(rs.getInt("board_code"));
+				boardName = rs.getString("board_name");
+				boardAndBoardName.add(boardName);
 				boardAndBoardName.add(board);
 			}
 		} catch (Exception e) {
@@ -117,6 +194,54 @@ public class FreeBoardDAO {
 		}
 		return boardAndBoardName;
 	}
+	
+	//게시글 카테고리
+//	public List<Object> selectBoardByNo(int no, int board_code) {
+//		List<Object> boardAndBoardName = new ArrayList<>();
+//		Board board = null;
+//		String boardName = "";
+//		
+//		try {
+//			conn = ds.getConnection();
+//			String sql2 = "select board_name from board_type where board_code=?";
+//			pstmt = conn.prepareStatement(sql2);
+//			pstmt.setInt(1, board_code);
+//			rs = pstmt.executeQuery();
+//			if(rs.next()) {
+//				boardName = rs.getString("board_name");
+//				boardAndBoardName.add(boardName);
+//			}
+//			
+//			String sql = "select board_code, no, id, title, content, write_date, views from board where no=?";
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setInt(1, no);
+//			rs = pstmt.executeQuery();
+//			
+//			if(rs.next()) {
+//				board = new Board();
+//				board.setNo(rs.getInt("no"));
+//				board.setId(rs.getString("id"));
+//				board.setTitle(rs.getString("title"));
+//				board.setContent(rs.getString("content"));
+//				board.setWriteDate(rs.getString("write_date"));
+//				board.setViews(rs.getInt("views"));
+//				board.setBoardCode(rs.getInt("board_code"));
+//				boardAndBoardName.add(board);
+//			}
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		} finally {
+//			try {
+//				pstmt.close();
+//				rs.close();
+//				conn.close();
+//			} catch (Exception e2) {
+//				System.out.println(e2.getMessage());
+//			}
+//		}
+//		System.out.println(boardAndBoardName);
+//		return boardAndBoardName;
+//	}
 	
 	//다중 select, 게시판코드로 검색
 	public List<BoardType> SelectBoardType(){
@@ -194,14 +319,18 @@ public class FreeBoardDAO {
 		int row = 0;
 		try {
 			conn = ds.getConnection();
-			String sql_board_delete = "delete from board where no=?";
-			pstmt = conn.prepareStatement(sql_board_delete);
+			String sql_boardComment_delete = "delete from board_comment where no=?";
+			pstmt = conn.prepareStatement(sql_boardComment_delete);
 			pstmt.setInt(1, no);
 			row = pstmt.executeUpdate();
-			
 			if(row > 0) {
-				conn.commit();
+				String sql_board_delete = "delete from board where no=?";
+				pstmt = conn.prepareStatement(sql_board_delete);
+				pstmt.setInt(1, no);
+				row = pstmt.executeUpdate();
 			}
+			
+			
 		} catch (Exception e) {
 			System.out.println("delte : " + e.getMessage());
 		} finally {

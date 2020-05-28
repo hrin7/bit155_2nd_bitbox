@@ -34,9 +34,20 @@
 	border-radius: 5px;
 }
 .memoTitle {
-	width: 270px;
+	width: 230px;
 	margin: 5px 10px;
 	padding: 5px;
+}
+.deleteListDiv {
+	display:inline-block; 
+	margin: 5px 10px; 
+	padding: 5px;
+}
+.deleteListBtn {
+	border-bottom: 0px;
+}
+.deleteListBtn:hover {
+	background-color: lightgray;
 }
 .createMemoContentBtn {
 	width: 270px;
@@ -70,4 +81,13 @@
 }
 .font-design, .modal, .modal-title {
 	color: #707090 !important; 
+}
+
+#textarea:focus {
+	height: 150px;
+	background-color: white;
+}
+
+#kanbanContent {
+	width: 100%;
 }
