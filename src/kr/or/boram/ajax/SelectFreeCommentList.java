@@ -10,31 +10,33 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.boram.dao.FreeBoardDAO;
-import kr.or.boram.dto.Board;
-import kr.or.boram.dto.BoardType;
+import kr.or.boram.dao.FreeBoardCommentDAO;
+import kr.or.boram.dto.BoardComment;
 import net.sf.json.JSONArray;
 
-@WebServlet("/SelectBoardType.ajax")
-public class SelectBoardType extends HttpServlet {
+
+@WebServlet("/SelectFreeCommentList.ajax")
+public class SelectFreeCommentList extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
-	public SelectBoardType() {
+	public SelectFreeCommentList() {
 		super();
 	}
-    
-    private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	response.setCharacterEncoding("UTF-8");
-    	FreeBoardDAO freeBoardDao = new FreeBoardDAO();
-		List<BoardType> list = freeBoardDao.SelectBoardType();
+	
+	private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setCharacterEncoding("utf-8");
+		int no = Integer.parseInt(request.getParameter("no"));
 		
-		JSONArray obj = JSONArray.fromObject(list);
+		FreeBoardCommentDAO commentDao = new FreeBoardCommentDAO();
+		List<BoardComment> commentList = commentDao.selectCommentList(no);
+		
+		JSONArray obj = JSONArray.fromObject(commentList);
 		
 		PrintWriter out = response.getWriter();
 		out.print(obj);
 		out.close();
     }
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}

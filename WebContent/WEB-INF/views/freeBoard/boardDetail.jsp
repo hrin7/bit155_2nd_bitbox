@@ -33,7 +33,6 @@
                         <blockquote>
                            <br>
                            ${board.writeDate}  조회수 : ${board.views} 카테고리 : ${requestScope.boardAndBoardName[0]}<br>
-                           
                         </blockquote> 
                         <pre><code>${board.content}</code></pre>
                         
@@ -43,15 +42,9 @@
                         <hr>
                         
                         <!-- 댓글 -->
-                        <div id="com">
-                           <blockquote>hyerin 20.20.20
-                              <a href='javascript:void(0);' data-value='' class='updateComment' ><i class='ri-pencil-line'></i></a>
-                              <a href='javascript:void(0);' data-value='' class='deleteComment'><i class='ri-delete-bin-line'></i></a><br>
-                              <code>코맨트ㅇ비니다</code>
-                           </blockquote>
-                        </div>
+                        <div id="com"></div>
                         
-                        <b></b>
+                        <b>${board.id}</b>
                         <textarea name="comment" id="comment" placeholder="Enter your comment" rows="3"></textarea>
                         <br>
                         <button class="button primary small" id="commWrite">Write</button>
@@ -75,5 +68,136 @@
       <script src="<%=request.getContextPath()%>/assets/js/breakpoints.min.js"></script>
       <script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
       <script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
+      <script type="text/javascript">
+      
+      	//댓글 목록
+      	$.ajax({
+      		url: "SelectFreeCommentList.ajax",
+      		data: {no:'${board.no}'},
+      		dataType: "json",
+      		success: function(resData){
+      			makeComment(resData);
+      		}
+      	});
+      	
+      	//댓글 등록
+      	$('#commWrite').click(function(){
+      		console.log('${board.no}');
+      		if($('#comment').val() == ""){
+      			alert('내용을 입력하세요');
+      			return false;
+      		}
+      		
+      		$.ajax({
+      			url: "InsertFreeComment.ajax",
+      			data: {
+      				no:'${board.no}',
+      				id:'${requestScope.id}',
+      				commentContent:$('#comment').val()
+      			},
+      			dataType: "json",
+      			success: function(resData){
+      				$('#com').empty();
+      				makeComment(resData);
+      				$('#comment').val("");
+      			}
+      		});
+      	});
+      	
+      	//댓글삭제
+      	$('#com').on('click', '.deleteComment', function(){
+      		$.ajax({
+      			url: "DeleteFreeComment.ajax",
+      			data: {
+      				no: '${board.no}',
+      				commentNo: $(this).data("value")
+      			},
+      			dataType: "json",
+      			success: function(resData){
+      				$('#com').empty();
+      				makeComment(resData);
+      			}
+      		});
+      	});
+      	
+      	//댓글 수정
+      	var check = true;
+      	$('#com').on('click', '.updateComment', function(){
+      		if(check){
+      			check = false;
+      			//클릭한 a태그의 class를 cancelUpdate로 바꾸고 아이콘 바꾸기
+      			$(this).attr('class', 'cancelUpdate');
+      			$(this).html("<i class='ri-close-line'></i>");
+      			
+      			//this(a태그)의 부모태그(blockquote태그)를 parentTag변수에 담기
+      			var parentTag = $(this).parent();
+      			//자식태그중 code(댓글내용이 들어있는 태그)를 찾아서 변수에 담기
+      			var code = parentTag.find('code');
+      			//댓글내용 변수에 담기
+      			var codeText = parentTag.find('code').text();
+      			//댓글내용이 있는 code태그 삭제
+      			$(code).remove();
+      			//input태그 append하기(value에는 기본의 값 세팅하고, 포커스주기)
+      			var html = "";
+      			html += '<div id="updateDiv">';
+      			html += '<input type="text" value="'+codeText+'" name="content" id="updateContent">';
+				html += '<button class="button special small alt" id="commUpdateBtn">Edit</button>';
+				html += '</div>';
+				parentTag.append(html);
+				parentTag.find('input').focus();
+				
+				var commentNo = $(this).data("value");
+				$('#commUpdateBtn').click(function(){
+					if($('#updateContent').val() == ""){
+						alert('내용을 입력하세요');
+						return false;
+					}
+					
+					$.ajax({
+						url: "UpdateFreeComment.ajax",
+						data: {
+							no: '${board.no}',
+							commentNo: commentNo,
+							content: $('#updateContent').val()
+						},
+						dataType: "json",
+						success: function(resData){
+							$('#com').empty();
+							makeComment(resData);
+						}
+					});
+				});
+      		}
+      		
+      		//수정 취소 눌렀을 경우 리스트 다시 불러오기
+      		$('#com').on('click', '.cancelUpdate', function(){
+      			$.ajax({
+      				url: "SelectFreeCommentList.ajax",
+      				data: {no:'${board.no}'},
+      				dataType: "json",
+      				success: function(resData){
+      					$('#com').empty();
+      					makeComment(resData);
+      				}
+      			});
+      			check = true;
+      		});
+      		
+      	});
+      	
+      	
+      	//게시판 목록 그리는 함수
+		function makeComment(result) {
+			var html = "";
+			$.each(result, function(index, obj) {
+				html += "<blockquote>" + obj.id + " " + obj.commentDate;
+				html += " <a href='javascript:void(0);' data-value='" + obj.commentNo + "' class='updateComment' ><i class='ri-pencil-line'></i></a>";
+				html += " <a href='javascript:void(0);' data-value='" + obj.commentNo + "' class='deleteComment'><i class='ri-delete-bin-line'></i></a><br>";
+				html += "<code>" + obj.commentContent + "</code></blockquote>";
+			});
+			$('#com').append(html);
+		}
+      	
+      </script>
    </body>
 </html>
