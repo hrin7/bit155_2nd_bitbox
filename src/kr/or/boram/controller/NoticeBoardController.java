@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
+import kr.or.boram.service.SelectNoticeService;
+import kr.or.boram.service.UpdateNoticeOkService;
+import kr.or.boram.service.UpdateNoticeService;
 
 @WebServlet("*.notice")
 public class NoticeBoardController extends HttpServlet {
@@ -34,16 +37,42 @@ public class NoticeBoardController extends HttpServlet {
     	ActionForward forward = null;
     	Action action = null;
     	
-    	if(url_Command.equals("/NoticeBoardController.notice")) {
+    	if(url_Command.equals("/selectBoardList.notice")) {
+    		System.out.println("공지사항 목록 보여주기");
     		
-    		//action = new InsertEmpAction();
+    		action = new SelectNoticeService();
     		forward = action.execute(request, response);
     		
     		
-  		String viewPage = "/create.jsp";
-   		RequestDispatcher dis = request.getRequestDispatcher(viewPage);
-		dis.forward(request, response);  
-    	} 
+  	
+    	}else if(url_Command.equals("/noticeBoardUpdate.notice")) {
+    		System.out.println("공지사항 목록 보여주기");
+    		
+			
+			  action = new UpdateNoticeService(); 
+			  forward = action.execute(request,response);
+			 
+			  
+    		
+  	
+    	}else if(url_Command.equals("/noticeUpdateOK.notice")) {
+    		System.out.println("공지사항 목록 보여주기");
+    			System.out.println("수정 진행중.....");
+			
+			  action = new UpdateNoticeOkService(); 
+			  forward = action.execute(request,response);
+    	}
+    	
+    	
+    	//뷰 지정하기
+        if(forward != null) {
+           if(forward.isRedirect()) { //true면 redirect 하겠다.
+              response.sendRedirect(forward.getPath());
+           } else { //false(모든 자원) 사용
+              RequestDispatcher dis = request.getRequestDispatcher(forward.getPath());
+              dis.forward(request, response);
+           }
+        }
     	
 	}
     
