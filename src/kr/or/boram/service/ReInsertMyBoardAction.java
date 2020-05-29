@@ -24,7 +24,6 @@ public class ReInsertMyBoardAction implements Action {
 		String title = "";
 		String content = "";
 		String fileName = "";
-		String oriFileName = "";
 		  
 		String uploadpath = request.getSession().getServletContext().getRealPath("upload");
 		System.out.println(uploadpath);
@@ -44,7 +43,6 @@ public class ReInsertMyBoardAction implements Action {
 			
 			String file = (String)filenames.nextElement();
 			fileName = multi.getFilesystemName(file);
-			oriFileName = multi.getOriginalFileName(file);
 			
 			diaryNo = multi.getParameter("diaryNo");
 			title = multi.getParameter("title");
@@ -57,22 +55,23 @@ public class ReInsertMyBoardAction implements Action {
 		HttpSession session = request.getSession();
 		
 		MyBoard board = new MyBoard();
+		board.setId((String)session.getAttribute("userID"));
 		board.setDiaryNo(Integer.parseInt(diaryNo));
 		board.setDiaryTitle(title);
 		board.setDiaryContent(content);
 		board.setDiaryFileName(fileName);
       
 		//파일 처리하는 부분
-//			if(filename == null) {
-//			emp.setImage("user.png");
-//			} else {
-//			emp.setImage(filename);
-//			}
+//		if(filename == null) {
+//		emp.setImage("user.png");
+//		} else {
+//		emp.setImage(filename);
+//		}
 		
-		System.out.println("보드 : " + board); //board 찍어보기
+		//System.out.println("답글 보드 : " + board); //board 잘넘어오는 지 찍어보기
 		MyBoardDAO dao = new MyBoardDAO();
 		int result = dao.ReInsertMyBoard(board);
-		System.out.println("리절트 : " + result); //result 찍어보기
+		//System.out.println("답글 리절트 : " + result); //result 잘넘어오는 지 찍어보기
 		
 		String msg = "";
 		

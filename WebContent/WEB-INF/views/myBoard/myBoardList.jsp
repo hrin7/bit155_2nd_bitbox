@@ -75,9 +75,9 @@
 							</table>
 							<p align="right"><a href="<%=request.getContextPath()%>/myBoardInsertForm.my" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a></p>
 														
-							<!-- 페이징 -->							
+							<!-- 페이징(동기) -->							
 							<p align="center">
-							<!--이전 링크 -->
+							<!-- 이전 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage > 1}">
 									<a href="myBoardList.my?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-fill"></i></a>
@@ -97,7 +97,7 @@
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
-							<!--다음 링크 -->
+							<!-- 다음 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage < requestScope.pageCount}">
 									<a href="myBoardList.my?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-fill"></i></a>
@@ -106,8 +106,7 @@
 									<a href="myBoardList.my?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-fill"></i></a>
 								</c:otherwise>
 	                        </c:choose>
-							</p>
-							
+							</p>						
 						</div>
 					</div>
 				</section>
@@ -124,16 +123,6 @@
 		<script src="<%=request.getContextPath()%>/assets/js/breakpoints.min.js"></script>
 		<script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
 		<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
-		
-		<script type="text/javascript">		
-		//개인 계정으로만 접근 가능
-		//console.log('${sessionScope.admin}');		
-//		if('${sessionScope.admin}' == "") {
-//			$('#writeBtn').attr('href', '#').click(function() {
-//				alert('로그인 후 이용가능합니다.');
-//			});
-//		}
-		</script>
-      
+		      
 	</body>
 </html>

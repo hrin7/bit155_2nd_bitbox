@@ -23,14 +23,14 @@ public class MyBoardDAO {
 		try {
 			 ctx = new InitialContext();
 			 Context envctx= (Context)ctx.lookup("java:comp/env"); //기본설정
-			 ds =(DataSource)envctx.lookup("/jdbc/oracle");//context.xml 에서 name="jdbc/oracle"
+			 ds =(DataSource)envctx.lookup("/jdbc/oracle"); //context.xml 에서 name="jdbc/oracle"
 		} catch (Exception e) {
 			System.out.println("look up 에러 : " + e.getMessage());
 		}
 	}
 	
 	//글 목록 가져오기
-	public List<MyBoard> selectMyBoardList(int cpage, int pageSize) {
+	public List<MyBoard> selectMyBoardList(int cpage, int pageSize, String id) {
 		List<MyBoard> list = null;
 		
 		try {
@@ -42,6 +42,7 @@ public class MyBoardDAO {
 						 "	from (" + 
 						 "		select *" + 
 						 "		from diary" + 
+						 "		where id = ?"+
 						 "		order by diary_refer desc, diary_step asc" + 
 						 "	) b" + 
 						 "	where rownum <= ?" + 
@@ -52,8 +53,9 @@ public class MyBoardDAO {
 			int start = cpage * pageSize - (pageSize-1); // 1*5-(5-1) >> 1
 			int end = cpage * pageSize; // 1*5 >> 5
 			
-			pstmt.setInt(1, end);
-			pstmt.setInt(2, start);
+			pstmt.setString(1, id);
+			pstmt.setInt(2, end);
+			pstmt.setInt(3, start);
 			
 			rs = pstmt.executeQuery();
 			list = new ArrayList<MyBoard>();
@@ -88,13 +90,15 @@ public class MyBoardDAO {
 	}
 	
 	//게시물 총 건수
-	public int totalCountMyBoard() {
+	public int totalCountMyBoard(String id) {
 		int totalCount = 0;
 		
 		try {
 			conn = ds.getConnection();
-			String sql = "select count(*) cnt from diary";
+			
+			String sql = "select count(*) cnt from diary where id = ?";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				totalCount = rs.getInt("cnt");
@@ -150,12 +154,14 @@ public class MyBoardDAO {
 		try {
 			conn = ds.getConnection();
 			String sql = "insert into diary(id, diary_no, diary_title, diary_content, diary_file_name, diary_date, diary_refer)" +
-						 "values('soyoung', diary_no_seq.nextval, ?, ?, ?, sysdate, ?)";
-			pstmt = conn.prepareStatement(sql);			
-			pstmt.setString(1, board.getDiaryTitle());
-			pstmt.setString(2, board.getDiaryContent());
-			pstmt.setString(3, board.getDiaryFileName());			
-			pstmt.setInt(4, maxRefer);
+						 "values(?, diary_no_seq.nextval, ?, ?, ?, sysdate, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, board.getId());
+			pstmt.setString(2, board.getDiaryTitle());
+			pstmt.setString(3, board.getDiaryContent());
+			pstmt.setString(4, board.getDiaryFileName());			
+			pstmt.setInt(5, maxRefer);
 			row = pstmt.executeUpdate();
 			
 		} catch (Exception e) {
@@ -268,27 +274,28 @@ public class MyBoardDAO {
 		try {
 			conn = ds.getConnection();
 			
-			int currNo = board.getDiaryNo(); //현재 읽고 있는 글의 글번호			
+			String id = board.getId();
+			int diaryNo = board.getDiaryNo(); //현재 읽고 있는 글의 글번호			
 			String title = board.getDiaryTitle();
 			String content = board.getDiaryContent();
 			String fileName = board.getDiaryFileName();
 			
 			//답글 
 			//현재 내가 읽은 글의 refer, depth, step
-			String refer_depth_step_sql ="select diary_refer, diary_depth, diary_step from diary where diary_no=?";
+			String refer_depth_step_sql = "select diary_refer, diary_depth, diary_step from diary where diary_no=?";
 			
 			//순서
 			String step_sql = "select nvl(min(diary_step), 0) diary_step from diary where diary_refer=? and diary_depth<=? and diary_step>?";
 			
 			//insert
-			String reply_sql="insert into diary(id, diary_no, diary_title, diary_content, diary_date, diary_file_name, diary_refer, diary_depth, diary_step)" + 
-				    		 "values('soyoung', diary_no_seq.nextval, ?, ?, sysdate, ?, ?, ?, ?)";
+			String reply_sql= "insert into diary(id, diary_no, diary_title, diary_content, diary_date, diary_file_name, diary_refer, diary_depth, diary_step)" + 
+							  "values(?, diary_no_seq.nextval, ?, ?, sysdate, ?, ?, ?, ?)";
 			
 			pstmt = conn.prepareStatement(refer_depth_step_sql);
-			pstmt.setInt(1, currNo);
+			pstmt.setInt(1, diaryNo);
 			rs = pstmt.executeQuery();
 			
-			if(rs.next()) { //데이터가 있다면, 원본글의 refer, depth, step가 존재한다면
+			if(rs.next()) { //데이터가 있다면, 원본글의 refer, depth, step가 존재한다면				
 				int refer = rs.getInt("diary_refer");
 				int depth = rs.getInt("diary_depth");
 				int step = rs.getInt("diary_step");
@@ -319,14 +326,15 @@ public class MyBoardDAO {
 				}
 				
 				pstmt = conn.prepareStatement(reply_sql); //컴파일
-				pstmt.setString(1, title);
-				pstmt.setString(2, content);
-				pstmt.setString(3, fileName);
+				pstmt.setString(1, id);
+				pstmt.setString(2, title);
+				pstmt.setString(3, content);
+				pstmt.setString(4, fileName);
 				//답변
-				pstmt.setInt(4, refer);
-				pstmt.setInt(5, depth+1); //규칙:현재 읽은 글의 depth+1
-				pstmt.setInt(6, step);				
-				int row = pstmt.executeUpdate();
+				pstmt.setInt(5, refer);
+				pstmt.setInt(6, depth+1); //규칙:현재 읽은 글의 depth+1
+				pstmt.setInt(7, step);				
+				int row = pstmt.executeUpdate();				
 				
 				if(row > 0) {
 					result = row;
@@ -336,7 +344,7 @@ public class MyBoardDAO {
 			}
 	
 		} catch (Exception e) {
-			System.out.println("에러 : " + e.getMessage());
+			System.out.println("답글 에러 : " + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			try {
