@@ -14,6 +14,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	</head>
 	
 	<body class="is-preload">
@@ -90,14 +91,14 @@
 
 			<!-- Main -->
 			<article id="main">
-				<section class="wrapper style5" style="overflow: auto; white-space: nowrap;">
+				<section class="wrapper style5">
 					<!-- <div class="inner"> -->
 						<div id="outer">
 							<c:forEach var="kanbanGroup" items="${requestScope.kanbanGroupList}">
 								<div class="memoSectionDiv shadow" data-title='${kanbanGroup.listName}'>
 									<div class="memoTopHr"></div>
-									<div class="memoTitle" style="float: left;">${kanbanGroup.listName}</div>
-									<div class="deleteListDiv"><a href="javascript:void(0);" class="deleteListBtn" style="text-decoration: none !important;"><i class="ri-close-fill"></i></a></div>
+									<div class="memoTitle">${kanbanGroup.listName}</div>
+									<div class="deleteListDiv"><a href="javascript:void(0);" data-code='${kanbanGroup.kanbanCode}' class="deleteListBtn" style="text-decoration: none !important;"><i class="ri-close-fill"></i></a></div>
 									
 									<c:forEach var="kanban" items="${requestScope.kanbanList}" varStatus="status">
 										<c:if test="${kanbanGroup.kanbanCode == kanban.kanbanCode}">
@@ -123,7 +124,7 @@
 									</div>
 								</div>
 							</c:forEach>
-							<div id="createListBtnBefore"><div id="createListBtn">+ Add a list</div></div>
+							<div id="createListBtnBefore"><div id="createListBtn" class="shadow">+ Add a list</div></div>
 						</div>
 
 					<!-- </div> -->
@@ -155,8 +156,9 @@
 			
 						<!-- Modal Header -->
 						<div class="modal-header">
-							<h2 class="modal-title" id="cardName"></h2>
-							<h5 class="modal-title" id="listName"></h5>
+							<div style="float: left;"><h2 class="modal-title" id="cardName"></h2></div>
+							<div style="display: inline-block; float: right;"><a href="javascript:void(0);" id="deleteCardBtn"><i class="ri-close-fill"></i>카드삭제</a></div>
+							<h5 class="modal-title" id="listName" style="clear: both;"></h5>
 							<input type="hidden" id="kanbanNo"/>
 						</div>
 			
@@ -196,6 +198,12 @@
 			
 		<!-- Scripts -->
 		<script src="<%=request.getContextPath()%>/assets/js/kanban.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
 		<script type="text/javascript">
 			console.log(window.location.pathname);
 			let url = window.location.pathname;

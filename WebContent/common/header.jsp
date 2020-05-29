@@ -29,18 +29,18 @@
 							<li><a href="template.jsp">To-do-List</a></li>
 							
 							<!-- 로그인 안해도 보이는 메뉴 -->
-							<li><br><a href="template.jsp">Notice</a></li>
-							<li><a href="selectBoardList.free">Free Board</a></li>
-							
+							<li><br><a href="selectBoardList.notice">Notice</a></li>
+							<li><a href="selectBoardList.notice">Free Board</a></li>
+			
 							<!-- admin 계정으로 로그인시 보이는 메뉴 -->
-							<li><a href="#">회원정보관리</a></li>
+							<li><a href="memberInfoRead.admin">회원정보관리</a></li>
 						<%
 							}else if(session.getAttribute("userID") == null || session.getAttribute("userID") == ""){
 						%>
 													
 							<!-- 로그인 안해도 보이는 메뉴 -->
-							<li><br><a href="template.jsp">Notice</a></li>
-							<li><a href="elements.html">Free Board</a></li>
+							<li><br><a href="selectBoardList.notice">Notice</a></li>
+							<li><a href="selectBoardList.free">Free Board</a></li>
 						
 						<%
 							}else if(session.getAttribute("userID") != "admin"){
@@ -57,8 +57,8 @@
 							<li><a href="template.jsp">To-do-List</a></li>
 						
 							<!-- 로그인 안해도 보이는 메뉴 -->
-							<li><br><a href="template.jsp">Notice</a></li>
-							<li><a href="selectBoardList.free">Free Board</a></li>
+							<li><br><a href="selectBoardList.notice">Notice</a></li>
+							<li><a href="elements.html">Free Board</a></li>
 						<%			
 							}
 						%>

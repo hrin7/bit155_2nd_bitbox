@@ -348,7 +348,7 @@ ALTER TABLE kanban
 		REFERENCES kanban_group (
 			kanban_code,
 			id
-		);
+		) ON DELETE CASCADE;
 
 ALTER TABLE kanban_group
 	ADD

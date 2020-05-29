@@ -2,7 +2,9 @@ package kr.or.boram.ajax;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,13 +33,17 @@ public class SelectKanban extends HttpServlet {
     	HttpSession session = request.getSession();
     	String id = (String)session.getAttribute("userID");
     	
+    	Map<String, Object> allList = new HashMap<>();
+    	
     	//칸반그룹 가져오기
 		List<KanbanGroup> kanbanGroupList = dao.selectKanbanGroupList(id);
+		allList.put("kanbanGroupList", kanbanGroupList);
 		
 		//보드리스트 가져오기
 		List<KanbanBoardAndGroup> kanbanList = dao.selectList(id);
+		allList.put("kanbanList", kanbanList);
     	
-    	JSONArray obj = JSONArray.fromObject(kanbanList);
+    	JSONArray obj = JSONArray.fromObject(allList);
 		PrintWriter out = response.getWriter();
 		out.print(obj);
 		out.close();
