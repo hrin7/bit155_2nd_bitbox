@@ -57,16 +57,8 @@
 							<li><a href="template.jsp">To-do-List</a></li>
 						
 							<!-- 로그인 안해도 보이는 메뉴 -->
-<<<<<<< HEAD
 							<li><br><a href="selectBoardList.notice">Notice</a></li>
 							<li><a href="elements.html">Free Board</a></li>
-						
-							
-						
-=======
-							<li><br><a href="template.jsp">Notice</a></li>
-							<li><a href="selectBoardList.free">Free Board</a></li>
->>>>>>> master
 						<%			
 							}
 						%>
