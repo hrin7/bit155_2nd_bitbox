@@ -249,6 +249,11 @@ public class MyBoardDAO {
 		
 		try {
 			conn = ds.getConnection();
+			String sqlComment = "delete from diary_comment where diary_no=?";
+			pstmt = conn.prepareStatement(sqlComment);
+			pstmt.setInt(1, diaryNo);
+			row = pstmt.executeUpdate();
+			
 			String sql = "delete from diary where diary_no=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, diaryNo);
