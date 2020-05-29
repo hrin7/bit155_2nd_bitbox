@@ -37,7 +37,7 @@ public class KanbanBoardDAO {
 		
 		try {
 			conn = ds.getConnection();
-			String sql = "select kanban_code, list_name from kanban_group  where id = ?";
+			String sql = "select kanban_code, list_name from kanban_group where id = ? order by kanban_code";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			
@@ -148,9 +148,10 @@ public class KanbanBoardDAO {
 		return kanban;
 	}
 	
-	//칸반그룹(list) 만들기
+	//칸반그룹(list) 만들고 kanbanCode 반환하기
 	public int insertKanbanGroup(KanbanGroup kanbanGroup) {
 		int row = 0;
+		int kanbanCode = 0;
 		
 		try {
 			conn = ds.getConnection();
@@ -162,6 +163,15 @@ public class KanbanBoardDAO {
 			pstmt.setString(2, kanbanGroup.getListName());
 			
 			row = pstmt.executeUpdate();
+			
+			if(row > 0) {
+				String selectCodeSeq = "select kanban_code_seq.currval kanban_code from dual";
+				pstmt = conn.prepareStatement(selectCodeSeq);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					kanbanCode = rs.getInt("kanban_code");
+				}
+			}
 		} catch (Exception e) {
 			e.getStackTrace();
 			System.out.println("insertKanbanGroup 오류: " + e.getMessage());
@@ -173,7 +183,7 @@ public class KanbanBoardDAO {
 				e2.getStackTrace();
 			}
 		}
-		return row;
+		return kanbanCode;
 	}
 	
 	//칸반 card이름 insert하기위해 listName으로 kanbanCode 구하기
@@ -355,6 +365,58 @@ public class KanbanBoardDAO {
 		} catch (Exception e) {
 			e.getStackTrace();
 			System.out.println("updateKanbanCardContent 오류: " + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+			    conn.close();
+			} catch (Exception e2) {
+				e2.getStackTrace();
+			}
+		}
+		return row;
+	}
+	
+	//칸반 list 삭제하기
+	public int deleteKanbanList(int kanbanCode) {
+		int row = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = "delete from kanban_group where kanban_code=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, kanbanCode);
+			
+			row = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("deleteKanbanList 오류: " + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+			    conn.close();
+			} catch (Exception e2) {
+				e2.getStackTrace();
+			}
+		}
+		return row;
+	}
+
+	//칸반 card 삭제하기
+	public int deleteKanbanCard(int kanbanNo) {
+		int row = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			String sql = "delete from kanban where kanban_no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, kanbanNo);
+			
+			row = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("deleteKanbanCard 오류: " + e.getMessage());
 		} finally {
 			try {
 				pstmt.close();

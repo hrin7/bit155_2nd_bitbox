@@ -35,11 +35,11 @@ public class UpdateFreeComment extends HttpServlet {
     	boardComment.setCommentNo(commentNo);
     	boardComment.setCommentContent(commentContent);
     	
-    	FreeBoardCommentDAO FreeBoardcommentDao = new FreeBoardCommentDAO();
+    	FreeBoardCommentDAO freeBoardCommentDAO = new FreeBoardCommentDAO();
     	//댓글수정
-    	FreeBoardcommentDao.updateComment(boardComment);
+    	freeBoardCommentDAO.updateComment(boardComment);
     	//댓글 select
-    	List<BoardComment> commentResult = FreeBoardcommentDao.selectCommentList(no);
+    	List<BoardComment> commentResult = freeBoardCommentDAO.selectCommentList(no);
     	
     	JSONArray obj = JSONArray.fromObject(commentResult);
     	

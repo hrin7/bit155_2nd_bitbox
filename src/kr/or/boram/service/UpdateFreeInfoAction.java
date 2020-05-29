@@ -1,5 +1,7 @@
 package kr.or.boram.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,7 +10,7 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.FreeBoardDAO;
 import kr.or.boram.dto.Board;
 
-public class UpdateInfoAction implements Action {
+public class UpdateFreeInfoAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
@@ -16,17 +18,12 @@ public class UpdateInfoAction implements Action {
 		String boardCode = request.getParameter("boardCode");
 		
 		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
-		System.out.println(no);
-		System.out.println(boardCode);
-		Board board = freeBoardDao.selectBoardByNo(Integer.parseInt(no));
-		
 		Board board = freeBoardDao.selectBoardByNo(Integer.parseInt(no));
 		
 		request.setAttribute("board", board);
 		List<Object> boardAndBoardName = freeBoardDao.selectBoardByNo(Integer.parseInt(no), Integer.parseInt(boardCode));
 		
 		request.setAttribute("boardAndBoardName", boardAndBoardName);
-		request.setAttribute("board", board);
 		request.setAttribute("board", board);
 
 		ActionForward forward = new ActionForward();

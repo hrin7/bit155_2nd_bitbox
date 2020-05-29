@@ -4,6 +4,8 @@ memoSectionDivHtml += '<div class="memoSectionDiv shadow">';
 memoSectionDivHtml += 	'<div class="memoTopHr"></div>';
 memoSectionDivHtml += 	'<div class="memoTitle">';
 memoSectionDivHtml += 		'<input type="text" placeholder="Enter list title"/>';
+memoSectionDivHtml += 	'</div>';
+memoSectionDivHtml += 	'<div class="memoTitle-sub">';
 memoSectionDivHtml += 		'<button class="button primary small addListBtn">Add List</button>';
 memoSectionDivHtml += 		'<a href="javascript:void(0);" class="listCancelBtn"><i class="ri-close-fill ri-xl"></i></a>';
 memoSectionDivHtml += 	'</div>';
@@ -11,29 +13,33 @@ memoSectionDivHtml += 	'<div class="deleteListDiv"><a href="javascript:void(0);"
 memoSectionDivHtml += '</div>';
 
 //리스트 만들기
-$('#createListBtn').click(function() {
+$(document).on('click', '#createListBtn', function() {
 	$(this).hide();
 	$('#createListBtnBefore').before(memoSectionDivHtml);
+	$('#createListBtnBefore').prev().find('.deleteListDiv').hide();
 	$('input').focus();
 });
 
 //리스트 이름 입력받은 후 만들기 버튼눌렀을 때
 $('#outer').on('click', '.addListBtn', function() {
-	let listName = $(this).prev().val();
+	var deleteListBtnTag = $(this).parent().next().find('a');
+	let listName = $(this).parent().prev().find('input').val();
 	if(listName == "") {
 		alert('list title을 입력하세요.');
-		$(this).prev().focus();
+		$(this).parent().prev().find('input').focus();
 		return;
 	}
 	$('input').blur();
 	
-	//버튼의 형제들 삭제
-	$(this).siblings().remove();
+	$('.deleteListDiv').show();
+	//인풋박스 삭제
+	$(this).parent().prev().find('input').remove();
 	//부모밑에 text를 append
-	$(this).parent().append(listName);
+	$(this).parent().prev().append(listName);
 	$(this).parent().parent().attr('data-title', listName);
 	$(this).parent().parent().append('<div id="createMemoContentBtnBefore"><div class="createMemoContentBtn">+ Add a card</div></div>');
 	//그리고 버튼은 마지막에 삭제 >> 순서를 이렇게 해야 append가 된다..
+	$(this).parent().remove();
 	$(this).remove();
 	$('#createListBtn').show();
 	
@@ -41,8 +47,10 @@ $('#outer').on('click', '.addListBtn', function() {
 	$.ajax({
 		url: "InsertKanbanGroup.ajax",
 		data: {listName: listName},
-		success: function() {
+		dataType: "html",
+		success: function(resData) {
 			console.log("list insert 완료");
+			deleteListBtnTag.attr('data-code', resData);
 		}
 	});
 });
@@ -54,42 +62,76 @@ $('#outer').on('click', '.listCancelBtn', function() {
 });
 
 //리스트 이름 바꾸기
-//$('#outer').on('click', '.memoTitle', function() {
-//	let memoTitle = $(this);
-//	let listName = $(this).text();
-//	$(this).before("<input type='text' value='"+listName+"' id='listNameInput'/>");
-//	$('#listNameInput').focus();
-//	$(this).hide();
-//	
-//	$('#listNameInput').blur(function() {
-//		if($(this).val() == "") {
-//			alert('list Name을 입력하세요');
-//			$(this).focus();
-//			return;
-//		}
-//		
-//		memoTitle.show();
-//		memoTitle.text($(this).val());
-//		$(this).remove();
-//		
-//		if(listName != $(this).val()) {
-//			$.ajax({
-//				url: "UpdateKanbanListName.ajax",
-//				data: {
-//					oriListName: listName,
-//					updateListName: $(this).val()
-//				},
-//				success: function() {
-//					$('#listNameInput').blur();
-//				}
-//			});
-//		}
-//	});
-//});
+$('#outer').on('click', '.memoTitle', function() {
+	let memoTitle = $(this);
+	let listName = $(this).text();
+	$(this).next().hide();
+	$(this).before("<input type='text' value='"+listName+"' id='listNameInput'/>");
+	$('#listNameInput').focus();
+	$(this).hide();
+	
+	$('#listNameInput').blur(function() {
+		if($(this).val() == "") {
+			alert('list Name을 입력하세요');
+			$(this).focus();
+			return;
+		}
+		
+		$('.deleteListDiv').show();
+		memoTitle.show();
+		memoTitle.text($(this).val());
+		$(this).remove();
+		
+		if(listName != $(this).val()) {
+			$.ajax({
+				url: "UpdateKanbanListName.ajax",
+				data: {
+					oriListName: listName,
+					updateListName: $(this).val()
+				},
+				success: function() {
+					$('#listNameInput').blur();
+				}
+			});
+		}
+	});
+});
 
 //리스트 삭제하기
 $('#outer').on('click', '.deleteListBtn', function() {
-	
+	swal({
+		title: "list를 정말 삭제하시겠습니까?",
+		text: "Once deleted, you will not be able to recover this list!",
+		icon: "warning",
+		buttons: true,
+		dangerMode: true,
+	})
+	.then((willDelete) => {
+	    if(willDelete) {
+			$.ajax({
+				url: "DeleteKanbanList.ajax",
+				traditional : true,
+				data: {
+					kanbanCode: $(this).data('code')
+				},
+				success: function() {
+					$.ajax({
+						url: "SelectKanban.ajax",
+						dataType: "json",
+						success: function(resData) {
+							$('#outer').empty();
+							makeKanbanList(resData);
+							swal("Poof! Your imaginary list has been deleted!", {
+								icon: "success",
+							});
+						}
+					});
+				}
+			});
+		} else {
+		    swal("Your list is safe!");
+		}
+	});
 });
 
 /////////////////////////////////////////////
@@ -162,45 +204,52 @@ $('#outer').on('click', '.addCardBtn', function() {
 
 
 //목록 그리는 함수
-//function makeKanbanList(resData) {
-//	let html = "";
-//	$.each(resData.kanbanList, function(index, obj) {
-//		html += '<div class="memoSectionDiv shadow" data-title="'+obj.listName+'">';
-//		html += 	'<div class="memoTopHr"></div>';
-//		html += 	'<div class="memoTitle">'+obj.listName+'</div>';
-//		html += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+obj.kanbanNo+"' data-title='"+obj.listName+"'>";
-//		html += 	obj.kanbanTitle+'<br>';
-//		if(obj.kanbanContent != "") {
-//			html += '<i class="ri-align-left"></i>';
-//		}
-//		if(obj.kanbanCommentCount != 0) {
-//			html += '<i class="ri-chat-3-line"></i>'+obj.kanbanCommentCount;
-//		}
-//		if(obj.kanbanFileCount != 0) {
-//			html += '<i class="ri-chat-3-line"></i>'+obj.kanbanFileCount;
-//		}
-//		html += '</div>';
-//		html += 	'<div id="createMemoContentBtnBefore">';
-//		html += 		'<div class="createMemoContentBtn">+ Add a card</div>';
-//		html += 	'</div>';
-//		html += '</div>';
-//	});
-//	html += '<div id="createListBtnBefore"><div id="createListBtn">+ Add a list</div></div>';
-//	$('#outer').append(html);
-//}
+function makeKanbanList(resData) {
+	let html = "";
+	$.each(resData[0].kanbanGroupList, function(index, obj) {
+		html += '<div class="memoSectionDiv shadow" data-title="'+obj.listName+'">';
+		html += 	'<div class="memoTopHr"></div>';
+		html += 	'<div class="memoTitle">'+obj.listName+'</div>';
+		html += 	'<div class="deleteListDiv"><a href="javascript:void(0);"  data-code="'+obj.kanbanCode+'" class="deleteListBtn" style="text-decoration: none !important;"><i class="ri-close-fill"></i></a></div>';
+		$.each(resData[0].kanbanList, function(index, obj2) {
+			if(obj.kanbanCode == obj2.kanbanCode) {
+				if(obj2.kanbanTitle != "") {
+					html += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+obj2.kanbanNo+"' data-title='"+obj2.listName+"'>";
+					html += 	obj2.kanbanTitle+'<br>';
+					if(obj2.kanbanContent != "") {
+						html += '<i class="ri-align-left"></i>';
+					}
+					if(obj2.kanbanCommentCount != 0) {
+						html += '<i class="ri-chat-3-line"></i>'+obj2.kanbanCommentCount;
+					}
+					if(obj2.kanbanFileCount != 0) {
+						html += '<i class="ri-chat-3-line"></i>'+obj2.kanbanFileCount;
+					}
+					html += '</div>';
+				}
+			}
+		});
+		html += 	'<div id="createMemoContentBtnBefore">';
+		html += 		'<div class="createMemoContentBtn">+ Add a card</div>';
+		html += 	'</div>';
+		html += '</div>';
+	});
+	html += '<div id="createListBtnBefore"><div id="createListBtn">+ Add a list</div></div>';
+	$('#outer').append(html);
+}
 
 //모달 닫을때마다 리스트 만들기
 $('#myModal').on('hide.bs.modal', function(event){
 	//전체 리스트
-//	$.ajax({
-//		url: "SelectKanban.ajax",
-//		dataType: "json",
-//		success: function(resData) {
-//			$('#outer').empty();
-//			makeKanbanList(resData);
-//		}
-//	});
-	location.reload();
+	$.ajax({
+		url: "SelectKanban.ajax",
+		dataType: "json",
+		success: function(resData) {
+			$('#outer').empty();
+			makeKanbanList(resData);
+		}
+	});
+//	location.reload();
 });
 
 //상세글 보기
@@ -276,6 +325,34 @@ $('#myModal').on('shown.bs.modal', function () {
 		updateContentLogic(cardContentText, $(this));
 	});
 	
+	//카드 삭제하기
+	$('#deleteCardBtn').click(function() {
+		swal({
+			title: "card를 정말 삭제하시겠습니까?",
+			text: "Once deleted, you will not be able to recover this card!",
+			icon: "warning",
+			buttons: true,
+			dangerMode: true,
+		})
+		.then((willDelete) => {
+		    if(willDelete) {
+				$.ajax({
+					url: "DeleteKanbanCard.ajax",
+					traditional : true,
+					data: {kanbanNo: $('#kanbanNo').val()},
+					success: function() {
+						swal("Poof! Your imaginary card has been deleted!", {
+							icon: "success",
+						});
+						$('#myModal').modal('hide');
+					}
+				});
+			} else {
+			    swal("Your card is safe!");
+			}
+		});
+	});
+	
 	/////////////////// 댓글 //////////////////////
 	setTimeout(function() {
 		console.log("글번호: "+$('#kanbanNo').val());
@@ -285,7 +362,6 @@ $('#myModal').on('shown.bs.modal', function () {
 			data: {kanbanNo: $('#kanbanNo').val()},
 			dataType: "json",
 			success: function(resData) {
-				console.log(resData);
 				makeComment(resData);
 			}
 		});
@@ -399,7 +475,7 @@ $('#myModal').on('shown.bs.modal', function () {
 			});
 		});
 	
-		//게시판 목록 그리는 함수
+		//댓글 목록 그리는 함수
 		function makeComment(result) {
 			var html = "";
 			$.each(result, function(index, obj) {
@@ -411,7 +487,7 @@ $('#myModal').on('shown.bs.modal', function () {
 			});
 			$('#com').append(html);
 		}
-	}, 500);
+	}, 100);
 	/////////////////////////////////////////////////////
 });
 

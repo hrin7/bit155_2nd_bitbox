@@ -54,7 +54,17 @@
 									<c:forEach var="boardList" items="${requestScope.boardList}">
 										<tr>
 											<td>${boardList.no}</td>
-											<td><a href="selectBoard.free?no=${boardList.no}&boardCode=${boardList.boardCode}">${boardList.title}</a></td>
+											<td>
+												<a href="selectBoard.free?no=${boardList.no}&boardCode=${boardList.boardCode}">${boardList.title}</a>
+												<!-- boardFile이 존재하는 경우에는 이미지를 붙여준다 -->
+		                                    	<c:if test="${!empty board.boardFile}">
+		                                    		<i class="ri-image-line"></i>
+		                                    	</c:if>
+												<!-- comment cnt가 존재하는 경우 -->
+		                                    	<c:if test="${boardList.commentCount > 0}">
+		                                    		[${boardList.commentCount}]
+		                                    	</c:if>
+											</td>
 											<td>${boardList.id}</td>
 											<td>${boardList.writeDate}</td>
 											<td>${boardList.views}</td>

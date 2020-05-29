@@ -38,7 +38,7 @@
                         
                         <a href="boardInfo.free?no=${board.no}&boardCode=${board.boardCode}" class="button small">Edit</a>
                         <a href="deleteBoard.free?no=${board.no}" class="button small">Delete</a>
-                        <a href="#" class="button small">Reply</a>
+                        <a href="<%=request.getContextPath()%>/insertReFreeBoardForm.free?no=${board.no}" class="button small">Reply</a>
                         <hr>
                         
                         <!-- 댓글 -->
@@ -121,11 +121,11 @@
       	});
       	
       	//댓글 수정
-      	var check = true;
+		var check = true;
       	$('#com').on('click', '.updateComment', function(){
       		if(check){
       			check = false;
-      			//클릭한 a태그의 class를 cancelUpdate로 바꾸고 아이콘 바꾸기
+      			//클리학 a태그의 class를 cancelUpdate로 바꾸고 아이콘 바꾸기
       			$(this).attr('class', 'cancelUpdate');
       			$(this).html("<i class='ri-close-line'></i>");
       			
@@ -137,10 +137,10 @@
       			var codeText = parentTag.find('code').text();
       			//댓글내용이 있는 code태그 삭제
       			$(code).remove();
-      			//input태그 append하기(value에는 기본의 값 세팅하고, 포커스주기)
+      			//input태그 append하기(value에는 기존의 값 셋팅하고, 포커스주기)
       			var html = "";
-      			html += '<div id="updateDiv">';
-      			html += '<input type="text" value="'+codeText+'" name="content" id="updateContent">';
+				html += '<div id="updateDiv">';
+				html += '<input type="text" value="'+codeText+'" name="content" id="updateContent">';
 				html += '<button class="button special small alt" id="commUpdateBtn">Edit</button>';
 				html += '</div>';
 				parentTag.append(html);
@@ -158,14 +158,15 @@
 						data: {
 							no: '${board.no}',
 							commentNo: commentNo,
-							content: $('#updateContent').val()
+							commentContent: $('#updateContent').val()
 						},
 						dataType: "json",
 						success: function(resData){
 							$('#com').empty();
 							makeComment(resData);
+							check = true;
 						}
-					});
+					})
 				});
       		}
       		
@@ -182,9 +183,7 @@
       			});
       			check = true;
       		});
-      		
       	});
-      	
       	
       	//게시판 목록 그리는 함수
 		function makeComment(result) {

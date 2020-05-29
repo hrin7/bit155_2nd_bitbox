@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import kr.or.boram.dao.MyBoardCommentDAO;
 import kr.or.boram.dto.MyBoardComment;
@@ -24,12 +25,16 @@ public class InsertMyBoardComment extends HttpServlet {
     
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("utf-8");
+    	HttpSession session = request.getSession();
     	
     	MyBoardComment comment = new MyBoardComment();
     	comment.setDiaryNo(Integer.parseInt(request.getParameter("diaryNo")));
     	comment.setDiaryCommentContent(request.getParameter("diaryCommentContent"));
+    	comment.setId((String)session.getAttribute("userID"));
+    	
     	
     	MyBoardCommentDAO dao = new MyBoardCommentDAO();
+    	
     	//댓글등록
     	dao.insertMyBoardComment(comment);
     	//댓글 select

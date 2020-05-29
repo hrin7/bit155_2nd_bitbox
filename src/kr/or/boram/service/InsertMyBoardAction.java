@@ -22,7 +22,6 @@ public class InsertMyBoardAction implements Action {
 		String title = "";
 		String content = "";
 		String fileName = "";
-		String oriFileName = "";
 		  
 		String uploadpath = request.getSession().getServletContext().getRealPath("upload");
 		System.out.println(uploadpath);
@@ -41,7 +40,6 @@ public class InsertMyBoardAction implements Action {
 			Enumeration filenames = multi.getFileNames();
 			String file = (String)filenames.nextElement();
 			fileName = multi.getFilesystemName(file);
-			oriFileName = multi.getOriginalFileName(file);
 			
 			title = multi.getParameter("title");
 			content = multi.getParameter("message");
@@ -53,6 +51,7 @@ public class InsertMyBoardAction implements Action {
 		HttpSession session = request.getSession();
 		
 		MyBoard board = new MyBoard();
+		board.setId((String)session.getAttribute("userID"));
 		board.setDiaryTitle(title);
 		board.setDiaryContent(content);
 		board.setDiaryFileName(fileName);
