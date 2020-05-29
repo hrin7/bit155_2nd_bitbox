@@ -95,7 +95,7 @@ public class MyBoardController extends HttpServlet {
     	}
     	
     	//답글 작성하는 폼으로 보내기
-		else if(url_Command.equals("/myBoardReInsertForm.my")) {		
+		else if(url_Command.equals("/myBoardReInsertForm.my")) {
 		String diaryNo = request.getParameter("diaryNo");
 		request.setAttribute("diaryNo", diaryNo);
 		forward = new ActionForward();
@@ -104,7 +104,7 @@ public class MyBoardController extends HttpServlet {
 		}
     	
     	//답글 작성하기
-		else if(url_Command.equals("/myBoardReInsert.my")) {    	
+		else if(url_Command.equals("/myBoardReInsert.my")) {
     	action = new ReInsertMyBoardAction();
     	forward = action.execute(request, response);
 		}

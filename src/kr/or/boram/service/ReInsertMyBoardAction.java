@@ -15,10 +15,12 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.MyBoardDAO;
 import kr.or.boram.dto.MyBoard;
 
+//실행하는 함수 : execute
 public class ReInsertMyBoardAction implements Action {
 	
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
+		String diaryNo = "";
 		String title = "";
 		String content = "";
 		String fileName = "";
@@ -44,6 +46,7 @@ public class ReInsertMyBoardAction implements Action {
 			fileName = multi.getFilesystemName(file);
 			oriFileName = multi.getOriginalFileName(file);
 			
+			diaryNo = multi.getParameter("diaryNo");
 			title = multi.getParameter("title");
 			content = multi.getParameter("message");
 			
@@ -54,6 +57,7 @@ public class ReInsertMyBoardAction implements Action {
 		HttpSession session = request.getSession();
 		
 		MyBoard board = new MyBoard();
+		board.setDiaryNo(Integer.parseInt(diaryNo));
 		board.setDiaryTitle(title);
 		board.setDiaryContent(content);
 		board.setDiaryFileName(fileName);
@@ -65,10 +69,10 @@ public class ReInsertMyBoardAction implements Action {
 //			emp.setImage(filename);
 //			}
 		
-		//System.out.println("보드 : " + board); //board 찍어보기
+		System.out.println("보드 : " + board); //board 찍어보기
 		MyBoardDAO dao = new MyBoardDAO();
-		int result = dao.insertMyBoard(board);
-		System.out.println("result : " + result); //result 찍어보기
+		int result = dao.ReInsertMyBoard(board);
+		System.out.println("리절트 : " + result); //result 찍어보기
 		
 		String msg = "";
 		

@@ -15,8 +15,8 @@ import kr.or.boram.service.DeleteFreeBoardAction;
 import kr.or.boram.service.InsertFreeBoardAction;
 import kr.or.boram.service.SelectFreeBoardByNoAction;
 import kr.or.boram.service.SelectFreeBoardListAction;
-import kr.or.boram.service.UpdadeInfoAction;
 import kr.or.boram.service.UpdateFreeBoardAction;
+import kr.or.boram.service.UpdateInfoAction;
 
 @WebServlet("*.free")
 public class FreeBoardController extends HttpServlet {
@@ -73,7 +73,7 @@ public class FreeBoardController extends HttpServlet {
     	
 		//게시글 정보
     	} else if(url_Command.equals("/boardInfo.free")) {
-    		action = new UpdadeInfoAction();
+    		action = new UpdateInfoAction();
     		forward = action.execute(request, response);
     	}
     	

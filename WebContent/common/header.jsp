@@ -23,15 +23,15 @@
 							<a href="<%=request.getContextPath()%>/logout.user" class="button">logout</a>
 							
 							</li>
-							<li><br><a href="template.jsp">My Board</a></li>
-							<li><a href="selectList.kanban">CanBan</a></li>
+							<li><br><a href="myBoardList.my">My Board</a></li>
+							<li><a href="selectList.kanban">KanBan</a></li>
 							<li><a href="template.jsp">Scheduler</a></li>
 							<li><a href="template.jsp">To-do-List</a></li>
 							
 							<!-- 로그인 안해도 보이는 메뉴 -->
 							<li><br><a href="selectBoardList.notice">Notice</a></li>
 							<li><a href="selectBoardList.notice">Free Board</a></li>
-							
+			
 							<!-- admin 계정으로 로그인시 보이는 메뉴 -->
 							<li><a href="memberInfoRead.admin">회원정보관리</a></li>
 						<%
@@ -51,17 +51,22 @@
 							<a href="#"><%=session.getAttribute("userID")+"님" %></a>
 							<a href="<%=request.getContextPath()%>/logout.user" class="button">logout</a>
 							</li>
-							<li><br><a href="template.jsp">My Board</a></li>
-							<li><a href="template.jsp">CanBan</a></li>
+							<li><br><a href="myBoardList.my">My Board</a></li>
+							<li><a href="selectList.kanban">KanBan</a></li>
 							<li><a href="template.jsp">Scheduler</a></li>
 							<li><a href="template.jsp">To-do-List</a></li>
 						
 							<!-- 로그인 안해도 보이는 메뉴 -->
+<<<<<<< HEAD
 							<li><br><a href="selectBoardList.notice">Notice</a></li>
 							<li><a href="elements.html">Free Board</a></li>
 						
 							
 						
+=======
+							<li><br><a href="template.jsp">Notice</a></li>
+							<li><a href="selectBoardList.free">Free Board</a></li>
+>>>>>>> master
 						<%			
 							}
 						%>
@@ -76,7 +81,7 @@
 <script type="text/javascript">
 	console.log(window.location.pathname);
 	let url = window.location.pathname;
-	if(url == "/2nd_team3_project/index.jsp" || url == "/2nd_team3_project/logout.do" || url == "/2nd_team3_project/loginOk.do") {
+	if(url == "/2nd_bitbox/index.jsp" || url == "/2nd_bitbox/logout.user" || url == "/2nd_bitbox/login.user") {
 		$('header').attr('class', 'alt');
 	}
 </script>

@@ -2,42 +2,43 @@ package kr.or.boram.ajax;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import kr.or.boram.dao.KanbanBoardDAO;
-import kr.or.boram.dto.KanbanBoard;
+import kr.or.boram.dao.KanbanCommentDAO;
+import kr.or.boram.dto.KanbanComment;
+import net.sf.json.JSONArray;
 
-@WebServlet("/InsertKanbanCardName.ajax")
-public class InsertKanbanCardName extends HttpServlet {
+@WebServlet("/InsertKanbanComment.ajax")
+public class InsertKanbanComment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public InsertKanbanCardName() {
+    public InsertKanbanComment() {
         super();
     }
-
+    
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("utf-8");
     	
-    	HttpSession session = request.getSession();
-    	KanbanBoard kanbanBoard = new KanbanBoard();
-    	kanbanBoard.setId((String)session.getAttribute("userID"));
-    	kanbanBoard.setKanbanTitle(request.getParameter("cardTitle"));
+    	KanbanComment comment = new KanbanComment();
+    	comment.setKanbanNo(Integer.parseInt(request.getParameter("kanbanNo")));
+    	comment.setKanbanCommentContent(request.getParameter("content"));
     	
-    	KanbanBoardDAO dao = new KanbanBoardDAO();
-    	int kanbanCode = dao.insertKanbanCardName(request.getParameter("listName"));
-    	kanbanBoard.setKanbanCode(kanbanCode);
+    	KanbanCommentDAO dao = new KanbanCommentDAO();
+    	//댓글등록
+    	dao.insertKanbanComment(comment);
+    	//댓글 select
+    	List<KanbanComment> commentResult = dao.selectKanbanCommentList(Integer.parseInt(request.getParameter("kanbanNo")));
+		
+    	JSONArray obj = JSONArray.fromObject(commentResult);
     	
-    	//insert하고 현재 시퀀스값 가져오기
-    	int kanbanNo = dao.insertKanbanCardName(kanbanBoard);
-    	System.out.println(kanbanBoard);
-    	PrintWriter out = response.getWriter();
-		out.print(kanbanNo);
+		PrintWriter out = response.getWriter();
+		out.print(obj);
 		out.close();
     }
 

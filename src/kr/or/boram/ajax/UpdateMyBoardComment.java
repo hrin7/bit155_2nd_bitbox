@@ -9,35 +9,39 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import kr.or.boram.dao.KanbanBoardDAO;
-import kr.or.boram.dto.KanbanBoardAndGroup;
-import kr.or.boram.dto.KanbanGroup;
+import kr.or.boram.dao.MyBoardCommentDAO;
+import kr.or.boram.dto.MyBoardComment;
 import net.sf.json.JSONArray;
 
-@WebServlet("/SelectKanban.ajax")
-public class SelectKanban extends HttpServlet {
+@WebServlet("/UpdateMyBoardComment.ajax")
+public class UpdateMyBoardComment extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public SelectKanban() {
+    public UpdateMyBoardComment() {
         super();
     }
-
+    
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("utf-8");
-    	KanbanBoardDAO dao = new KanbanBoardDAO();
     	
-    	HttpSession session = request.getSession();
-    	String id = (String)session.getAttribute("userID");
+    	int diaryNo = Integer.parseInt(request.getParameter("diaryNo"));
+    	int diaryCommentNo = Integer.parseInt(request.getParameter("diaryCommentNo"));
+    	String diaryCommentContent = request.getParameter("diaryCommentContent");
     	
-    	//칸반그룹 가져오기
-		List<KanbanGroup> kanbanGroupList = dao.selectKanbanGroupList(id);
+    	MyBoardComment comment = new MyBoardComment();
+    	comment.setDiaryNo(diaryNo);
+    	comment.setDiaryCommentNo(diaryCommentNo);
+    	comment.setDiaryCommentContent(diaryCommentContent);
+    	
+    	MyBoardCommentDAO dao = new MyBoardCommentDAO();
+    	//댓글수정
+    	dao.updateMyBoardComment(comment);
+    	//댓글 select
+    	List<MyBoardComment> commentResult = dao.selectMyBoardCommentList(diaryNo);
 		
-		//보드리스트 가져오기
-		List<KanbanBoardAndGroup> kanbanList = dao.selectList(id);
+    	JSONArray obj = JSONArray.fromObject(commentResult);
     	
-    	JSONArray obj = JSONArray.fromObject(kanbanList);
 		PrintWriter out = response.getWriter();
 		out.print(obj);
 		out.close();

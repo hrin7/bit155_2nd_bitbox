@@ -1,15 +1,15 @@
 package kr.or.boram.dto;
 
 public class KanbanComment {
-	private String id;
+	private int kanbanCommentNo;
 	private int kanbanNo;
 	private String kanbanCommentContent;
 	private String kanbanCommentDate;
-	public String getId() {
-		return id;
+	public int getKanbanCommentNo() {
+		return kanbanCommentNo;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setKanbanCommentNo(int kanbanCommentNo) {
+		this.kanbanCommentNo = kanbanCommentNo;
 	}
 	public int getKanbanNo() {
 		return kanbanNo;
@@ -31,7 +31,7 @@ public class KanbanComment {
 	}
 	@Override
 	public String toString() {
-		return "KanbanComment [id=" + id + ", kanbanNo=" + kanbanNo + ", kanbanCommentContent=" + kanbanCommentContent
-				+ ", kanbanCommentDate=" + kanbanCommentDate + "]";
+		return "KanbanComment [kanbanCommentNo=" + kanbanCommentNo + ", kanbanNo=" + kanbanNo
+				+ ", kanbanCommentContent=" + kanbanCommentContent + ", kanbanCommentDate=" + kanbanCommentDate + "]";
 	}
 }
