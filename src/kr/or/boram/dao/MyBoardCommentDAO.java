@@ -73,10 +73,12 @@ public class MyBoardCommentDAO {
 			conn = ds.getConnection();
 			
 			String sql = "insert into diary_comment(id, diary_no, diary_comment_no, diary_comment_content, diary_comment_date)" +
-						 "values('soyoung', ?, diary_comment_no_seq.nextval, ?, sysdate)";
+						 "values(?, ?, diary_comment_no_seq.nextval, ?, sysdate)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, comment.getDiaryNo());
-			pstmt.setString(2, comment.getDiaryCommentContent());			
+			
+			pstmt.setString(1, comment.getId());			
+			pstmt.setInt(2, comment.getDiaryNo());
+			pstmt.setString(3, comment.getDiaryCommentContent());			
 			row = pstmt.executeUpdate();
 			
 		} catch (Exception e) {
