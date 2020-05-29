@@ -7,8 +7,7 @@ import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.MyBoardDAO;
 
-//사원 삭제하기
-public class DeleteMyBoardAction implements Action {	
+public class DeleteMyBoardAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
@@ -16,6 +15,7 @@ public class DeleteMyBoardAction implements Action {
 		
 		MyBoardDAO dao = new MyBoardDAO();
 		int result = dao.deleteMyBoard(diaryNo);
+		System.out.println("리절트 : " + result);
 		
 		String msg = "";
 		if(result > 0) {
@@ -23,7 +23,6 @@ public class DeleteMyBoardAction implements Action {
 		} else {
 			msg = "삭제 실패";
 		}
-		
 		request.setAttribute("msg", msg);
 		
 		ActionForward forward = new ActionForward();

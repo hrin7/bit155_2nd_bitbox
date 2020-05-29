@@ -5,7 +5,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>DIARY</title>
+		<title>MY BOARD</title>
 			<meta charset="utf-8" />
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 			<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
@@ -31,7 +31,7 @@
 			<!-- Main -->
 			<article id="main">
 				<header>
-					<h2>DIARY</h2>
+					<h2>MY BOARD</h2>
 					<p>keeping a daily journal can change your life</p>
 				</header>
 				
@@ -53,9 +53,19 @@
 										<tr>
 											<td>${myBoardList.diaryNo}</td>
 											<td>
+												<c:forEach var="i" begin="1" end="${myBoardList.diaryDepth}">
+													&nbsp;&nbsp;&nbsp;
+												</c:forEach>
+												<!-- depth가 0보다 크면 답글. 답글이 있을 때는 답글 표시(ㄴ)를 붙여준다 -->
+												<c:if test="${myBoardList.diaryDepth>0}">ㄴ</c:if>
 												<a href="myBoardSelect.my?diaryNo=${myBoardList.diaryNo}">${myBoardList.diaryTitle}</a>
-												<c:if test="${!empty myBoard.diaryFileName}">
-                                    				<i class="ri-image-line"></i>
+												<!-- 파일이 존재하는 경우에는 파일 표시를 붙여준다 -->
+												<c:if test="${!empty myBoardList.diaryFileName}">
+                                    				<i class="ri-attachment-2"></i>
+                                    			</c:if>
+                                    			<!-- comment cnt가 존재하는 경우 -->
+                                    			<c:if test="${myBoardList.diaryCommentCount>0}">
+                                    				<span style = "font-size:13px">[${myBoardList.diaryCommentCount}]</span>
                                     			</c:if>
 											</td>
 											<td>${myBoardList.diaryDate}</td>
@@ -70,30 +80,30 @@
 							<!--이전 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage > 1}">
-									<a href="boardList.board?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}" class="button alt small">&lt;</a>
+									<a href="myBoardList.my?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-fill"></i></a>
 								</c:when>
 								<c:otherwise>
-									<a href="#"><i class="ri-arrow-left-s-line"></i></a>
+									<a href="myBoardList.my?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-fill"></i></a>
 								</c:otherwise>
 							</c:choose>
 							<!-- page 목록 나열하기 -->
 							<c:forEach var="i" begin="1" end="${requestScope.pageCount}" step="1">
 								<c:choose>
 									<c:when test="${requestScope.cpage == i}">
-										<a href="#" class="button small">${i}</a>
+										<a href="myBoardList.my?cp=${i}&ps=${requestScope.pageSize}">${i}</a>
 									</c:when>
 									<c:otherwise>
-										<a href="boardList.board?cp=${i}&ps=${requestScope.pageSize}" class="button alt small">${i}</a>
+										<a href="myBoardList.my?cp=${i}&ps=${requestScope.pageSize}">${i}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							<!--다음 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage < requestScope.pageCount}">
-									<a href="boardList.board?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}" class="button alt small">&gt;</a>
+									<a href="myBoardList.my?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-fill"></i></a>
 								</c:when>
 								<c:otherwise>
-									<a href="#"><i class="ri-arrow-right-s-line"></i></a>
+									<a href="myBoardList.my?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-fill"></i></a>
 								</c:otherwise>
 	                        </c:choose>
 							</p>

@@ -3,7 +3,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>DIARY</title>
+		<title>MY BOARD</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -27,7 +27,7 @@
 			<!-- Main -->
 			<article id="main">
 				<header>
-					<h2>DIARY</h2>
+					<h2>MY BOARD</h2>
 					<p>keeping a daily journal can change your life</p>
 				</header>
 				<section class="wrapper style5">
