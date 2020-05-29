@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import kr.or.boram.dto.Board;
+import kr.or.boram.dto.BoardAndFileAndReply;
 import kr.or.boram.dto.BoardAndType;
 import kr.or.boram.dto.BoardType;
 
@@ -71,8 +72,7 @@ public class FreeBoardDAO {
 				board.setContent(rs.getString("content"));
 				board.setViews(rs.getInt("views"));
 				board.setWriteDate(rs.getString("write_date"));
-				board.setCommentCount(rs.getInt("comment_count"));
-				
+				board.setCommentCount(rs.getInt("cnt"));
 				boardList.add(board);
 				
 			}
@@ -87,6 +87,7 @@ public class FreeBoardDAO {
 				System.out.println(e2.getMessage());
 			}
 		}
+		System.out.println(boardList);
 		return boardList;
 	}
 	
@@ -282,18 +283,8 @@ public class FreeBoardDAO {
 		
 		try {
 			conn = ds.getConnection();
-			String selectsql = "select no from board";
-			pstmt = conn.prepareStatement(selectsql);
-			
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				if(board.getNo() == rs.getInt("no")) {
-					return -1;
-				}
-			}
-			
-			String sql = "insert into board(board_code ,no , id , title , content , write_date)"
-					+ "values(?, no_seq.nextval ,'jinwon',?,?,sysdate)";
+			String sql = "insert into board(board_code, no, id, title, content, write_date)"
+					+ "values(?, no_seq.nextval, 'jinwon', ?, ?, sysdate)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, board.getBoardCode());
 			pstmt.setString(2, board.getTitle());
@@ -314,6 +305,117 @@ public class FreeBoardDAO {
 		return row;
 	}
 	
+	//답글글 작성
+	public int insertReBoard(BoardAndFileAndReply board) {
+		int row = 0;
+		int referMax = getMaxRefer();
+		int refer2 = referMax + 1;
+		
+		try {
+			conn = ds.getConnection();
+			
+			int cno = board.getNo(); //현재 읽은 글의 글번호
+			
+			//1. 답글 
+			//현재 내가 읽은 글의 refer, depth, step
+			String refer_depth_step_sal ="select refer, depth, step from board_reply where no=?";
+			
+			//2. 위치
+			String step_sql = "select nvl(min(step), 0) step from board_reply where refer=? and step > ? and depth <= ?";
+			
+			
+			//답글 테이블 insert
+			String referSql = "insert into board_reply(reply_no, id, no, refer) values(reply_no_seq.nextval, ?, ?, ?)";
+			pstmt = conn.prepareStatement(referSql);
+			pstmt.setString(1, board.getId());
+			pstmt.setInt(2, board.getNo());
+			pstmt.setInt(3, refer2);
+			int result = pstmt.executeUpdate();
+			System.out.println("result : " + result);
+			
+			pstmt = conn.prepareStatement(refer_depth_step_sal);
+			pstmt.setInt(1, cno);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				int refer = rs.getInt("refer");
+				int depth = rs.getInt("depth");
+				int step = rs.getInt("step");
+				
+				pstmt = conn.prepareStatement(step_sql); //컴파일
+				pstmt.setInt(1, refer); //원본글 ref
+				pstmt.setInt(2, step); //원본글 step
+				pstmt.setInt(3, depth); //원본글 lev
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					step = rs.getInt("step");
+					if(step == 0) {
+						String maxStep = "select max(step)+1 maxStep from board_reply where refer=?";
+						pstmt = conn.prepareStatement(maxStep);
+						pstmt.setInt(1, refer); //원본글 ref
+						rs = pstmt.executeQuery();
+						if(rs.next()) {
+							step = rs.getInt("maxStep");
+						}
+					} else {
+						String update_step = "update board_reply set step=step+1 where refer=? and step >= ? ";
+						pstmt = conn.prepareStatement(update_step);
+						pstmt.setInt(1, refer); //원본글 ref
+						pstmt.setInt(2, step);
+						pstmt.executeUpdate();
+					}
+				}
+				
+				//파일테이블 등록
+				String rewrite_file_sql = "insert into board_file(file_no, no, file_name) values(file_no_seq.nextval, ?, ?)";
+				pstmt = conn.prepareStatement(rewrite_file_sql);
+				pstmt.setInt(1, cno);
+				pstmt.setString(2, board.getFileName());
+				int result2 = pstmt.executeUpdate();
+				System.out.println("result2 : " + result2);
+				
+				//답글테이블 업데이트
+				int replyNo = 0;
+				String replyNoSql = "select reply_no_seq.currval as replyNo from dual";
+				conn.prepareStatement(replyNoSql);
+				if(rs.next()) {
+					replyNo = rs.getInt("replyNo");
+				}
+				
+				String rewrite_reply = "update board_reply set refer=?, depth=?, step=? where no=? and reply_no=?";
+				pstmt = conn.prepareStatement(rewrite_reply);
+				pstmt.setInt(1, refer);
+				pstmt.setInt(2, depth+1);
+				pstmt.setInt(3, step);
+				pstmt.setInt(4, cno);
+				pstmt.setInt(5, replyNo);
+				int result3 = pstmt.executeUpdate();
+				System.out.println("result3 : " + result3);
+				
+				//보드테이블 등록
+				String rewrite_board_sql = "insert into board(board_code, no, id, title, content, write_date)" + 
+			    		   				   "values(?, no_seq.nextval, ?, ?, ?, sysdate)";
+				pstmt = conn.prepareStatement(rewrite_board_sql);
+				pstmt.setInt(1, board.getBoardCode());
+				pstmt.setString(2, board.getId());
+				pstmt.setString(3, board.getTitle());
+				pstmt.setString(4, board.getContent());
+				row = pstmt.executeUpdate();
+				System.out.println("row : " + row);
+			}
+		} catch (Exception e) {
+			System.out.println("답글 insert오류:" + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return row;
+	}
+	
 	//게시글 삭제
 	public int deleteBoard(int no) {
 		int row = 0;
@@ -323,12 +425,11 @@ public class FreeBoardDAO {
 			pstmt = conn.prepareStatement(sql_boardComment_delete);
 			pstmt.setInt(1, no);
 			row = pstmt.executeUpdate();
-			if(row > 0) {
-				String sql_board_delete = "delete from board where no=?";
-				pstmt = conn.prepareStatement(sql_board_delete);
-				pstmt.setInt(1, no);
-				row = pstmt.executeUpdate();
-			}
+			
+			String sql_board_delete = "delete from board where no=?";
+			pstmt = conn.prepareStatement(sql_board_delete);
+			pstmt.setInt(1, no);
+			row = pstmt.executeUpdate();
 			
 			
 		} catch (Exception e) {
@@ -394,5 +495,32 @@ public class FreeBoardDAO {
 			}
 		}
 		return row;
+	}
+	
+	//원본 글에대한 refer 값 구하기
+	public int getMaxRefer() {
+		//select nvl(max(refer),0) from jspboard >> 처음 글 >> 0 >> refer +1값을
+		int maxRefer = 0;
+		
+		try {
+			conn = ds.getConnection();
+			String sql = "select nvl(max(refer), 0) from board_reply";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				maxRefer = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e2) {
+				System.out.println(e2.getMessage());
+			}
+		}
+		return maxRefer;
 	}
 }

@@ -40,7 +40,7 @@
 													
 							<!-- 로그인 안해도 보이는 메뉴 -->
 							<li><br><a href="template.jsp">Notice</a></li>
-							<li><a href="elements.html">Free Board</a></li>
+							<li><a href="selectBoardList.free">Free Board</a></li>
 						
 						<%
 							}else if(session.getAttribute("userID") != "admin"){

@@ -185,12 +185,4 @@ public class MyBoardDAO {
 		}
 		return row;
 	}
-	
-	//답글 작성하기
-		
-	//원본글에 대한 refer값 구하기
-	
-	//게시물 총 건수
-	
-	
 }
