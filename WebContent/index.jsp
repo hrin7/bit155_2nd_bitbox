@@ -51,15 +51,15 @@
 					crafted by <a href="http://html5up.net">HTML5 UP</a>.</p>
 					<ul class="actions special">
 						<li>
-							<%-- <c:set var="id" value="${sessionScope.userid}"/>
+							<c:set var="id" value="${sessionScope.userID}"/>
 							<c:choose>
-								<c:when test="${id != null}">
-									<a href='#' class="button primary">Logout</a>
-								</c:when>
-								<c:otherwise> --%>
+								<c:when test="${id == null || id == ''}">
 									<a href='#' class='button primary btn btn-info btn-lg' data-toggle='modal' data-target='#myModal'>Sign</a>
-							<%-- 	</c:otherwise>
-							</c:choose> --%>
+								</c:when>
+								<c:otherwise>
+									<a href="<%=request.getContextPath()%>/logout.user" class="button primary">Logout</a>
+							</c:otherwise>
+							</c:choose> 
 						</li>
 					</ul>
 				</div>
