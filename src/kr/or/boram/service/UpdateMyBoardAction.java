@@ -70,7 +70,7 @@ public class UpdateMyBoardAction implements Action {
 		MyBoardDAO dao = new MyBoardDAO();
 	    int result = dao.updateMyBoard(board);
 	    //System.out.println("보드 : " + board);
-	    System.out.println("result : " + result);
+	    System.out.println("리절트 : " + result);
 	    
 		String msg = "";
 		if(result > 0) {

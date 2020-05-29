@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import kr.or.boram.dao.KanbanBoardDAO;
 import kr.or.boram.dto.KanbanBoard;
@@ -23,7 +22,6 @@ public class UpdateKanbanCardName extends HttpServlet {
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("utf-8");
     	
-    	HttpSession session = request.getSession();
     	KanbanBoard kanbanBoard = new KanbanBoard();
     	kanbanBoard.setKanbanTitle(request.getParameter("cardTitle"));
     	kanbanBoard.setKanbanNo(Integer.parseInt(request.getParameter("kanbanNo")));

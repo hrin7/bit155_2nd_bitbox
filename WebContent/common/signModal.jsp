@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.security.SecureRandom" %>
+<%@ page import="java.math.BigInteger" %>   
 <script type="text/javascript">
 	
 	//회원가입 체크 로직 부분 
@@ -225,10 +228,14 @@
 						<span>Password</span>
 						<input type="password" name="userpwd" id="userpwd"/>
 					</label>
-					<p class="forgot-pass">Forgot password?</p>
 					<button type="submit" class="submit" style="background-color: #6a51a7 !important;">Sign In</button>
 				</form>
-				
+				<!-- ID,PWD 찾기  -->
+				<p class="forgot-pass">Forgot password? OR id ?</p>
+				<div style="text-align:center">
+				<!-- /Web-INF/views/userSearchBoard/idSearch.jsp  웹보안폴더안으로 접근이 안됨........???-->
+				<a href ="<%=request.getContextPath()%>/views/userSearchBoard/idSearch.jsp" style="color:black">아이디</a> * <a href ="#" style="color:blue">비밀번호 찾기</a>
+				</div>
 			</div>
 			<div class="sub-cont">
 				<div class="img">
