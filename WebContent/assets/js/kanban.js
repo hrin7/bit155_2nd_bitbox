@@ -365,6 +365,7 @@ $('#myModal').on('shown.bs.modal', function () {
 			data: {kanbanNo: $('#kanbanNo').val()},
 			dataType: "json",
 			success: function(resData) {
+				$('#com').empty();
 				makeComment(resData);
 			}
 		});
