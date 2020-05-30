@@ -12,21 +12,18 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.FreeBoardDAO;
-import kr.or.boram.dto.Board;
+import kr.or.boram.dto.BoardAndFileAndReply;
 
 public class InsertFreeBoardAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		String boardCode = "";
-		String id = "";
 		String title = "";
 		String content = "";
 		String fileName = "";
-		String oriFileName = "";
 		
 		String uploadpath = request.getSession().getServletContext().getRealPath("upload");
-		System.out.println(uploadpath);
 		int size = 1024 * 1024 * 10; //업로드 파일에 대한 기본 정보(10mb)
 		
 		MultipartRequest multi;
@@ -42,9 +39,7 @@ public class InsertFreeBoardAction implements Action {
 			
 			String file = (String)filenames.nextElement();
 			fileName = multi.getFilesystemName(file);
-			oriFileName = multi.getOriginalFileName(file);
 			
-			id = multi.getParameter("id");
 			title = multi.getParameter("title");
 			content = multi.getParameter("content");
 			boardCode = multi.getParameter("searchCode");
@@ -55,11 +50,12 @@ public class InsertFreeBoardAction implements Action {
 		
 		HttpSession session = request.getSession();
 		
-		Board board = new Board();
+		BoardAndFileAndReply board = new BoardAndFileAndReply();
 		board.setTitle(title);
 		board.setContent(content);
 		board.setBoardCode(Integer.parseInt(boardCode));
-		board.setId((String)session.getAttribute("id"));
+		board.setFileName(fileName);
+		board.setId((String)session.getAttribute("userID"));
 		
 		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
 		int result = freeBoardDao.insertBoard(board);

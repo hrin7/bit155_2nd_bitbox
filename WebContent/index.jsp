@@ -36,10 +36,10 @@
 	</head>
 	<!-- 로그아웃후 메인페이지로 뒤로가기가 안될 페이지 설정 -->
 	<body class="landing is-preload" onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
-
+		
 		<!-- Page Wrapper -->
 		<div id="page-wrapper">
-
+		
 			<!-- Header -->
 			<jsp:include page="/common/header.jsp"></jsp:include>
 
@@ -65,7 +65,7 @@
 					</ul>
 				</div>
 			</section>
-
+		
 		</div>
 		
 		<!-- sign Modal -->
