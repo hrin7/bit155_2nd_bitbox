@@ -122,15 +122,10 @@
 		<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 		
 		<script type="text/javascript">		
-		//개인 계정으로만 접근 가능
-		//console.log('${sessionScope.admin}');		
-//		if('${sessionScope.admin}' == "") {
-//			$('#writeBtn').attr('href', '#').click(function() {
-//				alert('로그인 후 이용가능합니다.');
-//			});
-//		}
-
-		
+			//로그인안하면 접근불가
+			if('${sessionScope.userID}' == "") {
+				$('#writeBtn').hide();
+			}
 		</script>
       
 	</body>
