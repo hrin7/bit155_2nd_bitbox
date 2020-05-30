@@ -16,7 +16,7 @@ import kr.or.boram.dto.BoardAndFileAndReply;
 import kr.or.boram.dto.BoardAndFileAndType;
 import kr.or.boram.dto.BoardType;
 
-public class FreeBoardDAO {
+public class BoardDAO {
 	static DataSource ds;
 	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -34,7 +34,7 @@ public class FreeBoardDAO {
 	}
 	
 	//게시판 목록보기
-	public List<Board> boardList(int cpage, int pageSize){
+	public List<Board> boardList(int cpage, int pageSize, int boardCode){
 		List<Board> boardList = null;
 		
 		try {
@@ -48,7 +48,7 @@ public class FreeBoardDAO {
 						 " 		FROM board " + 
 						 "  	ORDER BY no DESC" + 
 						 "  ) b" +
-						 " 	where rownum <= ?" + //end row
+						 " 	where rownum <= ? and board_code=?" + //end row
 						 ") " +
 						 "where rn >= ?"; //start row 
 			pstmt = conn.prepareStatement(sql);
@@ -58,7 +58,8 @@ public class FreeBoardDAO {
 			int end = cpage * pageSize;
 			
 			pstmt.setInt(1, end);
-			pstmt.setInt(2, start);
+			pstmt.setInt(2, boardCode);
+			pstmt.setInt(3, start);
 			rs = pstmt.executeQuery();
 			
 			boardList = new ArrayList<Board>();
