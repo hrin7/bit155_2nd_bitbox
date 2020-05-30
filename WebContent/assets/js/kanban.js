@@ -1,6 +1,6 @@
 ////////////////////////////////////////////
 var memoSectionDivHtml = "";
-memoSectionDivHtml += '<div class="memoSectionDiv shadow">';
+memoSectionDivHtml += '<div class="memoSectionDiv shadow" ondrop="drop(event)" ondragover="allowDrop(event)">';
 memoSectionDivHtml += 	'<div class="memoTopHr"></div>';
 memoSectionDivHtml += 	'<div class="memoTitle">';
 memoSectionDivHtml += 		'<input type="text" placeholder="Enter list title"/>';
@@ -23,6 +23,7 @@ $(document).on('click', '#createListBtn', function() {
 //리스트 이름 입력받은 후 만들기 버튼눌렀을 때
 $('#outer').on('click', '.addListBtn', function() {
 	var deleteListBtnTag = $(this).parent().next().find('a');
+	var ListDivTag = $(this).parent().parent();
 	let listName = $(this).parent().prev().find('input').val();
 	if(listName == "") {
 		alert('list title을 입력하세요.');
@@ -43,6 +44,7 @@ $('#outer').on('click', '.addListBtn', function() {
 	$(this).remove();
 	$('#createListBtn').show();
 	
+	
 	//생성된 리스트(그룹) DB에 insert하기
 	$.ajax({
 		url: "InsertKanbanGroup.ajax",
@@ -51,6 +53,7 @@ $('#outer').on('click', '.addListBtn', function() {
 		success: function(resData) {
 			console.log("list insert 완료");
 			deleteListBtnTag.attr('data-code', resData);
+			ListDivTag.attr('data-code', resData);
 		}
 	});
 });
@@ -186,7 +189,7 @@ $('#outer').on('click', '.addCardBtn', function() {
 		success: function(resData) {
 			console.log(resData);
 			var titleText = "";
-			titleText += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+resData+"'>" + cardTitle + "<br>";
+			titleText += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+resData+"' draggable='true' ondragstart='drag(event)'>" + cardTitle + "<br>";
 			titleText += "</div>";
 			//버튼의 형제들 삭제
 			siblings.remove();
@@ -207,14 +210,14 @@ $('#outer').on('click', '.addCardBtn', function() {
 function makeKanbanList(resData) {
 	let html = "";
 	$.each(resData[0].kanbanGroupList, function(index, obj) {
-		html += '<div class="memoSectionDiv shadow" data-title="'+obj.listName+'">';
+		html += '<div class="memoSectionDiv shadow" data-title="'+obj.listName+'" data-code="'+obj.kanbanCode+'" ondrop="drop(event)" ondragover="allowDrop(event)">';
 		html += 	'<div class="memoTopHr"></div>';
 		html += 	'<div class="memoTitle">'+obj.listName+'</div>';
 		html += 	'<div class="deleteListDiv"><a href="javascript:void(0);"  data-code="'+obj.kanbanCode+'" class="deleteListBtn" style="text-decoration: none !important;"><i class="ri-close-fill"></i></a></div>';
 		$.each(resData[0].kanbanList, function(index, obj2) {
 			if(obj.kanbanCode == obj2.kanbanCode) {
 				if(obj2.kanbanTitle != "") {
-					html += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+obj2.kanbanNo+"' data-title='"+obj2.listName+"'>";
+					html += "<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='"+obj2.kanbanNo+"' data-title='"+obj2.listName+"' draggable='true' ondragstart='drag(event)'>";
 					html += 	obj2.kanbanTitle+'<br>';
 					if(obj2.kanbanContent != "") {
 						html += '<i class="ri-align-left"></i>';
@@ -487,7 +490,7 @@ $('#myModal').on('shown.bs.modal', function () {
 			});
 			$('#com').append(html);
 		}
-	}, 100);
+	}, 200);
 	/////////////////////////////////////////////////////
 });
 
@@ -552,5 +555,50 @@ function updateContentAjax(updateCardContent) {
 	});
 }
 
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////// drag & drop
+//ondragover='allowDrop(event)'  dragover의 기본이벤트 막기
+function allowDrop(ev) {
+	ev.preventDefault();
+}
 
+//drag & drop 이벤트를 위한 모든 event listener method는 DataTransfer 객체를 반환합니다.
+//이렇게 반환된 DataTransfer 객체는 드래그 앤 드롭 동작에 관한 정보를 가지고 있게 됩니다.
+function drag(ev) {
+    ev.dataTransfer.setData("kanbanNo", $(ev.target).attr('data-value'));
+    ev.dataTransfer.setData("dragListCode", $(ev.target).parent().attr('data-code'));
+//    $(ev.target).css('background-color', 'black');
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    //드랍하는 요소의 className을 DataTransfer 객체에서 가져오기
+    let dragKanbanNo = ev.dataTransfer.getData("kanbanNo");
+    let dragListCode = ev.dataTransfer.getData("dragListCode");
+    let dropListCode = $(ev.target).parents('.memoSectionDiv').attr('data-code');
+    if(dropListCode == undefined) {
+    	dropListCode = $(ev.target).attr('data-code');
+    }
+    console.log("dragKanbanNo : " + dragKanbanNo);
+    console.log("dragListCode : " + dragListCode);
+    console.log("dropListCode : " + dropListCode);
+    
+    if(dragListCode != dropListCode) {
+    	$.ajax({
+    		url: "MoveKanbanCardFromList.ajax",
+    		data: {
+    			kanbanNo: dragKanbanNo,
+    			updateKanbanCode: dropListCode
+    		},
+    		success: function() {
+    			$.ajax({
+    				url: "SelectKanban.ajax",
+    				dataType: "json",
+    				success: function(resData) {
+    					$('#outer').empty();
+    					makeKanbanList(resData);
+    				}
+    			});
+    		}
+    	});
+    }
+}
