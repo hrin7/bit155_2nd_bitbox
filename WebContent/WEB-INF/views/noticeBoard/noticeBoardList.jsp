@@ -126,6 +126,11 @@
 			if('${sessionScope.userID}' == "") {
 				$('#writeBtn').hide();
 			}
+			
+			//admin아니면 글쓰기버튼 숨기기
+			if('${sessionScope.userID}' != 'admin') {
+				$('#writeBtn').hide();
+			}
 		</script>
       
 	</body>
