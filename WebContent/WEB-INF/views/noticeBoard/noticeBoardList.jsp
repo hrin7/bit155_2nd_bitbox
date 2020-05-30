@@ -31,8 +31,8 @@
 			<!-- Main -->
 			<article id="main">
 				<header>
-					<h2>NoticeBoard</h2>
-					<p>This is Notice Board List</p>
+					<h2>Notice</h2>
+					<p>This is Notice List</p>
 				</header>
 				
 				<section class="wrapper style5">
@@ -55,7 +55,7 @@
 										<tr>
 											<td>${boardList.no}</td>
 											<td>
-												<a href="selectBoard.notice?no=${boardList.no}&boardCode=${boardList.boardCode}">${boardList.title}</a>
+												<a href="selectNotice.notice?no=${boardList.no}&boardCode=${boardList.boardCode}">${boardList.title}</a>
 												<!-- boardFile이 존재하는 경우에는 이미지를 붙여준다 -->
 		                                    	<c:if test="${!empty board.boardFile}">
 		                                    		<i class="ri-image-line"></i>
@@ -76,7 +76,7 @@
 							<!-- 이전 링크 --> 
 							<c:choose>
 								<c:when test="${requestScope.cpage > 1}">
-									<a href="selectBoardList.free?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-line"></i></a>
+									<a href="selectNoticeList.notice?cp=${requestScope.cpage-1}&ps=${requestScope.pageSize}"><i class="ri-arrow-left-s-line"></i></a>
 								</c:when>
 								<c:otherwise>
 									<a href="#"><i class="ri-arrow-left-s-line"></i></a>
@@ -89,14 +89,14 @@
 										<a href="#">${i}</a>
 									</c:when>
 									<c:otherwise>
-										<a href="selectBoardList.free?cp=${i}&ps=${requestScope.pageSize}">${i}</a>
+										<a href="selectNoticeList.notice?cp=${i}&ps=${requestScope.pageSize}">${i}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							<!-- 다음 링크 -->
 							<c:choose>
 								<c:when test="${requestScope.cpage < requestScope.pageCount}">
-									<a href="selectBoardList.free?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-line"></i></a>
+									<a href="selectNoticeList.notice?cp=${requestScope.cpage+1}&ps=${requestScope.pageSize}"><i class="ri-arrow-right-s-line"></i></a>
 								</c:when>
 								<c:otherwise>
 									<a href="#"><i class="ri-arrow-right-s-line"></i></a>
@@ -104,7 +104,7 @@
                         	</c:choose>
                      	</div>
 						<br>
-						<a href="insertForm.notice" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
+						<a href="insertNoticeForm.notice" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
 					</div>
 				</section>	
 			</article>
@@ -122,15 +122,10 @@
 		<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 		
 		<script type="text/javascript">		
-		//개인 계정으로만 접근 가능
-		//console.log('${sessionScope.admin}');		
-//		if('${sessionScope.admin}' == "") {
-//			$('#writeBtn').attr('href', '#').click(function() {
-//				alert('로그인 후 이용가능합니다.');
-//			});
-//		}
-
-		
+			//로그인안하면 접근불가
+			if('${sessionScope.userID}' == "") {
+				$('#writeBtn').hide();
+			}
 		</script>
       
 	</body>

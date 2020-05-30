@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.boram.dao.FreeBoardCommentDAO;
+import kr.or.boram.dao.BoardCommentDAO;
 import kr.or.boram.dto.BoardComment;
 import net.sf.json.JSONArray;
 
@@ -32,7 +32,7 @@ public class DeleteFreeComment extends HttpServlet{
     	boardComment.setNo(no);
     	boardComment.setCommentNo(commentNo);
     	
-    	FreeBoardCommentDAO commentDao = new FreeBoardCommentDAO();
+    	BoardCommentDAO commentDao = new BoardCommentDAO();
     	//댓글삭제
     	commentDao.deleteComment(boardComment);
     	//댓글 select

@@ -7,13 +7,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.NoticeBoardDAO;
+import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.Board;
 
-public class SelectNoticeBoardListAction implements Action {
+public class SelectNoticeListAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
+		String boardCode = request.getParameter("boardCode");
+		if(boardCode == null) {
+			boardCode = "1";
+		}
 		String cpage = request.getParameter("cp");
 		String pageSize = request.getParameter("ps");
 		int pageCount = 0;
@@ -28,10 +32,10 @@ public class SelectNoticeBoardListAction implements Action {
 		int cp = Integer.parseInt(cpage);
 		int ps = Integer.parseInt(pageSize);
 		
-		NoticeBoardDAO noticeBoardDao = new NoticeBoardDAO();
+		BoardDAO dao = new BoardDAO();
 		
 		//게시물 총 건수
-		int totalBoardCount = noticeBoardDao.totalBoardCount();
+		int totalBoardCount = dao.totalBoardCount();
 		request.setAttribute("totalBoardCount", totalBoardCount);
 		
 		if(totalBoardCount % ps == 0) {
@@ -41,11 +45,12 @@ public class SelectNoticeBoardListAction implements Action {
 		}
 		
 		//게시판리스트 가져오기
-		List<Board> boardList = noticeBoardDao.boardList(cp, ps);
+		List<Board> boardList = dao.boardList(cp, ps, Integer.parseInt(boardCode));
 		request.setAttribute("boardList", boardList);
 		request.setAttribute("cpage", cpage);
 		request.setAttribute("pageSize", ps);
 		request.setAttribute("pageCount", pageCount);
+		request.setAttribute("boardCode", boardCode);
 		
 		ActionForward forward = new ActionForward();
 		forward.setRedirect(false);

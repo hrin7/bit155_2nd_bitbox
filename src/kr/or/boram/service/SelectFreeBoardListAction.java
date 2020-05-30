@@ -7,13 +7,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.FreeBoardDAO;
+import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.Board;
 
 public class SelectFreeBoardListAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
+		String boardCode = request.getParameter("boardCode");
+		if(boardCode == null) {
+			boardCode = "2";
+		}
 		String cpage = request.getParameter("cp");
 		String pageSize = request.getParameter("ps");
 		int pageCount = 0;
@@ -28,7 +32,7 @@ public class SelectFreeBoardListAction implements Action {
 		int cp = Integer.parseInt(cpage);
 		int ps = Integer.parseInt(pageSize);
 		
-		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
+		BoardDAO freeBoardDao = new BoardDAO();
 		
 		//게시물 총 건수
 		int totalBoardCount = freeBoardDao.totalBoardCount();
@@ -41,7 +45,7 @@ public class SelectFreeBoardListAction implements Action {
 		}
 		
 		//게시판리스트 가져오기
-		List<Board> boardList = freeBoardDao.boardList(cp, ps);
+		List<Board> boardList = freeBoardDao.boardList(cp, ps, Integer.parseInt(boardCode));
 		request.setAttribute("boardList", boardList);
 		request.setAttribute("cpage", cpage);
 		request.setAttribute("pageSize", ps);

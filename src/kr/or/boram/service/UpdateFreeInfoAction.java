@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.FreeBoardDAO;
+import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.Board;
 import kr.or.boram.dto.BoardAndFileAndType;
 
@@ -16,7 +16,7 @@ public class UpdateFreeInfoAction implements Action {
 		String no = request.getParameter("no");
 		String boardCode = request.getParameter("boardCode");
 		
-		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
+		BoardDAO freeBoardDao = new BoardDAO();
 		Board board = freeBoardDao.selectBoardByNo(Integer.parseInt(no));
 		
 		request.setAttribute("board", board);

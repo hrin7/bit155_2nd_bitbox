@@ -12,25 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.service.DeleteFreeBoardAction;
-import kr.or.boram.service.DeleteNoticeBoardAction;
-import kr.or.boram.service.InsertFreeBoardAction;
-import kr.or.boram.service.InsertNoticeBoardAction;
+import kr.or.boram.service.InsertNoticeAction;
 import kr.or.boram.service.InsertReFreeBoardAction;
-import kr.or.boram.service.SelectFreeBoardByNoAction;
-import kr.or.boram.service.SelectFreeBoardListAction;
-import kr.or.boram.service.SelectNoticeBoardByNoAction;
-import kr.or.boram.service.SelectNoticeBoardListAction;
+import kr.or.boram.service.SelectNoticeByNoService;
+import kr.or.boram.service.SelectNoticeListAction;
 import kr.or.boram.service.UpdateFreeBoardAction;
 import kr.or.boram.service.UpdateFreeInfoAction;
-import kr.or.boram.service.UpdateNoticeBoardAction;
-import kr.or.boram.service.UpdateNoticeInfoAction;
-import kr.or.boram.service.UpdateNoticeOkService;
-
 
 @WebServlet("*.notice")
 public class NoticeBoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
     public NoticeBoardController() {
         super();
     }
@@ -50,40 +42,51 @@ public class NoticeBoardController extends HttpServlet {
     	Action action = null;
     	
     	//게시판 목록보기
-    	if(url_Command.equals("/selectBoardList.notice")) {
-    		action = new SelectNoticeBoardListAction();
+    	if(url_Command.equals("/selectNoticeList.notice")) {
+    		action = new SelectNoticeListAction();
     		forward = action.execute(request, response);
     		
     	//게시판 상세보기
-    	} else if(url_Command.equals("/selectBoard.notice")) {
-    		action = new SelectNoticeBoardByNoAction();
+    	} else if(url_Command.equals("/selectNotice.notice")) {
+    		action = new SelectNoticeByNoService();
     		forward = action.execute(request, response);
     		
     	//글쓰기 form으로 보내기
-    	} else if(url_Command.equals("/insertForm.notice")) {
+    	} else if(url_Command.equals("/insertNoticeForm.notice")) {
     		forward = new ActionForward();
             forward.setRedirect(false);
             forward.setPath("/WEB-INF/views/noticeBoard/insertForm.jsp");
             
         //게시판 글쓰기
-    	} else if(url_Command.equals("/insertBoard.notice")) {
-    		action = new InsertNoticeBoardAction();
+    	} else if(url_Command.equals("/insertNotice.notice")) {
+    		action = new InsertNoticeAction();
     		forward = action.execute(request, response);
     	
     	//게시판 삭제
-    	} else if(url_Command.equals("/deleteBoard.notice")) {
-    		System.out.println("글목록 삭제중 ...");
-    		action = new DeleteNoticeBoardAction();
+    	} else if(url_Command.equals("/deleteNotice.notice")) {
+    		action = new DeleteFreeBoardAction();
     		forward = action.execute(request, response);
 
     	//게시글 수정	
-    	} else if(url_Command.equals("/updateBoard.notice")) {
-    		action = new UpdateNoticeBoardAction();
+    	} else if(url_Command.equals("/updateNotice.notice")) {
+    		action = new UpdateFreeBoardAction();
     		forward = action.execute(request, response);
     	
 		//게시글 정보
-    	} else if(url_Command.equals("/boardInfo.notice")) {
-    		action = new UpdateNoticeInfoAction();
+    	} else if(url_Command.equals("/noticeInfo.notice")) {
+    		action = new UpdateFreeInfoAction();
+    		forward = action.execute(request, response);
+    		
+    	//답글쓰기 form으로 이동
+    	} else if(url_Command.equals("/insertReNoticeForm.notice")) {
+    		String no = request.getParameter("no");
+    		request.setAttribute("no", no);
+    		forward = new ActionForward();
+            forward.setRedirect(false);
+            forward.setPath("/WEB-INF/views/noticeBoard/insertReNotice.jsp");
+    	//답글쓰기
+    	} else if(url_Command.equals("/insertReNotice.notice")) {
+    		action = new InsertReFreeBoardAction();
     		forward = action.execute(request, response);
     	}
     	

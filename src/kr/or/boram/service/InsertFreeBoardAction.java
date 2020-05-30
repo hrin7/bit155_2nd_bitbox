@@ -11,7 +11,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.FreeBoardDAO;
+import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.BoardAndFileAndReply;
 
 public class InsertFreeBoardAction implements Action {
@@ -57,7 +57,7 @@ public class InsertFreeBoardAction implements Action {
 		board.setFileName(fileName);
 		board.setId((String)session.getAttribute("userID"));
 		
-		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
+		BoardDAO freeBoardDao = new BoardDAO();
 		int result = freeBoardDao.insertBoard(board);
 		
 		String msg = "";
@@ -69,7 +69,7 @@ public class InsertFreeBoardAction implements Action {
 		
 		ActionForward forward = new ActionForward();
 		request.setAttribute("msg", msg);
-		forward.setPath("selectBoardList.notice");
+		forward.setPath("selectBoardList.free");
 		
 		return forward;
 	}

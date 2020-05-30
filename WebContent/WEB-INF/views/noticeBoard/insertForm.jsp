@@ -33,7 +33,7 @@
 							<div class="inner">
 								<section>
 									<h4>Board Insert Form</h4>
-									<form method="post" action="<%=request.getContextPath()%>/insertBoard.notice" enctype="multipart/form-data">
+									<form method="post" action="<%=request.getContextPath()%>/insertNotice.notice" enctype="multipart/form-data">
 										<div class="row gtr-uniform">
 											
 											<div class="col-6 col-12-small">
@@ -58,7 +58,7 @@
 											</div>
 										</div>
 									</form>
-									<a href="<%=request.getContextPath()%>/selectBoardList.notice" id="goList">목록가기</a>
+									<a href="<%=request.getContextPath()%>/selectNoticeList.notice" id="goList">목록가기</a>
 								</section>
 							</div>
 						</section>
@@ -98,7 +98,7 @@
 					console.log(resData);
 					let html = "";
 					$.each(resData, function(index, obj) {
-						if(obj.boardCode == 2){
+						if(obj.boardCode == 1){
 							html += "<option value='"+obj.boardCode+"' selected>"+obj.boardName+"</option>";
 						} else {
 							html += "<option value='"+obj.boardCode+"'>"+obj.boardName+"</option>";

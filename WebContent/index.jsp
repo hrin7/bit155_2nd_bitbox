@@ -18,7 +18,7 @@
 		<script src="https://www.google.com/recaptcha/api.js" async defer></script><!-- 구글 리캡차 v2 API -->
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 		<script type="text/javascript">
-			$(function() {
+			/* $(function() {
 				if("${requestScope.msg}" == "정상적으로 회원가입이 완료되었습니다") {
 					alert("${requestScope.msg}");
 				}else if("${requestScope.msg}" == "회원가입중 에러 발생...다시 회원가입 바람"){
@@ -26,7 +26,7 @@
 				}else if("${requestScope.msg}" == "로그인 성공 메인페이지로 이동"){
 					alert("${requestScope.msg}");
 				}
-			});
+			}); */
 		</script>
 		<!-- 로그아웃후 메인페이지로 이동하는데 뒤로가기 버튼을 막는 함수 -->
 		 <script type="text/javascript">

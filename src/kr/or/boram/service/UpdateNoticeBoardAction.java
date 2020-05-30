@@ -11,7 +11,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.FreeBoardDAO;
+import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dao.NoticeBoardDAO;
 import kr.or.boram.dto.Board;
 

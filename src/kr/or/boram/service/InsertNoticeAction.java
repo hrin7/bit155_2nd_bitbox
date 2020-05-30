@@ -11,23 +11,19 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.FreeBoardDAO;
-import kr.or.boram.dao.NoticeBoardDAO;
-import kr.or.boram.dto.Board;
+import kr.or.boram.dao.BoardDAO;
+import kr.or.boram.dto.BoardAndFileAndReply;
 
-public class InsertNoticeBoardAction implements Action {
+public class InsertNoticeAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		String boardCode = "";
-		String id = "";
 		String title = "";
 		String content = "";
 		String fileName = "";
-		String oriFileName = "";
 		
 		String uploadpath = request.getSession().getServletContext().getRealPath("upload");
-		System.out.println(uploadpath);
 		int size = 1024 * 1024 * 10; //업로드 파일에 대한 기본 정보(10mb)
 		
 		MultipartRequest multi;
@@ -43,9 +39,7 @@ public class InsertNoticeBoardAction implements Action {
 			
 			String file = (String)filenames.nextElement();
 			fileName = multi.getFilesystemName(file);
-			oriFileName = multi.getOriginalFileName(file);
 			
-			id = multi.getParameter("id");
 			title = multi.getParameter("title");
 			content = multi.getParameter("content");
 			boardCode = multi.getParameter("searchCode");
@@ -56,14 +50,15 @@ public class InsertNoticeBoardAction implements Action {
 		
 		HttpSession session = request.getSession();
 		
-		Board board = new Board();
+		BoardAndFileAndReply board = new BoardAndFileAndReply();
 		board.setTitle(title);
 		board.setContent(content);
 		board.setBoardCode(Integer.parseInt(boardCode));
-		board.setId((String)session.getAttribute("id"));
+		board.setFileName(fileName);
+		board.setId((String)session.getAttribute("userID"));
 		
-		NoticeBoardDAO noticeBoardDao = new NoticeBoardDAO();
-		int result = noticeBoardDao.insertBoard(board);
+		BoardDAO freeBoardDao = new BoardDAO();
+		int result = freeBoardDao.insertBoard(board);
 		
 		String msg = "";
 		if(result > 0) {
@@ -74,11 +69,9 @@ public class InsertNoticeBoardAction implements Action {
 		
 		ActionForward forward = new ActionForward();
 		request.setAttribute("msg", msg);
-		forward.setPath("selectBoardList.notice");
+		forward.setPath("selectNoticeList.notice");
 		
 		return forward;
 	}
-		
-	
 
 }
