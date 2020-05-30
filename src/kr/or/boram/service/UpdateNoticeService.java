@@ -5,8 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.NoticeBoardDAO;
-import kr.or.boram.dto.NoticeBoard;
+import kr.or.boram.dao.BoardDAO;
 
 public class UpdateNoticeService implements Action {
 
@@ -16,14 +15,14 @@ public class UpdateNoticeService implements Action {
 		int no = Integer.parseInt(request.getParameter("no"));
 		System.out.println("해당 글 목록 ID " + no);
 		
-		NoticeBoardDAO dao = new NoticeBoardDAO();
+		BoardDAO dao = new BoardDAO();
 		
-		NoticeBoard dto = dao.boardSelect(no);
+		//Board dto = dao.boardSelect(no);
 		
-		System.out.println(dto.getId());
-		System.out.println(dto.getContent());
+		//System.out.println(dto.getId());
+		//System.out.println(dto.getContent());
 		
-		request.setAttribute("noticeList", dto);
+		//request.setAttribute("noticeList", dto);
 			ActionForward forward = new ActionForward();
 	      forward.setRedirect(false);
 	      forward.setPath("/WEB-INF/views/noticeboard/noticeupdateForm.jsp");

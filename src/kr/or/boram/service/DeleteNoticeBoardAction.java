@@ -6,14 +6,13 @@ import javax.servlet.http.HttpServletResponse;
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.BoardDAO;
-import kr.or.boram.dao.NoticeBoardDAO;
 
 public class DeleteNoticeBoardAction implements Action {
 
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
-		NoticeBoardDAO noticeBoardDao = new NoticeBoardDAO();
+		BoardDAO noticeBoardDao = new BoardDAO();
 		
 		int no = Integer.parseInt(request.getParameter("no")); //삭제하려는 게시글 번호
 		int result = noticeBoardDao.deleteBoard(no);

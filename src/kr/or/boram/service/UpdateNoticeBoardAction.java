@@ -12,7 +12,6 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.BoardDAO;
-import kr.or.boram.dao.NoticeBoardDAO;
 import kr.or.boram.dto.Board;
 
 public class UpdateNoticeBoardAction implements Action {
@@ -61,7 +60,7 @@ public class UpdateNoticeBoardAction implements Action {
 		board.setContent(content);
 		board.setBoardCode(Integer.parseInt(boardCode));
 		
-		NoticeBoardDAO noticeBoardDao = new NoticeBoardDAO();
+		BoardDAO noticeBoardDao = new BoardDAO();
 		int result = noticeBoardDao.updateBoard(board);
 		String msg = "";
 		if(result > 0) {
