@@ -22,8 +22,8 @@
             <!-- Main -->
                <article id="main">
                   <header>
-                     <h2>Free Board Detail</h2>
-                     <p>This is Free Board Detail</p>
+                     <h2>Notice Detail</h2>
+                     <p>This is Notice Detail</p>
                      
                   </header>
                   <section class="wrapper style5">
@@ -39,9 +39,9 @@
                         </blockquote> 
                         <pre><code>${board.content}</code></pre>
                         
-                        <a href="boardInfo.free?no=${board.no}&boardCode=${board.boardCode}" class="button small" id="editBtn">Edit</a>
-                        <a href="deleteBoard.free?no=${board.no}" class="button small" id="deleteBtn">Delete</a>
-                        <a href="<%=request.getContextPath()%>/insertReFreeBoardForm.free?no=${board.no}" class="button small" id="replyBtn">Reply</a>
+                        <a href="noticeInfo.notice?no=${board.no}&boardCode=${board.boardCode}" class="button small" id="editBtn">Edit</a>
+                        <a href="deleteNotice.notice?no=${board.no}" class="button small" id="deleteBtn">Delete</a>
+                        <a href="<%=request.getContextPath()%>/insertReNoticeForm.notice?no=${board.no}" class="button small" id="replyBtn">Reply</a>
                         <hr>
                         
                         <!-- 댓글 -->
@@ -52,7 +52,7 @@
                         <br>
                         <button class="button primary small" id="commWrite">Write</button>
                         <br><br>
-                        <a href="<%=request.getContextPath()%>/selectBoardList.free" id="goList">목록으로</a>
+                        <a href="<%=request.getContextPath()%>/selectNoticeList.notice" id="goList">목록으로</a>
 
                      </div>
                   </section>
@@ -72,7 +72,7 @@
       <script src="<%=request.getContextPath()%>/assets/js/util.js"></script>
       <script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
       <script type="text/javascript">
-      
+      /*
       	//댓글 목록
       	$.ajax({
       		url: "SelectFreeCommentList.ajax",
@@ -200,6 +200,7 @@
 			$('#com').append(html);
 		}
       	
+		*/
       	
 		//로그인안하면 접근불가
 		if('${sessionScope.userID}' == "") {
@@ -219,7 +220,6 @@
 				$('#deleteBtn').show();
 			}
 		}
-		
 
 		
       	

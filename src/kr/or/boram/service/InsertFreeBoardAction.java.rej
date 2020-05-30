@@ -1,0 +1,9 @@
+diff a/src/kr/or/boram/service/InsertFreeBoardAction.java b/src/kr/or/boram/service/InsertFreeBoardAction.java	(rejected hunks)
+@@ -48,6 +48,7 @@
+ 			title = multi.getParameter("title");
+ 			content = multi.getParameter("content");
+ 			boardCode = multi.getParameter("searchCode");
++			System.out.println("무슨값이 찍힐까?"+boardCode);
+ 		} catch (Exception e) {
+ 			System.out.println(e.getMessage());
+ 		}

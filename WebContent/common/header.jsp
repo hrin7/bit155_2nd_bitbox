@@ -25,12 +25,12 @@
 							</li>
 							<li><br><a href="myBoardList.my">My Board</a></li>
 							<li><a href="selectList.kanban">KanBan</a></li>
-							<li><a href="template.jsp">Scheduler</a></li>
-							<li><a href="template.jsp">To-do-List</a></li>
+							<!-- <li><a href="template.jsp">Scheduler</a></li>
+							<li><a href="template.jsp">To-do-List</a></li> -->
 							
 							<!-- 로그인 안해도 보이는 메뉴 -->
-							<li><br><a href="selectBoardList.notice">Notice</a></li>
-							<li><a href="selectBoardList.notice">Free Board</a></li>
+							<li><br><a href="selectNoticeList.notice?boardCode=1">Notice</a></li>
+							<li><a href="selectBoardList.free?boardCode=2">Free Board</a></li>
 							
 							<!-- admin 계정으로 로그인시 보이는 메뉴 -->
 							<li><a href="memberInfoRead.admin">회원정보관리</a></li>
@@ -39,8 +39,8 @@
 						%>
 													
 							<!-- 로그인 안해도 보이는 메뉴 -->
-							<li><br><a href="selectBoardList.notice">Notice</a></li>
-							<li><a href="selectBoardList.free">Free Board</a></li>
+							<li><br><a href="selectNoticeList.notice?boardCode=1">Notice</a></li>
+							<li><a href="selectBoardList.free?boardCode=2">Free Board</a></li>
 						
 						<%
 							}else if(session.getAttribute("userID") != "admin"){
@@ -57,8 +57,8 @@
 							<li><a href="template.jsp">To-do-List</a></li>
 						
 							<!-- 로그인 안해도 보이는 메뉴 -->
-							<li><br><a href="selectBoardList.notice">Notice</a></li>
-							<li><a href="elements.html">Free Board</a></li>
+							<li><br><a href="selectNoticeList.notice?boardCode=1">Notice</a></li>
+							<li><a href="selectBoardList.free?boardCode=2">Free Board</a></li>
 						<%			
 							}
 						%>

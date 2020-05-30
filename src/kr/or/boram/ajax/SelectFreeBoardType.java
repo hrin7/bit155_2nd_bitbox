@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.or.boram.dao.FreeBoardDAO;
+import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.Board;
 import kr.or.boram.dto.BoardType;
 import net.sf.json.JSONArray;
@@ -25,7 +25,7 @@ public class SelectFreeBoardType extends HttpServlet {
     
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	response.setCharacterEncoding("UTF-8");
-    	FreeBoardDAO freeBoardDao = new FreeBoardDAO();
+    	BoardDAO freeBoardDao = new BoardDAO();
 		List<BoardType> list = freeBoardDao.SelectBoardType();
 		
 		JSONArray obj = JSONArray.fromObject(list);

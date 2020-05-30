@@ -22,32 +22,29 @@
             <!-- Main -->
                <article id="main">
                   <header>
-                     <h2>Free Board Detail</h2>
-                     <p>This is Free Board Detail</p>
+                     <h2>Notice Board Detail</h2>
+                     <p>This is Notice Board Detail</p>
                      
                   </header>
                   <section class="wrapper style5">
                      <div class="inner">
-                        <c:set var="board" value="${requestScope.boardAndBoardName}"/>
+                        <c:set var="board" value="${requestScope.boardAndBoardName[1]}"/>
+                        <h2>${board.title}</h2>
                         <blockquote>
-	                        <h2>${board.title}</h2>
-                        	<b>${board.id}</b>  ${board.writeDate}<br>
-                        	readCount ${board.views} in board ${board.boardName}<br>
-                        	<c:if test="${!empty board.fileName}">
-								첨부파일   <a href='upload/${board.fileName}' download><b>${board.fileName}</b></a>
-							</c:if>
+                           <br>
+                           ${board.writeDate}  조회수 : ${board.views} 카테고리 : ${requestScope.boardAndBoardName[0]}<br>
                         </blockquote> 
                         <pre><code>${board.content}</code></pre>
                         
-                        <a href="boardInfo.free?no=${board.no}&boardCode=${board.boardCode}" class="button small" id="editBtn">Edit</a>
-                        <a href="deleteBoard.free?no=${board.no}" class="button small" id="deleteBtn">Delete</a>
-                        <a href="<%=request.getContextPath()%>/insertReFreeBoardForm.free?no=${board.no}" class="button small" id="replyBtn">Reply</a>
+                        <a href="boardInfo.notice?no=${board.no}&boardCode=${board.boardCode}" class="button small">Edit</a>
+                        <a href="deleteBoard.notice?no=${board.no}" class="button small">Delete</a>
+                        <a href="<%=request.getContextPath()%>/insertReFreeBoardForm.free?no=${board.no}" class="button small">Reply</a>
                         <hr>
                         
                         <!-- 댓글 -->
                         <div id="com"></div>
                         
-                        <b>${sessionScope.userID}</b>
+                        <b>${board.id}</b>
                         <textarea name="comment" id="comment" placeholder="Enter your comment" rows="3"></textarea>
                         <br>
                         <button class="button primary small" id="commWrite">Write</button>
@@ -199,29 +196,6 @@
 			});
 			$('#com').append(html);
 		}
-      	
-      	
-		//로그인안하면 접근불가
-		if('${sessionScope.userID}' == "") {
-			$('#editBtn').hide();
-			$('#deleteBtn').hide();
-			$('#replyBtn').hide();
-			$('#comment').hide();
-			$('#commWrite').hide();
-		} else {
-			//로그인 한 사용자랑 글쓴이와 같지 않으면
-			if('${sessionScope.userID}' != '${requestScope.boardAndBoardName.id}'){
-				$('#editBtn').hide(); //수정버튼 숨기기
-				$('#deleteBtn').hide(); //삭제버튼 숨기기
-			//로그인 한 사용자랑 글쓴이와 같으면
-			} else if('${sessionScope.userID}' == '${requestScope.boardAndBoardName.id}'){
-				$('#editBtn').show();
-				$('#deleteBtn').show();
-			}
-		}
-		
-
-		
       	
       </script>
    </body>

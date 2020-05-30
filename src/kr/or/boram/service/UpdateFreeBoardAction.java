@@ -11,7 +11,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.FreeBoardDAO;
+import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.Board;
 
 public class UpdateFreeBoardAction implements Action {
@@ -60,7 +60,7 @@ public class UpdateFreeBoardAction implements Action {
 		board.setContent(content);
 		board.setBoardCode(Integer.parseInt(boardCode));
 		
-		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
+		BoardDAO freeBoardDao = new BoardDAO();
 		int result = freeBoardDao.updateBoard(board);
 		String msg = "";
 		if(result > 0) {

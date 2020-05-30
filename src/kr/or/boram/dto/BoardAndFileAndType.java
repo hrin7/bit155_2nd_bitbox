@@ -1,7 +1,8 @@
 package kr.or.boram.dto;
 
-public class NoticeBoard {
+public class BoardAndFileAndType {
 	private int boardCode;
+	private String boardName;
 	private int no;
 	private String id;
 	private String title;
@@ -9,7 +10,8 @@ public class NoticeBoard {
 	private int views;
 	private String writeDate;
 	private int commentCount;
-	
+	private int fileNo;
+	private String fileName;
 	public int getBoardCode() {
 		return boardCode;
 	}
@@ -58,10 +60,28 @@ public class NoticeBoard {
 	public void setCommentCount(int commentCount) {
 		this.commentCount = commentCount;
 	}
-	
+	public int getFileNo() {
+		return fileNo;
+	}
+	public void setFileNo(int fileNo) {
+		this.fileNo = fileNo;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getBoardName() {
+		return boardName;
+	}
+	public void setBoardName(String boardName) {
+		this.boardName = boardName;
+	}
 	@Override
 	public String toString() {
-		return "Board [boardCode=" + boardCode + ", no=" + no + ", id=" + id + ", title=" + title + ", content="
-				+ content + ", views=" + views + ", writeDate=" + writeDate + ", commentCount=" + commentCount + "]";
+		return "BoardAndFileAndType [boardCode=" + boardCode + ", boardName=" + boardName + ", no=" + no + ", id=" + id
+				+ ", title=" + title + ", content=" + content + ", views=" + views + ", writeDate=" + writeDate
+				+ ", commentCount=" + commentCount + ", fileNo=" + fileNo + ", fileName=" + fileName + "]";
 	}
 }

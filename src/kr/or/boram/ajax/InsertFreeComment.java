@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import kr.or.boram.dao.FreeBoardCommentDAO;
+import kr.or.boram.dao.BoardCommentDAO;
 import kr.or.boram.dto.BoardComment;
 import net.sf.json.JSONArray;
 
@@ -33,7 +33,7 @@ public class InsertFreeComment extends HttpServlet {
 	    boardComment.setId((String)session.getAttribute("userID"));
 	    boardComment.setCommentContent(request.getParameter("commentContent"));
 	    
-	    FreeBoardCommentDAO commentDao = new FreeBoardCommentDAO();
+	    BoardCommentDAO commentDao = new BoardCommentDAO();
 	    //댓글등록
 	    commentDao.insertComment(boardComment);
 	    //댓글 sclect

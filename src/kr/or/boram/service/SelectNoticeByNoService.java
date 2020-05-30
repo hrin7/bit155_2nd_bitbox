@@ -9,15 +9,13 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.BoardAndFileAndType;
 
-public class SelectFreeBoardByNoAction implements Action {
+public class SelectNoticeByNoService implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		int no = Integer.parseInt(request.getParameter("no"));
 		int boardCode = Integer.parseInt(request.getParameter("boardCode"));
 		BoardDAO freeBoardDao = new BoardDAO();
-		
-		HttpSession session = request.getSession();
 		
 		//조회수 증가
 		freeBoardDao.updateViews(no);
@@ -26,7 +24,7 @@ public class SelectFreeBoardByNoAction implements Action {
 		
 		request.setAttribute("boardAndBoardName", boardAndBoardName);
 		ActionForward forward = new ActionForward();
-		forward.setPath("/WEB-INF/views/freeBoard/boardDetail.jsp");
+		forward.setPath("/WEB-INF/views/noticeBoard/boardDetail.jsp");
 		return forward;
 	}
 

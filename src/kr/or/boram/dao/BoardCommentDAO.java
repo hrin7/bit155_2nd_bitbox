@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 import kr.or.boram.dto.BoardComment;
 
-public class FreeBoardCommentDAO {
+public class BoardCommentDAO {
 	static DataSource ds;
 	Connection conn = null;
 	PreparedStatement pstmt = null;

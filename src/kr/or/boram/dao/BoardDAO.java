@@ -13,10 +13,10 @@ import javax.sql.DataSource;
 
 import kr.or.boram.dto.Board;
 import kr.or.boram.dto.BoardAndFileAndReply;
-import kr.or.boram.dto.BoardAndType;
+import kr.or.boram.dto.BoardAndFileAndType;
 import kr.or.boram.dto.BoardType;
 
-public class FreeBoardDAO {
+public class BoardDAO {
 	static DataSource ds;
 	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -34,7 +34,7 @@ public class FreeBoardDAO {
 	}
 	
 	//게시판 목록보기
-	public List<Board> boardList(int cpage, int pageSize){
+	public List<Board> boardList(int cpage, int pageSize, int boardCode){
 		List<Board> boardList = null;
 		
 		try {
@@ -48,7 +48,7 @@ public class FreeBoardDAO {
 						 " 		FROM board " + 
 						 "  	ORDER BY no DESC" + 
 						 "  ) b" +
-						 " 	where rownum <= ?" + //end row
+						 " 	where rownum <= ? and board_code=?" + //end row
 						 ") " +
 						 "where rn >= ?"; //start row 
 			pstmt = conn.prepareStatement(sql);
@@ -58,7 +58,8 @@ public class FreeBoardDAO {
 			int end = cpage * pageSize;
 			
 			pstmt.setInt(1, end);
-			pstmt.setInt(2, start);
+			pstmt.setInt(2, boardCode);
+			pstmt.setInt(3, start);
 			rs = pstmt.executeQuery();
 			
 			boardList = new ArrayList<Board>();
@@ -153,24 +154,25 @@ public class FreeBoardDAO {
 	}
 	
 	//게시글 카테고리 join
-	public List<Object> selectBoardByNo(int no, int board_code){
-		List<Object> boardAndBoardName = new ArrayList<>();
-		BoardAndType board = null;
-		String boardName = "";
+	public BoardAndFileAndType selectBoardByNo(int no, int board_code){
+		BoardAndFileAndType board = null;
 		
 		try {
 			conn = ds.getConnection();
-			String sql = "select t.board_code, b.no, b.id, b.title, b.content, b.write_date, b.views, t.board_name" + 
-						  "  from board b join board_type t" + 
-					      "    on b.board_code = t.board_code" + 
-					      " where t.board_code =?  and b.no = ?";
+			String sql = "  select t.board_code, b.no, b.id, b.title, b.content, b.write_date, b.views, t.board_name, f.file_no, f.file_name" + 
+						 "  from board b" + 
+						 "  left outer join board_type t" + 
+						 "    on b.board_code = t.board_code" + 
+						 "  left outer join board_file f" + 
+						 "    on b.no = f.no" + 
+						 " where t.board_code = ? and b.no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, board_code);
 			pstmt.setInt(2, no);
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()) {
-				board = new BoardAndType();
+				board = new BoardAndFileAndType();
 				board.setNo(rs.getInt("no"));
 				board.setId(rs.getString("id"));
 				board.setTitle(rs.getString("title"));
@@ -178,9 +180,9 @@ public class FreeBoardDAO {
 				board.setWriteDate(rs.getString("write_date"));
 				board.setViews(rs.getInt("views"));
 				board.setBoardCode(rs.getInt("board_code"));
-				boardName = rs.getString("board_name");
-				boardAndBoardName.add(boardName);
-				boardAndBoardName.add(board);
+				board.setBoardName(rs.getString("board_name"));
+				board.setFileNo(rs.getInt("file_no"));
+				board.setFileName(rs.getString("file_name"));
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -193,7 +195,7 @@ public class FreeBoardDAO {
 				System.out.println(e2.getMessage());
 			}
 		}
-		return boardAndBoardName;
+		return board;
 	}
 	
 	//게시글 카테고리
@@ -278,19 +280,26 @@ public class FreeBoardDAO {
 	}
 	
 	//게시글 작성
-	public int insertBoard(Board board) {
+	public int insertBoard(BoardAndFileAndReply board) {
 		int row = 0;
 		
 		try {
 			conn = ds.getConnection();
+			
 			String sql = "insert into board(board_code, no, id, title, content, write_date)"
-					+ "values(?, no_seq.nextval, 'jinwon', ?, ?, sysdate)";
+					   + "values(?, no_seq.nextval, ?, ?, ?, sysdate)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, board.getBoardCode());
-			pstmt.setString(2, board.getTitle());
-			pstmt.setString(3, board.getContent());
+			pstmt.setString(2, board.getId());
+			pstmt.setString(3, board.getTitle());
+			pstmt.setString(4, board.getContent());
 			row = pstmt.executeUpdate();
 
+			String fileSql = "insert into board_file(file_no, no, file_name)"
+					+ "values(file_no_seq.nextval, no_seq.currval, ?)";
+			pstmt = conn.prepareStatement(fileSql);
+			pstmt.setString(1, board.getFileName());
+			row = pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.getStackTrace();
 			System.out.println("insert오류:" + e.getMessage());

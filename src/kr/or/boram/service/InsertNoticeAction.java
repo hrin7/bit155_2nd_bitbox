@@ -14,7 +14,7 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.BoardAndFileAndReply;
 
-public class InsertFreeBoardAction implements Action {
+public class InsertNoticeAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
@@ -69,7 +69,7 @@ public class InsertFreeBoardAction implements Action {
 		
 		ActionForward forward = new ActionForward();
 		request.setAttribute("msg", msg);
-		forward.setPath("selectBoardList.free");
+		forward.setPath("selectNoticeList.notice");
 		
 		return forward;
 	}

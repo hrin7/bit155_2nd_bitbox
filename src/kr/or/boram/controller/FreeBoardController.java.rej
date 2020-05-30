@@ -1,0 +1,10 @@
+diff a/src/kr/or/boram/controller/FreeBoardController.java b/src/kr/or/boram/controller/FreeBoardController.java	(rejected hunks)
+@@ -73,7 +73,7 @@
+     	
+ 		//게시글 정보
+     	} else if(url_Command.equals("/boardInfo.free")) {
+-    		action = new UpdadeInfoAction();
++    		action = new UpdateInfoAction();
+     		forward = action.execute(request, response);
+     	}
+     	
