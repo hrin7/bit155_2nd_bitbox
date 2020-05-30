@@ -73,8 +73,8 @@
 										</li>
 										<li><br><a href="myBoardList.my">My Board</a></li>
 										<li><a href="selectList.kanban">KanBan</a></li>
-										<li><a href="template.jsp">Scheduler</a></li>
-										<li><a href="template.jsp">To-do-List</a></li>
+										<!-- <li><a href="template.jsp">Scheduler</a></li>
+										<li><a href="template.jsp">To-do-List</a></li> -->
 									
 										<!-- 로그인 안해도 보이는 메뉴 -->
 										<li><br><a href="selectNoticeList.notice?boardCode=1">Notice</a></li>
