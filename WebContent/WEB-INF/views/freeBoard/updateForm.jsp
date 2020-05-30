@@ -40,7 +40,7 @@
 											<c:set var="board" value="${requestScope.board}"/>
 											
 											<div class="col-6 col-12-small">
-												<select name="searchCode" id="searchCode" disabled>
+												<select name="searchCode" id="searchCode">
 													<option value="">- Category -</option>
 												</select>
 											</div>
