@@ -31,7 +31,7 @@
 							<!-- 로그인 안해도 보이는 메뉴 -->
 							<li><br><a href="selectBoardList.notice">Notice</a></li>
 							<li><a href="selectBoardList.notice">Free Board</a></li>
-			
+							
 							<!-- admin 계정으로 로그인시 보이는 메뉴 -->
 							<li><a href="memberInfoRead.admin">회원정보관리</a></li>
 						<%

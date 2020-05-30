@@ -9,14 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.service.DeleteFreeBoardAction;
 import kr.or.boram.service.InsertFreeBoardAction;
+import kr.or.boram.service.InsertReFreeBoardAction;
 import kr.or.boram.service.SelectFreeBoardByNoAction;
 import kr.or.boram.service.SelectFreeBoardListAction;
 import kr.or.boram.service.UpdateFreeBoardAction;
-import kr.or.boram.service.UpdateInfoAction;
+import kr.or.boram.service.UpdateFreeInfoAction;
 
 @WebServlet("*.free")
 public class FreeBoardController extends HttpServlet {
@@ -50,17 +52,17 @@ public class FreeBoardController extends HttpServlet {
     		action = new SelectFreeBoardByNoAction();
     		forward = action.execute(request, response);
     		
-    	//게시판 form으로 보내기
+    	//글쓰기 form으로 보내기
     	} else if(url_Command.equals("/insertForm.free")) {
     		forward = new ActionForward();
             forward.setRedirect(false);
             forward.setPath("/WEB-INF/views/freeBoard/insertForm.jsp");
             
-        //게시판 글쓰기 로직    
+        //게시판 글쓰기
     	} else if(url_Command.equals("/insertBoard.free")) {
     		action = new InsertFreeBoardAction();
     		forward = action.execute(request, response);
-    		
+    	
     	//게시판 삭제
     	} else if(url_Command.equals("/deleteBoard.free")) {
     		action = new DeleteFreeBoardAction();
@@ -73,7 +75,19 @@ public class FreeBoardController extends HttpServlet {
     	
 		//게시글 정보
     	} else if(url_Command.equals("/boardInfo.free")) {
-    		action = new UpdateInfoAction();
+    		action = new UpdateFreeInfoAction();
+    		forward = action.execute(request, response);
+    		
+    	//답글쓰기 form으로 이동
+    	} else if(url_Command.equals("/insertReFreeBoardForm.free")) {
+    		String no = request.getParameter("no");
+    		request.setAttribute("no", no);
+    		forward = new ActionForward();
+            forward.setRedirect(false);
+            forward.setPath("/WEB-INF/views/freeBoard/insertReFreeBoard.jsp");
+    	//답글쓰기
+    	} else if(url_Command.equals("/insertReFreeBoard.free")) {
+    		action = new InsertReFreeBoardAction();
     		forward = action.execute(request, response);
     	}
     	

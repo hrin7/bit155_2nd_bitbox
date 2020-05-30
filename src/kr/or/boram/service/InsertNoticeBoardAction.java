@@ -12,9 +12,10 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.FreeBoardDAO;
+import kr.or.boram.dao.NoticeBoardDAO;
 import kr.or.boram.dto.Board;
 
-public class InsertFreeBoardAction implements Action {
+public class InsertNoticeBoardAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
@@ -58,10 +59,11 @@ public class InsertFreeBoardAction implements Action {
 		board.setTitle(title);
 		board.setContent(content);
 		board.setBoardCode(Integer.parseInt(boardCode));
-		board.setId((String)session.getAttribute("id"));
+		//board.setId((String)session.getAttribute("id"));
 		
-		FreeBoardDAO freeBoardDao = new FreeBoardDAO();
-		int result = freeBoardDao.insertBoard(board);
+		NoticeBoardDAO noticeBoardDao = new NoticeBoardDAO();
+		
+		int result = noticeBoardDao(board);
 		
 		String msg = "";
 		if(result > 0) {
@@ -72,9 +74,16 @@ public class InsertFreeBoardAction implements Action {
 		
 		ActionForward forward = new ActionForward();
 		request.setAttribute("msg", msg);
-		forward.setPath("selectBoardList.free");
+		forward.setPath("selectBoardList.notice");
 		
 		return forward;
 	}
+
+	private int noticeBoardDao(Board board) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+		
+	
 
 }

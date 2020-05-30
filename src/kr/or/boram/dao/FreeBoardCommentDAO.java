@@ -122,7 +122,7 @@ public class FreeBoardCommentDAO {
 		int row = 0;
 		try {
 			conn =ds.getConnection();
-			String sql = "update board_comment set comment_content=? where no=? and comment_=?";
+			String sql = "update board_comment set comment_content=? where no=? and comment_no=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, boardComment.getCommentContent());
 			pstmt.setInt(2, boardComment.getNo());

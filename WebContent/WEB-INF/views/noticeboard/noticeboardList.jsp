@@ -31,7 +31,7 @@
 			<!-- Main -->
 			<article id="main">
 				<header>
-					<h2>FreeBoard</h2>
+					<h2>NoticeBoard</h2>
 					<p>This is Free Board List</p>
 				</header>
 				
@@ -43,32 +43,28 @@
                         	<table>
                         		<thead>
 									<tr>
-										<th width="10%">글번호</th>
-			                            <th width="45%">제목</th>
-			                            <th width="15%">작성자</th>
-			                            <th width="22%">작성일</th>
-			                            <th width="8%">조회</th>
+										<th>게시판 코드</th>
+										<th >글번호</th>
+			                            <th>제목</th>
+			                            <th>작성자</th>
+			                            <th>작성일</th>
+			                            <th>조회</th>
+			                            <th colspan="2"></th>
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="boardList" items="${requestScope.boardList}">
+									<c:forEach var="boardList" items="${requestScope.noticeList}">
 										<tr>
-											<td>${boardList.no}</td>
-											<td>
-												<a href="selectBoard.free?no=${boardList.no}&boardCode=${boardList.boardCode}">${boardList.title}</a>
-												<!-- boardFile이 존재하는 경우에는 이미지를 붙여준다 -->
-		                                    	<c:if test="${!empty board.boardFile}">
-		                                    		<i class="ri-image-line"></i>
-		                                    	</c:if>
-												<!-- comment cnt가 존재하는 경우 -->
-		                                    	<c:if test="${boardList.commentCount > 0}">
-		                                    		[${boardList.commentCount}]
-		                                    	</c:if>
-											</td>
+											<td>${boardList.boardCode}</td>
+											<td><a href="#">${boardList.no}</a></td>
+											<td>${boardList.title}</td>
 											<td>${boardList.id}</td>
 											<td>${boardList.writeDate}</td>
 											<td>${boardList.views}</td>
-										</tr>
+
+										<td><a href="noticeBoardUpdate.notice?no=${boardList.no}">[수정]</a></td>
+										<td><a href="memberInfoDelete.admin?id=${list.id}">[삭제]</a></td>
+									</tr>
 									</c:forEach>
 								</tbody>
 							</table>                        
@@ -104,7 +100,7 @@
                         	</c:choose>
                      	</div>
 						<br>
-						<a href="insertForm.free" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
+						<a href="noticeinsertForm.free" class="button small" id="writeBtn"><i class="ri-pencil-line"> write</i></a>
 					</div>
 				</section>	
 			</article>
