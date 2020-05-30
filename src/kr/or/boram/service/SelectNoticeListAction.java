@@ -10,13 +10,13 @@ import kr.or.boram.action.ActionForward;
 import kr.or.boram.dao.BoardDAO;
 import kr.or.boram.dto.Board;
 
-public class SelectFreeBoardListAction implements Action {
+public class SelectNoticeListAction implements Action {
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
 		String boardCode = request.getParameter("boardCode");
 		if(boardCode == null) {
-			boardCode = "2";
+			boardCode = "1";
 		}
 		String cpage = request.getParameter("cp");
 		String pageSize = request.getParameter("ps");
@@ -32,10 +32,10 @@ public class SelectFreeBoardListAction implements Action {
 		int cp = Integer.parseInt(cpage);
 		int ps = Integer.parseInt(pageSize);
 		
-		BoardDAO freeBoardDao = new BoardDAO();
+		BoardDAO dao = new BoardDAO();
 		
 		//게시물 총 건수
-		int totalBoardCount = freeBoardDao.totalBoardCount();
+		int totalBoardCount = dao.totalBoardCount();
 		request.setAttribute("totalBoardCount", totalBoardCount);
 		
 		if(totalBoardCount % ps == 0) {
@@ -45,18 +45,20 @@ public class SelectFreeBoardListAction implements Action {
 		}
 		
 		//게시판리스트 가져오기
-		List<Board> boardList = freeBoardDao.boardList(cp, ps, Integer.parseInt(boardCode));
+		List<Board> boardList = dao.boardList(cp, ps, Integer.parseInt(boardCode));
 		request.setAttribute("boardList", boardList);
 		request.setAttribute("cpage", cpage);
 		request.setAttribute("pageSize", ps);
 		request.setAttribute("pageCount", pageCount);
+		request.setAttribute("boardCode", boardCode);
 		
 		ActionForward forward = new ActionForward();
 		forward.setRedirect(false);
-		forward.setPath("WEB-INF/views/freeBoard/freeBoardList.jsp");
+		forward.setPath("WEB-INF/views/noticeBoard/noticeBoardList.jsp");
 		return forward;
 		
 		
 	}
+
 
 }

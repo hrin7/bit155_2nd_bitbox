@@ -5,17 +5,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.BoardCommentDAO;
 import kr.or.boram.dao.BoardDAO;
+import kr.or.boram.dao.NoticeBoardDAO;
 
-public class DeleteFreeBoardAction implements Action {
+public class DeleteNoticeBoardAction implements Action {
+
 
 	@Override
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) {
-		BoardDAO freeBoardDao = new BoardDAO();
+		NoticeBoardDAO noticeBoardDao = new NoticeBoardDAO();
 		
 		int no = Integer.parseInt(request.getParameter("no")); //삭제하려는 게시글 번호
-		int result = freeBoardDao.deleteBoard(no);
+		int result = noticeBoardDao.deleteBoard(no);
+		
+		System.out.println("삭제 결과값:"+result);
+		
 		
 		String msg = "";
 		if(result > 0) {
@@ -27,7 +31,7 @@ public class DeleteFreeBoardAction implements Action {
 		request.setAttribute("msg", msg);
 		
 		ActionForward forward = new ActionForward();
-		forward.setPath("selectBoardList.free");
+		forward.setPath("selectBoardList.notice");
 		return forward;
 	}
 

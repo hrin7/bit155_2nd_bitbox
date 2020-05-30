@@ -11,21 +11,25 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.service.SelectNoticeService;
-import kr.or.boram.service.UpdateNoticeOkService;
-import kr.or.boram.service.UpdateNoticeService;
+import kr.or.boram.service.DeleteFreeBoardAction;
+import kr.or.boram.service.InsertNoticeAction;
+import kr.or.boram.service.InsertReFreeBoardAction;
+import kr.or.boram.service.SelectNoticeByNoService;
+import kr.or.boram.service.SelectNoticeListAction;
+import kr.or.boram.service.UpdateFreeBoardAction;
+import kr.or.boram.service.UpdateFreeInfoAction;
 
 @WebServlet("*.notice")
 public class NoticeBoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
     public NoticeBoardController() {
         super();
     }
 	
     private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	request.setCharacterEncoding("utf-8");
-	
+    	
     	String requestURI = request.getRequestURI();
     	String contextPath = request.getContextPath();
     	String url_Command = requestURI.substring(contextPath.length());
@@ -37,32 +41,54 @@ public class NoticeBoardController extends HttpServlet {
     	ActionForward forward = null;
     	Action action = null;
     	
-    	if(url_Command.equals("/selectBoardList.notice")) {
-    		System.out.println("공지사항 목록 보여주기");
-    		
-    		action = new SelectNoticeService();
+    	//게시판 목록보기
+    	if(url_Command.equals("/selectNoticeList.notice")) {
+    		action = new SelectNoticeListAction();
     		forward = action.execute(request, response);
     		
+    	//게시판 상세보기
+    	} else if(url_Command.equals("/selectNotice.notice")) {
+    		action = new SelectNoticeByNoService();
+    		forward = action.execute(request, response);
     		
-  	
-    	}else if(url_Command.equals("/noticeBoardUpdate.notice")) {
-    		System.out.println("공지사항 목록 보여주기");
-    		
-			
-			  action = new UpdateNoticeService(); 
-			  forward = action.execute(request,response);
-			 
-			  
-    		
-  	
-    	}else if(url_Command.equals("/noticeUpdateOK.notice")) {
-    		System.out.println("공지사항 목록 보여주기");
-    			System.out.println("수정 진행중.....");
-			
-			  action = new UpdateNoticeOkService(); 
-			  forward = action.execute(request,response);
-    	}
+    	//글쓰기 form으로 보내기
+    	} else if(url_Command.equals("/insertNoticeForm.notice")) {
+    		forward = new ActionForward();
+            forward.setRedirect(false);
+            forward.setPath("/WEB-INF/views/noticeBoard/insertForm.jsp");
+            
+        //게시판 글쓰기
+    	} else if(url_Command.equals("/insertNotice.notice")) {
+    		action = new InsertNoticeAction();
+    		forward = action.execute(request, response);
     	
+    	//게시판 삭제
+    	} else if(url_Command.equals("/deleteNotice.notice")) {
+    		action = new DeleteFreeBoardAction();
+    		forward = action.execute(request, response);
+
+    	//게시글 수정	
+    	} else if(url_Command.equals("/updateNotice.notice")) {
+    		action = new UpdateFreeBoardAction();
+    		forward = action.execute(request, response);
+    	
+		//게시글 정보
+    	} else if(url_Command.equals("/noticeInfo.notice")) {
+    		action = new UpdateFreeInfoAction();
+    		forward = action.execute(request, response);
+    		
+    	//답글쓰기 form으로 이동
+    	} else if(url_Command.equals("/insertReNoticeForm.notice")) {
+    		String no = request.getParameter("no");
+    		request.setAttribute("no", no);
+    		forward = new ActionForward();
+            forward.setRedirect(false);
+            forward.setPath("/WEB-INF/views/noticeBoard/insertReNotice.jsp");
+    	//답글쓰기
+    	} else if(url_Command.equals("/insertReNotice.notice")) {
+    		action = new InsertReFreeBoardAction();
+    		forward = action.execute(request, response);
+    	}
     	
     	//뷰 지정하기
         if(forward != null) {
@@ -73,7 +99,6 @@ public class NoticeBoardController extends HttpServlet {
               dis.forward(request, response);
            }
         }
-    	
 	}
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
