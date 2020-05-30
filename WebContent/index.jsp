@@ -29,13 +29,14 @@
 			}); */
 		</script>
 		<!-- 로그아웃후 메인페이지로 이동하는데 뒤로가기 버튼을 막는 함수 -->
-		 <script type="text/javascript">
+		 <!-- <script type="text/javascript">
 			 window.history.forward();
 			 function noBack(){window.history.forward();}
-		</script>
+				<body class="landing is-preload" onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
+		</script>  -->
 	</head>
 	<!-- 로그아웃후 메인페이지로 뒤로가기가 안될 페이지 설정 -->
-	<body class="landing is-preload" onload="noBack();" onpageshow="if(event.persisted) noBack();" onunload="">
+	<body class="landing is-preload">
 		
 		<!-- Page Wrapper -->
 		<div id="page-wrapper">
