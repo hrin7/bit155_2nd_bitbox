@@ -95,7 +95,7 @@
 					<!-- <div class="inner"> -->
 						<div id="outer">
 							<c:forEach var="kanbanGroup" items="${requestScope.kanbanGroupList}">
-								<div class="memoSectionDiv shadow" data-title='${kanbanGroup.listName}'>
+								<div class="memoSectionDiv shadow" data-title='${kanbanGroup.listName}' data-code='${kanbanGroup.kanbanCode}' ondrop='drop(event)' ondragover='allowDrop(event)'>
 									<div class="memoTopHr"></div>
 									<div class="memoTitle">${kanbanGroup.listName}</div>
 									<div class="deleteListDiv"><a href="javascript:void(0);" data-code='${kanbanGroup.kanbanCode}' class="deleteListBtn" style="text-decoration: none !important;"><i class="ri-close-fill"></i></a></div>
@@ -103,7 +103,7 @@
 									<c:forEach var="kanban" items="${requestScope.kanbanList}" varStatus="status">
 										<c:if test="${kanbanGroup.kanbanCode == kanban.kanbanCode}">
 											<c:if test="${!empty kanban.kanbanTitle}">
-												<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='${kanban.kanbanNo}' data-title='${kanban.listName}' style="clear: both;">
+												<div class='memoContent shadow' data-toggle='modal' data-target='#myModal' data-value='${kanban.kanbanNo}' data-title='${kanban.listName}' style="clear: both;" draggable="true" ondragstart='drag(event)'>
 													${kanban.kanbanTitle}<br>
 													<c:if test="${!empty kanban.kanbanContent}">
 														<i class="ri-align-left"></i>

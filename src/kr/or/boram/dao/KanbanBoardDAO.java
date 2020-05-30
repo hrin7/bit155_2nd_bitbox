@@ -428,4 +428,31 @@ public class KanbanBoardDAO {
 		}
 		return row;
 	}
+	
+	//칸반 card의 list옮기기
+	public int moveKanbanCardFromList(int kanbanNo, int updateKanbanCode) {
+		int row = 0;
+		
+		try {
+			conn = ds.getConnection();
+			
+			//옮길 카드의 kanbanCode업데이트하기
+			String updateSql = "update kanban set kanban_code=? where kanban_no=?";
+			pstmt = conn.prepareStatement(updateSql);
+			pstmt.setInt(1, updateKanbanCode);
+			pstmt.setInt(2, kanbanNo);
+			row = pstmt.executeUpdate();
+		} catch (Exception e) {
+			System.out.println("moveKanbanCardFromList 오류: " + e.getMessage());
+		} finally {
+			try {
+				pstmt.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e2) {
+				e2.getStackTrace();
+			}
+		}
+		return row;
+	}
 }
