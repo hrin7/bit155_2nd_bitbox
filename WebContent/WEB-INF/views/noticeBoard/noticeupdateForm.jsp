@@ -27,7 +27,7 @@
 				<!-- Main -->
 					<article id="main">
 						<header>
-							<h2>Board Edit</h2>
+							<h2>Notice Board List</h2>
 							<p>Please feel free to Edit it</p>
 						</header>
 						
@@ -35,9 +35,9 @@
 							<div class="inner">
 								<section>
 									<h4>Board Edit Form</h4>
-									<form method="post" action="<%=request.getContextPath()%>/updateBoard.free" enctype="multipart/form-data">
+									<form method="post" action="<%=request.getContextPath()%>/noticeUpdateOK.notice" enctype="multipart/form-data">
 										<div class="row gtr-uniform">
-											<c:set var="board" value="${requestScope.board}"/>
+											<c:set var="board" value="${requestScope.noticeList}"/>
 											
 											<div class="col-6 col-12-small">
 												<select name="searchCode" id="searchCode">
@@ -45,7 +45,7 @@
 												</select>
 											</div>
 											<div class="col-12">
-												<input type="hidden" name="no" id="no" value="${board.no}">
+												<input type="text" name="no" id="no" value="${board.no}">
 												<input type="text" name="title" id="title" value="${board.title}"/>
 											</div>
 											<div class="col-6 col-12-mobilep">

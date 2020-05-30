@@ -435,11 +435,22 @@ public class BoardDAO {
 			pstmt.setInt(1, no);
 			row = pstmt.executeUpdate();
 			
+			conn = ds.getConnection();
+			String sql_boardReply_delete = "delete from board_reply where no=?";
+			pstmt = conn.prepareStatement(sql_boardReply_delete);
+			pstmt.setInt(1, no);
+			row = pstmt.executeUpdate();
+			
+			conn = ds.getConnection();
+			String sql_boardFile_delete = "delete from board_file where no=?";
+			pstmt = conn.prepareStatement(sql_boardFile_delete);
+			pstmt.setInt(1, no);
+			row = pstmt.executeUpdate();
+			
 			String sql_board_delete = "delete from board where no=?";
 			pstmt = conn.prepareStatement(sql_board_delete);
 			pstmt.setInt(1, no);
 			row = pstmt.executeUpdate();
-			
 			
 		} catch (Exception e) {
 			System.out.println("delte : " + e.getMessage());

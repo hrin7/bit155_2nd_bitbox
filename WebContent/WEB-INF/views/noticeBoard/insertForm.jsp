@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>BITBOX - 게시판 수정하기</title>
+		<title>BITBOX - 게시판 글쓰기</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
@@ -27,17 +26,15 @@
 				<!-- Main -->
 					<article id="main">
 						<header>
-							<h2>Board Edit</h2>
-							<p>Please feel free to Edit it</p>
+							<h2>Write</h2>
+							<p>Please feel free to create it</p>
 						</header>
-						
 						<section class="wrapper style5">
 							<div class="inner">
 								<section>
-									<h4>Board Edit Form</h4>
-									<form method="post" action="<%=request.getContextPath()%>/updateBoard.free" enctype="multipart/form-data">
+									<h4>Board Insert Form</h4>
+									<form method="post" action="<%=request.getContextPath()%>/insertNotice.notice" enctype="multipart/form-data">
 										<div class="row gtr-uniform">
-											<c:set var="board" value="${requestScope.board}"/>
 											
 											<div class="col-6 col-12-small">
 												<select name="searchCode" id="searchCode">
@@ -45,24 +42,23 @@
 												</select>
 											</div>
 											<div class="col-12">
-												<input type="hidden" name="no" id="no" value="${board.no}">
-												<input type="text" name="title" id="title" value="${board.title}"/>
+												<input type="text" name="title" id="title" value="" placeholder="title"/>
 											</div>
 											<div class="col-6 col-12-mobilep">
 												<input type="file" name="file" id="file" value="" style="color:black"/>
 											</div>
 											<div class="col-12">
-												 <textarea id="summernote" name="content">${board.content}</textarea>
+												 <textarea id="summernote" name="content"></textarea>
 											</div>
 											<div class="col-12">
 												<ul class="actions">
-													<li><input type="submit" value="Edit" class="primary" /></li>
+													<li><input type="submit" value="Create" class="primary" /></li>
 													<li><input type="reset" value="Reset" /></li>
 												</ul>
 											</div>
 										</div>
 									</form>
-									<a href="<%=request.getContextPath()%>/selectBoardList.free" id="goList">목록가기</a>
+									<a href="<%=request.getContextPath()%>/selectNoticeList.notice" id="goList">목록가기</a>
 								</section>
 							</div>
 						</section>
@@ -94,7 +90,7 @@
 		       	placeholder: 'Enter your content'   //placeholder 설정
 		  	});
 		
-			//ajax 카테고리
+			//ajax
 			$.ajax({
 				url: "SelectBoardType.ajax",
 				dataType: "json",
@@ -102,7 +98,7 @@
 					console.log(resData);
 					let html = "";
 					$.each(resData, function(index, obj) {
-						if(obj.boardCode == 2){
+						if(obj.boardCode == 1){
 							html += "<option value='"+obj.boardCode+"' selected>"+obj.boardName+"</option>";
 						} else {
 							html += "<option value='"+obj.boardCode+"'>"+obj.boardName+"</option>";

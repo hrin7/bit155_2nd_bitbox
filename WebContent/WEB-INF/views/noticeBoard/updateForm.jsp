@@ -27,7 +27,7 @@
 				<!-- Main -->
 					<article id="main">
 						<header>
-							<h2>Board Edit</h2>
+							<h2>Notice Board Edit</h2>
 							<p>Please feel free to Edit it</p>
 						</header>
 						
@@ -35,7 +35,7 @@
 							<div class="inner">
 								<section>
 									<h4>Board Edit Form</h4>
-									<form method="post" action="<%=request.getContextPath()%>/updateBoard.free" enctype="multipart/form-data">
+									<form method="post" action="<%=request.getContextPath()%>/updateBoard.notice" enctype="multipart/form-data">
 										<div class="row gtr-uniform">
 											<c:set var="board" value="${requestScope.board}"/>
 											
