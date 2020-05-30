@@ -18,6 +18,11 @@
 		          return false;
 		      }else if(!checkEmail(joinForm.email.value)) {
 		          return false;
+		      }else if(grecaptcha.getResponse() == 0){ //리캡차 관련 응답 함수 0이면 리캡차에 체크가 안된거임 
+			       var v = grecaptcha.getResponse();
+			       console.log("안나와"+v.length);
+			       alert("로봇이 아닙니다를 체크해야 합니다."); 
+			       return false; 
 		      }
 		      
 		      //모든 정규표현식에 다일치 할경우 DB에있는 데이터랑 중복여부 판단을 ajax로 ??? 
@@ -214,7 +219,7 @@
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 	  </div>
 	  <div class="modal-body">
-			<div class="cont" style="height: 600px;">
+			<div class="cont" style="height: 670px;">
 			<div class="form sign-in">
 				<h2 style="color: #6a51a7 !important;">Welcome back,</h2>
 				
@@ -282,6 +287,9 @@
 						<input type="email" name="email" id="email" />	
 						<span>ex)bit155@naver.com</span>
 					</label>
+					<div>
+						<div class="g-recaptcha" data-sitekey="6LccovQUAAAAAIBhl8HROJokAu464hyH5SzK-Maq" data-theme="dark" style="margin-left: 135px;margin-top: 10px;"></div>
+					</div>
 					<button type="submit" class="submit" style="background-color: #6a51a7 !important;margin-top: 10px;margin-bottom: 0px;">Sign Up</button>
 				</form>
 				

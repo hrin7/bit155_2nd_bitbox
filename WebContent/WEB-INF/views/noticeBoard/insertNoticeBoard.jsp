@@ -3,7 +3,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>BITBOX - 게시판 글쓰기</title>
+		<title>BITBOX - 게시판 답글</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/main.css" />
@@ -32,8 +32,8 @@
 						<section class="wrapper style5">
 							<div class="inner">
 								<section>
-									<h4>Board Insert Form</h4>
-									<form method="post" action="<%=request.getContextPath()%>/insertBoard.free" enctype="multipart/form-data">
+									<h4>Board Insert ReFreeBoard Form</h4>
+									<form method="post" action="<%=request.getContextPath()%>/insertReFreeBoard.free" enctype="multipart/form-data">
 										<div class="row gtr-uniform">
 											
 											<div class="col-6 col-12-small">
@@ -42,6 +42,7 @@
 												</select>
 											</div>
 											<div class="col-12">
+												<input type="hidden" value="${no}" name="no"/>
 												<input type="text" name="title" id="title" value="" placeholder="title"/>
 											</div>
 											<div class="col-6 col-12-mobilep">

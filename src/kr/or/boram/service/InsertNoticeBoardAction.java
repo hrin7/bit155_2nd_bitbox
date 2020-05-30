@@ -49,6 +49,7 @@ public class InsertNoticeBoardAction implements Action {
 			title = multi.getParameter("title");
 			content = multi.getParameter("content");
 			boardCode = multi.getParameter("searchCode");
+			System.out.println("무슨값이 찍힐까?"+boardCode);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -59,11 +60,10 @@ public class InsertNoticeBoardAction implements Action {
 		board.setTitle(title);
 		board.setContent(content);
 		board.setBoardCode(Integer.parseInt(boardCode));
-		//board.setId((String)session.getAttribute("id"));
+		board.setId((String)session.getAttribute("id"));
 		
 		NoticeBoardDAO noticeBoardDao = new NoticeBoardDAO();
-		
-		int result = noticeBoardDao(board);
+		int result = noticeBoardDao.insertBoard(board);
 		
 		String msg = "";
 		if(result > 0) {
@@ -77,11 +77,6 @@ public class InsertNoticeBoardAction implements Action {
 		forward.setPath("selectBoardList.notice");
 		
 		return forward;
-	}
-
-	private int noticeBoardDao(Board board) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 		
 	

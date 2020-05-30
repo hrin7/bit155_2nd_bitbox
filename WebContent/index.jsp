@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="assets/js/idCheck_msg.js"></script> <!-- ID중복체크 로직함수+메시지띄우기(동률)-->
 		<script type="text/javascript" src="assets/js/signUp.js"></script> <!-- 회원가입시 로직함수(동률)-->
 		<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script><!-- 이쁜 알람창 CDN(동률) -->
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script><!-- 구글 리캡차 v2 API -->
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 		<script type="text/javascript">
 			$(function() {
