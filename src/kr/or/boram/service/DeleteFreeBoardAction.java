@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import kr.or.boram.action.Action;
 import kr.or.boram.action.ActionForward;
-import kr.or.boram.dao.BoardCommentDAO;
 import kr.or.boram.dao.BoardDAO;
 
 public class DeleteFreeBoardAction implements Action {

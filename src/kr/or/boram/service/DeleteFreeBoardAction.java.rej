@@ -1,9 +1,0 @@
-diff a/src/kr/or/boram/service/DeleteFreeBoardAction.java b/src/kr/or/boram/service/DeleteFreeBoardAction.java	(rejected hunks)
-@@ -5,6 +5,7 @@
- 
- import kr.or.boram.action.Action;
- import kr.or.boram.action.ActionForward;
-+import kr.or.boram.dao.FreeBoardCommentDAO;
- import kr.or.boram.dao.FreeBoardDAO;
- 
- public class DeleteFreeBoardAction implements Action {
